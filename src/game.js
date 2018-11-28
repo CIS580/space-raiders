@@ -1,3 +1,6 @@
+import Input from './input';
+import StartScreen from './menus/start-screen';
+
 /** @class Game
   * A class representing the high-level functionality
   * of a game - the game loop, buffer swapping, etc.
@@ -25,13 +28,40 @@ export default class Game {
     this.screenBuffer.height = this.HEIGHT;
     this.screenBufferCtx = this.screenBuffer.getContext('2d');
     document.body.append(this.screenBuffer);
+
+    // Set up the input object
+    this.input = new Input();
+
+    // Set up the game state stack
+    this.gameState = []
+    this.gameState.push(new StartScreen());
+  }
+  /** @method pushGameState
+    * Pushes the provided game state to the
+    * state stack.
+    * @param {GameState} gameState - an object that
+    * implements an update() and render() method.
+    */
+  pushGameState(gameState) {
+    this.gameState.push(gameState);
+  }
+  /** @method popGameState
+    * Pops the current game state from the state stack.
+    * @return {GameState} the popped game state object
+    */
+  popGameState() {
+    return this.gameState.pop();
   }
   /** @method update
     * Updates the game state
     * @param {integer} elapsedTime - the number of milliseconds per frame
     */
   update(elapsedTime) {
-    // TODO: Update game state
+    // Update the active game state
+    this.gameState[this.gameState.length - 1].update(elapsedTime, this.input, this);
+
+    // Update the input object
+    this.input.update();
   }
   /** @method render
     * Renders the game state
@@ -39,11 +69,11 @@ export default class Game {
     */
   render(elapsedTime) {
     // Clear the back buffer
-    this.backBufferCtx.clearRect(0,0,this.WIDTH, this.HEIGHT);
+    this.backBufferCtx.fillStyle = "#000";
+    this.backBufferCtx.fillRect(0,0,this.WIDTH, this.HEIGHT);
 
-    // TODO: Render game
-    // Render some placeholder text
-    this.backBufferCtx.fillText('Hello World!!!???????!!', 100, 100);
+    // Render the game state
+    this.gameState[this.gameState.length - 1].render(elapsedTime, this.backBufferCtx, this);
 
     // Flip the back buffer
     this.screenBufferCtx.drawImage(this.backBuffer, 0, 0);
