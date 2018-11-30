@@ -9,29 +9,33 @@ export default class Input {
     * and attaches event listeners to the window.
     */
   constructor() {
-    this.oldState = {}
-    this.newState = {}
+    this.oldState = {};
+    this.newState = {};
 
     window.addEventListener('keydown', (event) => {
-      event.preventDefault();
+      if(event.key.length <= 1 || event.key.charAt(0) !== 'F') {
+        event.preventDefault();
+      }
       this.newState[event.key] = true;
     });
 
     window.addEventListener('keyup', (event) => {
-      event.preventDefault();
+      if(event.key.length <= 1 || event.key.charAt(0) !== 'F') {
+        event.preventDefault();
+      }
       this.newState[event.key] = false;
     });
 
   }
 
-  /** @method update
+  /** @method
     * Copies the new state to the old state
     */
   update() {
     this.oldState = JSON.parse(JSON.stringify(this.newState));
   }
 
-  /** @method keyPressed
+  /** @method
     * Returns true if the specified key is
     * currently pressed.
     * @param {String} key - the key to test
@@ -41,7 +45,7 @@ export default class Input {
     return this.newState[key];
   }
 
-  /** @method keyDown
+  /** @method
     * Returns true if the specified key
     * went down this frame
     * @param {String} key - the key to test
@@ -51,7 +55,7 @@ export default class Input {
     return this.newState[key] && !this.oldState[key];
   }
 
-  /** @method keyUp
+  /** @method
     * Returns true if the specified key
     * went up this frame
     * @param {String} key - the key to test

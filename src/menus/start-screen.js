@@ -1,26 +1,25 @@
-
 /** @class StartScreen
   * A starting screen for the game.
   */
+import PlanetLevelManager from "./PlanetLevelManager";
+import SamplePlanetLevel from "../planet_levels/SamplePlanetLevel";
+
 export default class StartScreen {
-  /** @method update
+  /** @method
     * Updates the starting screen
-    * @param {DOMHighResTimestamp} elaspedTime - the amount of time elapsed this frame
+    * @param {DOMHighResTimeStamp} elaspedTime - the amount of time elapsed this frame
     * @param {Input} input - the input from this and the prior frame
     * @param {Game} game - the game object
     */
   update(elaspedTime, input, game) {
     // TODO: Load inital game state object
     if(input.keyPressed(' ')) {
-      game.pushGameState({
-        render: () => {},
-        update: () => {}
-      });
+      game.pushGameState(new PlanetLevelManager(new SamplePlanetLevel()));;
     }
   }
-  /** @method render
+  /** @method
     * Renders the starting screen.
-    * @param {DOMHighResTimestamp} elaspedTime - the amount of time elapsed this frame
+    * @param {DOMHighResTimeStamp} elapsedTime - the amount of time elapsed this frame
     * @param {CanvasRenderingContext2D} context - the rendering context
     */
   render(elapsedTime, context) {
