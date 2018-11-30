@@ -8,13 +8,15 @@ import StartScreen from './menus/start-screen';
 export default class Game {
   /** @constructor
     * Creates the game instance
-    * @param {integer} width - the width of the game screen in pixels
-    * @param {integer} heght - the height of the game screen in pixels
+    * @param {int} width - the width of the game screen in pixels
+    * @param {int} height - the height of the game screen in pixels
     */
   constructor(width, height) {
     this._start = null;
     this.WIDTH = width;
     this.HEIGHT = height;
+    this.GRID_WIDTH = Math.floor(width / 32);
+    this.GRID_HEIGHT = Math.floor(height / 32);
 
     // Set up the back buffer
     this.backBuffer = document.createElement('canvas');

@@ -17,6 +17,11 @@ export default class PlanetLevelManager {
 
     this.level = level;
     this.player = new PlanetPlayer(this.level);
+    this.lastCalculatedTilemapWidth = 0;
+    this.lastCalculatedTilemapHeight = 0;
+
+    this.scrollingXOffset = 0;
+    this.scrollingYOffset = 0;
 
     this.scrollingCanvas = document.createElement('canvas');
     this.scrollingCanvas.width = this.level.tileset.width * 32;
@@ -82,7 +87,53 @@ export default class PlanetLevelManager {
       this.finished = true;
     } else {
       this.level.update(elaspedTime, input, game, this.player);
-      // TODO scrolling logic
+
+      // Check if we need to update our scrolling information based on a change in tilemap.
+      if(this.lastCalculatedTilemapWidth !== this.level.tileset.width ||
+          this.lastCalculatedTilemapHeight !== this.level.tileset.height) {
+
+        this.lastCalculatedTilemapWidth = this.level.tileset.width;
+        this.lastCalculatedTilemapHeight = this.level.tileset.height;
+
+        // Edges which, if the player is within, the map must scroll.
+        this.leftEdge = game.WIDTH / (32 * 2);
+        this.topEdge = game.HEIGHT / (32 * 2);
+        this.rightEdge = this.lastCalculatedTilemapWidth - (this.leftEdge);
+        this.bottomEdge = this.lastCalculatedTilemapHeight - (this.topEdge);
+
+        // Actual dimensions that we'll be drawing. Either the dim of the canvas or the tilemap dim, whichever is smaller.
+        this.drawingWidth = Math.min(game.WIDTH, this.lastCalculatedTilemapWidth * 32);
+        this.drawingHeight = Math.min(game.HEIGHT, this.lastCalculatedTilemapHeight * 32);
+
+        // Update the scrolling canvas with the new width and height.
+        this.scrollingCanvas.width = this.lastCalculatedTilemapWidth * 32;
+        this.scrollingCanvas.height = this.lastCalculatedTilemapHeight * 32;
+
+        // If the new tilemap is smaller, we want to avoid drawing old data.
+        this.scrollingContext.clearRect(0, 0, this.scrollingCanvas.width, this.scrollingCanvas.height);
+      }
+
+      // Check if we need to scroll x dimension.
+      if(this.lastCalculatedTilemapWidth > game.GRID_WIDTH && this.player.x > this.leftEdge) {
+        if(this.player.x < this.rightEdge) {
+          this.scrollingXOffset = (this.player.x - this.leftEdge) * 32;
+        } else {
+          this.scrollingXOffset = (this.rightEdge - this.leftEdge) * 32;
+        }
+      } else {
+        this.scrollingXOffset = 0;
+      }
+
+      // Check if we need to scroll y dimension.
+      if(this.lastCalculatedTilemapHeight > game.GRID_HEIGHT && this.player.y > this.topEdge) {
+        if(this.player.y < this.bottomEdge) {
+          this.scrollingYOffset = (this.player.y - this.topEdge) * 32;
+        } else {
+          this.scrollingYOffset = (this.bottomEdge - this.topEdge) * 32;
+        }
+      } else {
+        this.scrollingYOffset = 0;
+      }
     }
   }
 
@@ -94,8 +145,17 @@ export default class PlanetLevelManager {
   render(elapsedTime, context) {
     if(!this.finished) {
       this.level.render(elapsedTime, this.scrollingContext, this.player);
-      // TODO scrolling render
-      context.drawImage(this.scrollingCanvas, 0, 0);
+
+      context.drawImage(
+        this.scrollingCanvas,
+        this.scrollingXOffset,
+        this.scrollingYOffset,
+        this.drawingWidth,
+        this.drawingHeight,
+        0,
+        0,
+        this.drawingWidth,
+        this.drawingHeight);
     }
   }
 }

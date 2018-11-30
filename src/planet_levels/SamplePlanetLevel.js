@@ -43,6 +43,23 @@ export default class SamplePlanetLevel extends BasePlanetLevel {
    */
   playerInteracted(player, x, y) {
     console.log("Player interacted with " + x + "," + y);
+    if(this.map === undefined) {
+      this.map = 0;
+    }
+    this.map++;
+    this.map %= 3;
+    switch(this.map) {
+      case 0:
+        this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap.json"));
+        break;
+      case 1:
+        this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_large.json"));
+        break;
+      case 2:
+        this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_small.json"));
+        break;
+    }
+    player.movePlayerToSpawn();
   }
 
   /**

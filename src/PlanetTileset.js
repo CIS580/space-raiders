@@ -58,6 +58,16 @@ export default class PlanetTileset {
     }
 
     // Prepare the tilemap.
+    this.loadNewTilemap(tilemapJson);
+  }
+
+  /**
+   * Load a new tilemap into this tileset.
+   * Overwrites the previous tilemap.
+   * @param tilemapJson Loaded tilemap json (created in Tiled.) Use require('path/to/file'). Path is relative to where
+   * the require() is used.
+   */
+  loadNewTilemap(tilemapJson) {
     this.tilemapJson = tilemapJson;
 
     // Check if the tilemap is correctly set up. This might not be necessary.

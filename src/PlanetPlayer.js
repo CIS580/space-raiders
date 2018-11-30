@@ -15,16 +15,29 @@ export default class PlanetPlayer {
   }
 
   /**
+   * Move the player to a specific location and direction.
+   * @param x - New grid x position.
+   * @param y - New grid y position.
+   * @param direction - New face direction integer. If omitted, the face direction won't change.
+   * Face direction key:
+   *     N       0       -y
+   *   W   E   1   3   -x  +x
+   *     S       2       +y
+   */
+  movePlayer(x, y, direction) {
+    this.x = x;
+    this.y = y;
+    if(direction !== undefined && direction !== null) {
+      this.faceDirection = direction;
+    }
+    this.level.playerMoved(this);
+  }
+
+  /**
    * Move the player to the spawn location, as if it was killed and is re-spawning.
    */
   movePlayerToSpawn() {
-    this.x = this.level.playerSpawnX;
-    this.y = this.level.playerSpawnY;
-    // Face direction
-    //    N       0       -y
-    //  W   E   1   3   -x  +x
-    //    S       2       +y
-    this.faceDirection = this.level.playerSpawnFaceDirection;
+    this.movePlayer(this.level.playerSpawnX, this.level.playerSpawnY, this.level.playerSpawnFaceDirection);
   }
 
   /** @method
