@@ -3,6 +3,7 @@
   */
 import PlanetLevelManager from "./PlanetLevelManager";
 import SamplePlanetLevel from "../planet_levels/SamplePlanetLevel";
+import Encounter from "../space/encounter";
 
 export default class StartScreen {
   /** @method
@@ -14,7 +15,7 @@ export default class StartScreen {
   update(elaspedTime, input, game) {
     // TODO: Load inital game state object
     if(input.keyPressed(' ')) {
-      game.pushGameState(new PlanetLevelManager(new SamplePlanetLevel()));;
+      game.pushGameState(new Encounter(game, 1024, 768));
     }
   }
   /** @method

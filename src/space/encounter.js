@@ -23,8 +23,8 @@ export default class Encounter {
     constructor(game, width, height) {
         this.gameObjects = [];
 
-        this.width = width;
-        this.height = height;
+        this.width = Math.max(width, game.WIDTH);
+        this.height = Math.max(height, game.HEIGHT);
 
         this.initialize();
 
