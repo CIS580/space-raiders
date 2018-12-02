@@ -79,25 +79,73 @@ export default class PlanetTileset {
     this.width = this.tilemapJson.width;
     this.height = this.tilemapJson.height;
     this.numberOfTilesInMap = this.width * this.height;
+    this.tilemapOrder = [];
+    for(let layerIndex = 0; layerIndex < this.tilemapJson.layers.length; layerIndex++) {
+      if(this.tilemapJson.layers[layerIndex].type === "tilelayer") {
+        this.tilemapOrder.push({
+          id: this.tilemapJson.layers[layerIndex].id,
+          location: layerIndex
+        });
+      }
+    }
+    this.tilemapOrder.sort((a, b) => { return a.id - b.id; });
   }
 
   /** @method
-   * Retrieve the tile object for a tile at the given coordinates.
+   * Retrieve the highest layer tile object for a tile at the given coordinates.
    * The y coordinate can be omitted if the tiles are being indexed by a single dimension.
    * @param x - X grid coordinate for the requested tile.
    * @param y - Y grid coordinate for the requested tile.
    * @returns An array of properties defined by that tile, including imageX, imageY, and id, as well as other custom
-   * properties defined in Tiled.
+   * properties defined in Tiled. The highest layer with an actual tile in this location is returned.
    */
   getTile(x, y) {
     if(y === undefined) {
       y = 0;
     }
 
-    // We must take the tile id - 1 here because the 0 id within **tilemaps** is reserved for undefined tiles (as per
-    // Tiled standard). The id of each tile returned should be what we'd normally expect.
-    // Other than this fix, the id's work as expected.
-    return this.tileset[this.tilemapJson.layers[0].data[x + (this.tilemapJson.width * y)] - 1];
+    let highestTile = undefined;
+    this.getStackedTiles(x, y).reverse().some((value) => {
+      if(value !== undefined) {
+        highestTile = value;
+        return true;
+      }
+      return false;
+    });
+    return highestTile;
+  }
+
+  /** @method
+   * Retrieves all tiles at the given coordinates (if using multiple layers in Tiled).
+   * THe y coordinate can be omitted if the tiles are being index by a single dimension.
+   * @param x - X grid coordinate to retrieve from.
+   * @param y - Y grid coordinate to retrieve from.
+   * @returns {array} List of tiles for the provided coordinates where the "key" or index for each item is the layer id
+   * that the tile is found on.
+   * NOTE: Layer ID's start from 1 in Tiled, not 0! Requesting the 0 index will return undefined for this array.
+   */
+  getStackedTiles(x, y) {
+    if(y === undefined) {
+      y = 0;
+    }
+
+    let tiles = [];
+    for(let i = 0; i < this.tilemapOrder.length; i++) {
+      let layerIndex = this.tilemapOrder[i].location;
+
+      // We must take the tile id - 1 here because the 0 id within **tilemaps** is reserved for undefined tiles (as
+      // per Tiled standard). The id of each tile returned should be what we'd normally expect.
+      // Other than this fix, the id's work as expected.
+      let tileId = this.tilemapJson.layers[layerIndex].data[x + (this.tilemapJson.width * y)] - 1;
+
+      // -1 refers to undefined (unspecified) tiles in this layer.
+      if(tileId !== -1) {
+        // For some reason Tiled may "wrap" the tileId to be realId + (n * tilesetCount)
+        // To get the actual tile, we mod the tilecount.
+        tiles[this.tilemapJson.layers[layerIndex].id] = this.tileset[tileId % this.tilesetJson.tilecount];
+      }
+    }
+    return tiles;
   }
 
   /** @method
@@ -108,18 +156,34 @@ export default class PlanetTileset {
    */
   render(elapsedTime, context) {
     if(this.imageLoaded) {
-      for(let i = 0; i < this.numberOfTilesInMap; i++) {
-        let tile = this.getTile(i);
-        context.drawImage(
-          this.tileImage,
-          tile["imageX"],                                   // X position within the image
-          tile["imageY"],                                   // Y position within the image
-          32,                                               // Width of the tile within the image
-          32,                                               // Height of the tile within the image
-          (i % this.tilemapJson.width) * 32,                // X position within the rendered context
-          Math.floor(i / this.tilemapJson.width) * 32,   // Y position within the rendered context
-          32,                                               // Width of the tile within the rendered context
-          32);                                              // Height of the tile within the rendered context
+      // We don't use the getStackedTiles function here primarily for efficiency.
+      // We want to draw each layer in order, then go to the next layer (instead of tile by tile) to avoid cache miss.
+
+      // Draw each layer
+      for(let i = 0; i < this.tilemapOrder.length; i++) {
+        let layerIndex = this.tilemapOrder[i].location;
+        // Draw each tile
+        for(let tilemapIndex = 0; tilemapIndex < this.numberOfTilesInMap; tilemapIndex++) {
+          // Only draw the tile if the tile exists
+          // Non-existent tiles in a layer are 0 in JSON with each tile id for every other tile incremented by one
+          // We subtract 1 here to offset this, so -1 is non-existent and 0 and above is the actual tile id.
+          let tileId = this.tilemapJson.layers[layerIndex].data[tilemapIndex] - 1;
+          if(tileId !== -1) {
+            // For some reason Tiled may "wrap" the tileId to be realId + (n * tilesetCount)
+            // To get the actual tile, we mod the tilecount.
+            let tile = this.tileset[tileId % this.tilesetJson.tilecount];
+            context.drawImage(
+              this.tileImage,
+              tile["imageX"],                                           // X position within the image
+              tile["imageY"],                                           // Y position within the image
+              32,                                                       // Width of the tile within the image
+              32,                                                       // Height of the tile within the image
+              (tilemapIndex % this.tilemapJson.width) * 32,             // X position within the rendered context
+              Math.floor(tilemapIndex / this.tilemapJson.width) * 32,   // Y position within the rendered context
+              32,                                                       // Width of the tile within the rendered context
+              32);                                                      // Height of the tile within the rendered context
+          }
+        }
       }
     }
   }
