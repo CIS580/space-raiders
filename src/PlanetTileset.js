@@ -162,6 +162,28 @@ export default class PlanetTileset {
     return tiles;
   }
 
+  /**
+   * Draw a specific tile from your tileset.
+   * @param x - X grid coordinate to draw the tile
+   * @param y - Y grid coordinate to draw the tile
+   * @param id - Id of the tile (from your tileset) to draw
+   * @param context - Drawing context
+   */
+  drawTile(x, y, id, context) {
+    let tile = this.tileset[id];
+    context.drawImage(
+      this.tileImage,
+      tile["imageX"],                                           // X position within the image
+      tile["imageY"],                                           // Y position within the image
+      32,                                                       // Width of the tile within the image
+      32,                                                       // Height of the tile within the image
+      x * 32,             // X position within the rendered context
+      y * 32,   // Y position within the rendered context
+      32,                                                       // Width of the tile within the rendered context
+      32);                                                      // Height of the tile within the rendered context
+  }
+
+
   /** @method
    * Render the tileset.
    * Draw here as if your visible grid is infinite, scrolling within a viewport is done by the PlanetLevelManager.
