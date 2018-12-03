@@ -94,6 +94,17 @@ export default class PlanetTileset {
     this.tilemapOrder.sort((a, b) => { return a.id - b.id; });
   }
 
+  /**
+   * Change the tile id from its original value.
+   * @param x - X grid coordinate
+   * @param y - Y grid coordinate
+   * @param layer - Layer of the tile (try 0 or 1 if you aren't using layers)
+   * @param id - New id (from your tileset) for the tile.
+   */
+  setTileId(x, y, layer, id) {
+    this.tilemapJson.layers[layer].data[x + (this.tilemapJson.width * y)] = id + 1;
+  }
+
   /** @method
    * Retrieve the highest layer tile object for a tile at the given coordinates.
    * The y coordinate can be omitted if the tiles are being indexed by a single dimension.
