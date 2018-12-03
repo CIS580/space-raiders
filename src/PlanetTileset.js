@@ -45,16 +45,19 @@ export default class PlanetTileset {
     this.tileset = [];
     for(let i = 0; i < this.tilesetJson.tilecount; i++) {
       let properties = [];
-      properties["id"] = this.tilesetJson.tiles[i].id;
+      properties["id"] = i;
       properties["imageX"] = this.tilesetJson.spacing + ((i % this.tilesetJson.columns) * (32 + this.tilesetJson.margin));
       properties["imageY"] = this.tilesetJson.spacing + (Math.floor(i / this.tilesetJson.columns) * (32 + this.tilesetJson.margin));
 
-      let jsonProperties = this.tilesetJson.tiles[i].properties;
-      for(let j = 0; j < jsonProperties.length; j++) {
-        properties[jsonProperties[j].name] = jsonProperties[j].value;
-      }
-
       this.tileset[i] = properties;
+    }
+
+    for(let i = 0; i < this.tilesetJson.tiles.length; i++) {
+      let jsonProperties = this.tilesetJson.tiles[i].properties;
+      let id = this.tilesetJson.tiles[i].id;
+      for(let j = 0; j < jsonProperties.length; j++) {
+        this.tileset[id][jsonProperties[j].name] = jsonProperties[j].value;
+      }
     }
 
     // Prepare the tilemap.
