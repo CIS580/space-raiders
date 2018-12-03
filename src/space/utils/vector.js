@@ -144,6 +144,8 @@ export default class Vector {
     add(other) {
         this.x += other.x;
         this.y += other.y;
+
+        return this;
     }
 
     /**
@@ -154,6 +156,8 @@ export default class Vector {
     subtract(other) {
         this.x -= other.x;
         this.y -= other.y;
+
+        return this;
     }
 
     /**
@@ -164,6 +168,8 @@ export default class Vector {
     multiply(multiplier) {
         this.x *= multiplier;
         this.y *= multiplier;
+
+        return this;
     }
 
     /**
@@ -190,6 +196,8 @@ export default class Vector {
 
         this.x = x * cos - y * sin;
         this.y = x * sin + y * cos;
+
+        return this;
     }
 
     /**
@@ -201,6 +209,8 @@ export default class Vector {
 
         this.x = -y;
         this.y = x;
+
+        return this;
     }
 
     /**
