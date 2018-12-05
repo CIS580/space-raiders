@@ -94,6 +94,17 @@ export default class PlanetTileset {
     this.tilemapOrder.sort((a, b) => { return a.id - b.id; });
   }
 
+  /**
+   * Change the tile id from its original value.
+   * @param x - X grid coordinate
+   * @param y - Y grid coordinate
+   * @param layer - Layer of the tile (try 0 or 1 if you aren't using layers)
+   * @param id - New id (from your tileset) for the tile.
+   */
+  setTileId(x, y, layer, id) {
+    this.tilemapJson.layers[layer].data[x + (this.tilemapJson.width * y)] = id + 1;
+  }
+
   /** @method
    * Retrieve the highest layer tile object for a tile at the given coordinates.
    * The y coordinate can be omitted if the tiles are being indexed by a single dimension.
@@ -150,6 +161,28 @@ export default class PlanetTileset {
     }
     return tiles;
   }
+
+  /**
+   * Draw a specific tile from your tileset.
+   * @param x - X grid coordinate to draw the tile
+   * @param y - Y grid coordinate to draw the tile
+   * @param id - Id of the tile (from your tileset) to draw
+   * @param context - Drawing context
+   */
+  drawTile(x, y, id, context) {
+    let tile = this.tileset[id];
+    context.drawImage(
+      this.tileImage,
+      tile["imageX"],                                           // X position within the image
+      tile["imageY"],                                           // Y position within the image
+      32,                                                       // Width of the tile within the image
+      32,                                                       // Height of the tile within the image
+      x * 32,             // X position within the rendered context
+      y * 32,   // Y position within the rendered context
+      32,                                                       // Width of the tile within the rendered context
+      32);                                                      // Height of the tile within the rendered context
+  }
+
 
   /** @method
    * Render the tileset.
