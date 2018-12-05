@@ -7,23 +7,19 @@ export default class LizardPeople {
     this.tileset = tileset;
   }
 
-  update() {
-
-  }
-
   render(ctx) {
     switch (this.direction) {
       case 1:
-        this.tileset.drawTile(this.x, this.y, 15,ctx);
+        this.tileset.drawTile(this.x, this.y, 15, ctx);
         break;
       case 2:
-        this.tileset.drawTile(this.x, this.y, 16,ctx);
+        this.tileset.drawTile(this.x, this.y, 16, ctx);
         break;
       case 3:
-        this.tileset.drawTile(this.x, this.y, 17,ctx);
+        this.tileset.drawTile(this.x, this.y, 17, ctx);
         break;
       case 4:
-        this.tileset.drawTile(this.x, this.y, 18,ctx);
+        this.tileset.drawTile(this.x, this.y, 18, ctx);
         break;
     }
   }

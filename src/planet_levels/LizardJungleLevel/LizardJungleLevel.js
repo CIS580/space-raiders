@@ -53,9 +53,10 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    */
   playerInteracted(player, x, y) {
     //console.log("Player interacted with " + x + "," + y);
-    if (x === 2 && y === 11) {
+    if (x === 2 && y === 14 && player.y === 15) {
       //draw text box like yay you found it
       //set both finished and success to true
+      console.log('this one!');
     }
     this.lizards.forEach(function(lizard){
       if (x == lizard.x && y == lizard.y) {
@@ -88,6 +89,13 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    * @return True if the player may pass, false if the requested tile is "blocked".
    */
   tilePassable(x, y) {
+    var flag = false;
+    this.lizards.forEach(function(lizard) {
+      if (x === lizard.x && y === lizard.y) {
+        flag = true;
+      }
+    });
+    if (flag) return false;
     return this.tileset.getTile(x, y)["passable"] !== "false";
   }
 
