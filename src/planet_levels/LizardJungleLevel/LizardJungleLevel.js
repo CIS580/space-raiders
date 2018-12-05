@@ -1,5 +1,7 @@
 import BasePlanetLevel from "../BasePlanetLevel";
 import PlanetTileset from "../../PlanetTileset";
+import LizardPeople from "LizardPeople.js";
+
 
 /**
  * Example SamplePlanetLevel which extends the base planet class functionality.
@@ -17,7 +19,7 @@ export default class LizardJungleLevel extends BasePlanetLevel {
   constructor() {
     super();
 
-    this.playerSpawnX = 5;
+    this.playerSpawnX = 15;
     this.playerSpawnY = 18;
     this.playerSpawnFaceDirection = 1;
 
@@ -43,8 +45,11 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    */
   playerInteracted(player, x, y) {
     console.log("Player interacted with " + x + "," + y);
-
-    player.movePlayerToSpawn();
+    if (x === 2 && y === 11) {
+      //draw text box like yay you found it
+      //set both finished and success to true
+    }
+    //check if lizard location
   }
 
   /**
@@ -52,7 +57,7 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    * @param player Representation of the player.
    */
   playerMoved(player) {
-    console.log("Player at " + player.x + "," + player.y);
+    //console.log("Player at " + player.x + "," + player.y);
   }
 
   /**
@@ -62,7 +67,6 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    * @param y Y grid coordinate of the tile the player fires into (in front of player).
    */
   playerFired(player, x, y) {
-    console.log("Player fired at " + x + "," + y);
   }
 
   /**
@@ -72,7 +76,7 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    * @return True if the player may pass, false if the requested tile is "blocked".
    */
   tilePassable(x, y) {
-    return this.tileset.getTile(x, y)["passable"] === true;
+    return this.tileset.getTile(x, y)["passable"] !== "false";
   }
 
   /** @method
@@ -96,5 +100,6 @@ export default class LizardJungleLevel extends BasePlanetLevel {
   render(elapsedTime, context, player) {
     this.tileset.render(elapsedTime, context);
     player.render(elapsedTime, context);
+    //draw lizards underneath
   }
 }

@@ -1,5 +1,4 @@
 import Input from './input';
-import LizardJungleLevel from './planet_levels/LizardJungleLevel/LizardJungleLevel.js'
 import StartScreen from './menus/start-screen';
 
 /** @class Game
@@ -37,7 +36,7 @@ export default class Game {
 
     // Set up the game state stack
     this.gameState = []
-    this.gameState.push(new LizardJungleLevel());
+    this.gameState.push(new StartScreen());
   }
   /** @method pushGameState
     * Pushes the provided game state to the
