@@ -28,7 +28,7 @@ export default class Overworld {
 			var star = {
 			  x: Math.floor(Math.random() * game.WIDTH),
 			  y: Math.floor(Math.random() * game.HEIGHT),
-			  vx: Math.floor(Math.random() * 25)
+			  vx: Math.floor(Math.random() * 5)
 			};
 			this.starList.push(star);
 		  }
@@ -122,24 +122,24 @@ export default class Overworld {
 
 			star.x += elapsedTime/1000*vx;
 			star.y += elapsedTime/1000*vy;
-			if(star.x < 0){
+			if(star.x < -star.vx){
 				star.x = this.game.WIDTH;
 				star.y = Math.floor(Math.random() * this.game.HEIGHT)
-			} else if(star.y<0) {
+			} else if(star.y<-star.vx) {
 				star.x = Math.floor(Math.random()*this.game.WIDTH)
 				star.y = this.game.HEIGHT;
-			} else if(star.x>this.game.WIDTH)
+			} else if(star.x>this.game.WIDTH+star.vx)
 			{
 				star.x = 0;
 				star.y = Math.floor(Math.random() * this.game.HEIGHT)
-			} else if(star.y>this.game.HEIGHT)
+			} else if(star.y>this.game.HEIGHT+star.vx)
 			{
 				star.x = Math.floor(Math.random()*this.game.WIDTH)
 				star.y = 0;
 			}
 			context.fillStyle = "white";
 			context.beginPath();
-			context.arc(star.x, star.y, .1+ (star.vx / 5), 0, Math.PI * 2, true);
+			context.arc(star.x, star.y, .1+ star.vx, 0, Math.PI * 2, true);
 			context.closePath();
 			context.fill();
 		}
