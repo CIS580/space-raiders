@@ -1,4 +1,4 @@
-import AssetLoader from "./utils/assetLoader";
+import AssetLoader from "../../utils/assetLoader";
 import EncounterObject from "../pattern/encounterObject";
 import Type from "../pattern/encounterObjectType";
 import Vector from "../../utils/vector";
@@ -11,6 +11,21 @@ const PLAYER_RADIUS = 30.0;
 
 /** Name of base player asset */
 const PLAYER_ASSET_NAME = "player";
+
+/** Name of player-turning-left asset */
+const PLAYER_LEFT_ASSET_NAME = "playerLeft";
+
+/** Name of player-turning-right asset */
+const PLAYER_RIGHT_ASSET_NAME = "playerRight";
+
+/** Name of player engine flame 1 asset */
+const PLAYER_JET_ENGINE_1_ASSET_NAME = "jetFlame1";
+
+/** Name of player engine flame 2 asset */
+const PLAYER_JET_ENGINE_2_ASSET_NAME = "jetFlame2";
+
+/** Name of player engine flame 2 asset */
+const PLAYER_SHIELD_ASSET_NAME = "shield";
 
 /** Key associated with turning left */
 const KEY_TURN_LEFT = "ArrowLeft";
@@ -66,8 +81,9 @@ export default class PlayerShip extends EncounterObject {
         this.targetVelocity = 0.0;
         this.targetAngularVelocity = 0.0;
 
-        this.flicker = 0.0;
         this.gunCooldown = GUN_COOLDOWN;
+
+        this.engineAnimationFlicker = 0.0;
     }
 
     /**
@@ -200,8 +216,38 @@ export default class PlayerShip extends EncounterObject {
      * @param {CanvasRenderingContext2D} context - context to render content on
      */
     render(elapsedTime, context) {
-        this.superRender(elapsedTime, context);
+        let g = context;
+        g.save();
 
-        // TODO: Implement fancier rendering
+        g.translate(this.position.x, this.position.y);
+        g.rotate(this.angle);
+
+
+        // Select correct texture
+        let shieldOffset = 0;
+        let texture = AssetLoader.getAsset(PLAYER_ASSET_NAME);
+        if (this.angularVelocity > Math.PI / 8) {
+            texture = AssetLoader.getAsset(PLAYER_RIGHT_ASSET_NAME);
+            shieldOffset = 1;
+        } else if (this.angularVelocity < -Math.PI / 8) {
+            texture = AssetLoader.getAsset(PLAYER_LEFT_ASSET_NAME);
+            shieldOffset = -1;
+        }
+
+
+        let engineThrustLen = this.velocity.magnitude() * (Math.sin(this.engineAnimationFlicker) / 3 + 1) / 200;
+        this.engineAnimationFlicker += Math.PI * 4 / 3 * elapsedTime / 1000.0;
+
+
+        // TODO Render and animate shields
+        let shieldScale = 1;
+        g.drawImage(AssetLoader.getAsset(PLAYER_SHIELD_ASSET_NAME), (-this.radius * 1.5 * this.radiusScale + shieldOffset) * shieldScale, (-this.radius * 1.5 * this.radiusScale) * shieldScale, this.radius * 3 * this.radiusScale * shieldScale, this.radius * 3 * this.radiusScale * shieldScale);
+
+
+        g.drawImage(texture, -this.radius * this.radiusScale, -this.radius * this.radiusScale, this.radius * this.radiusScale * 2, this.radius * this.radiusScale * 2);
+        g.drawImage(AssetLoader.getAsset(PLAYER_JET_ENGINE_2_ASSET_NAME), -this.radius * this.radiusScale / 2, this.radius * this.radiusScale, this.radius * this.radiusScale, this.radius * this.radiusScale / 2 * engineThrustLen);
+        g.drawImage(AssetLoader.getAsset(PLAYER_JET_ENGINE_1_ASSET_NAME), -this.radius * this.radiusScale / 4, this.radius * this.radiusScale * 1.1, this.radius * this.radiusScale / 2, this.radius * this.radiusScale * engineThrustLen);
+
+        g.restore();
     }
 }

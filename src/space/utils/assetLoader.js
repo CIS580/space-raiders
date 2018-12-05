@@ -32,6 +32,13 @@ class AssetLoader {
     preloadImages() {
         this.getAsset("starBackground");
 
+        this.getAsset("player");
+        this.getAsset("playerLeft");
+        this.getAsset("playerRight");
+        this.getAsset("jetFlame1");
+        this.getAsset("jetFlame2");
+        this.getAsset("shield");
+
         // TODO: Preload required images
     }
 
