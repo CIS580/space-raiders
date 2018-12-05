@@ -181,4 +181,6 @@ export default class EncounterObject {
     render(elapsedTime, context) {
         this.superRender(elapsedTime, context);
     }
+
+    initialize() {}
 }

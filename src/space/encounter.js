@@ -2,6 +2,7 @@ import AssetLoader from "./utils/assetLoader";
 import Camera from "./utils/camera";
 import CollisionHandler from "./objects/pattern/collisionHandler";
 import Vector from "./utils/vector";
+import PlayerShip from "./objects/realization/playerShip";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'starBackground';
@@ -26,10 +27,9 @@ export default class Encounter {
         this.width = Math.max(width, game.WIDTH);
         this.height = Math.max(height, game.HEIGHT);
 
-        this.initialize();
-
         this.camera = new Camera(game.WIDTH, game.HEIGHT, new Vector(0, 0));
         this.prepareBackground();
+        this.initialize();
     }
 
     /**
@@ -37,6 +37,10 @@ export default class Encounter {
      */
     initialize() {
         // TODO: Prepare game objects and win conditions
+
+        let playerShip = new PlayerShip(this, new Vector(this.width / 2, this.height / 2));
+        this.gameObjects.push(playerShip);
+        this.camera.bindTo(playerShip);
     }
 
     /**
@@ -117,7 +121,13 @@ export default class Encounter {
     update(elapsedTime, input, game) {
         // TODO: Add additional updating
 
-        this.gameObjects.forEach(object => object.update && object.update(elapsedTime, input));
+        this.gameObjects.forEach(object => {
+            if (!object.initialized) {
+                object.initialize();
+                object.initialized = true;
+            }
+        });
+        this.gameObjects.forEach(object => object.update(elapsedTime, input));
         this.handleCollisions();
 
         this.camera.update(elapsedTime);
@@ -131,6 +141,13 @@ export default class Encounter {
      * @param {Game} game - reference to the upper-most game object
      */
     render(elapsedTime, context, game) {
+        this.gameObjects.forEach(object => {
+            if (!object.initialized) {
+                object.initialize();
+                object.initialized = true;
+            }
+        });
+
         // TODO: Add additional rendering
 
         this.camera.render(context);
