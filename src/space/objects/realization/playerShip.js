@@ -225,12 +225,12 @@ export default class PlayerShip extends EncounterObject {
 
         // Select correct texture
         let shieldOffset = 0;
-        let texture = AssetLoader.getAsset(PLAYER_ASSET_NAME);
+        let texture = this.assetPlayer;
         if (this.angularVelocity > Math.PI / 8) {
-            texture = AssetLoader.getAsset(PLAYER_RIGHT_ASSET_NAME);
+            texture = this.assetPlayerRight;
             shieldOffset = 1;
         } else if (this.angularVelocity < -Math.PI / 8) {
-            texture = AssetLoader.getAsset(PLAYER_LEFT_ASSET_NAME);
+            texture = this.assetPlayerLeft;
             shieldOffset = -1;
         }
 
@@ -239,15 +239,27 @@ export default class PlayerShip extends EncounterObject {
         this.engineAnimationFlicker += Math.PI * 4 / 3 * elapsedTime / 1000.0;
 
 
+        let renderRadius = this.radius * this.radiusScale;
+
         // TODO Render and animate shields
         let shieldScale = 1;
-        g.drawImage(AssetLoader.getAsset(PLAYER_SHIELD_ASSET_NAME), (-this.radius * 1.5 * this.radiusScale + shieldOffset) * shieldScale, (-this.radius * 1.5 * this.radiusScale) * shieldScale, this.radius * 3 * this.radiusScale * shieldScale, this.radius * 3 * this.radiusScale * shieldScale);
+        g.drawImage(this.assetShield, (-renderRadius * 1.5 + shieldOffset) * shieldScale, (-renderRadius * 1.5) * shieldScale, renderRadius * 3 * shieldScale, renderRadius * 3 * shieldScale);
 
 
-        g.drawImage(texture, -this.radius * this.radiusScale, -this.radius * this.radiusScale, this.radius * this.radiusScale * 2, this.radius * this.radiusScale * 2);
-        g.drawImage(AssetLoader.getAsset(PLAYER_JET_ENGINE_2_ASSET_NAME), -this.radius * this.radiusScale / 2, this.radius * this.radiusScale, this.radius * this.radiusScale, this.radius * this.radiusScale / 2 * engineThrustLen);
-        g.drawImage(AssetLoader.getAsset(PLAYER_JET_ENGINE_1_ASSET_NAME), -this.radius * this.radiusScale / 4, this.radius * this.radiusScale * 1.1, this.radius * this.radiusScale / 2, this.radius * this.radiusScale * engineThrustLen);
+        g.drawImage(texture, -renderRadius, -renderRadius, renderRadius * 2, renderRadius * 2);
+        g.drawImage(this.assetJetEngine2, -renderRadius / 2, renderRadius, renderRadius, renderRadius / 2 * engineThrustLen);
+        g.drawImage(this.assetJetEngine1, -renderRadius / 4, renderRadius * 1.1, renderRadius / 2, renderRadius * engineThrustLen);
 
         g.restore();
+    }
+
+    initialize() {
+        this.assetJetEngine2 = AssetLoader.getAsset(PLAYER_JET_ENGINE_2_ASSET_NAME);
+        this.assetJetEngine1 = AssetLoader.getAsset(PLAYER_JET_ENGINE_1_ASSET_NAME);
+
+        this.assetShield = AssetLoader.getAsset(PLAYER_SHIELD_ASSET_NAME);
+        this.assetPlayer = AssetLoader.getAsset(PLAYER_ASSET_NAME);
+        this.assetPlayerLeft = AssetLoader.getAsset(PLAYER_LEFT_ASSET_NAME);
+        this.assetPlayerRight = AssetLoader.getAsset(PLAYER_RIGHT_ASSET_NAME);
     }
 }

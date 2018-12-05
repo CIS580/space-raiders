@@ -121,7 +121,13 @@ export default class Encounter {
     update(elapsedTime, input, game) {
         // TODO: Add additional updating
 
-        this.gameObjects.forEach(object => object.update && object.update(elapsedTime, input));
+        this.gameObjects.forEach(object => {
+            if (!object.initialized) {
+                object.initialize();
+                object.initialized = true;
+            }
+        });
+        this.gameObjects.forEach(object => object.update(elapsedTime, input));
         this.handleCollisions();
 
         this.camera.update(elapsedTime);
@@ -135,6 +141,13 @@ export default class Encounter {
      * @param {Game} game - reference to the upper-most game object
      */
     render(elapsedTime, context, game) {
+        this.gameObjects.forEach(object => {
+            if (!object.initialized) {
+                object.initialize();
+                object.initialized = true;
+            }
+        });
+
         // TODO: Add additional rendering
 
         this.camera.render(context);
