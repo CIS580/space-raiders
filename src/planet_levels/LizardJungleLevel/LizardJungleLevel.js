@@ -1,15 +1,9 @@
 import BasePlanetLevel from "../BasePlanetLevel";
 import PlanetTileset from "../../PlanetTileset";
-import LizardPeople from "LizardPeople.js";
+import LizardPeople from "./LizardPeople";
 
 
-/**
- * Example SamplePlanetLevel which extends the base planet class functionality.
- * ** DO NOT MODIFY THIS CLASS. **
- *
- * To start your own planet, copy this file and rename the class to your own level name, then customize the various
- * methods to tailor it to your game.
- */
+
 export default class LizardJungleLevel extends BasePlanetLevel {
 
   /**
@@ -23,6 +17,7 @@ export default class LizardJungleLevel extends BasePlanetLevel {
     this.playerSpawnY = 18;
     this.playerSpawnFaceDirection = 1;
 
+
     // This loads your own tileset created from Tiled.
     // You'll need the tileset.json, tilemap.json, and image.png. Look at the PlanetTileset class for more details.
 
@@ -35,6 +30,19 @@ export default class LizardJungleLevel extends BasePlanetLevel {
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
     this.name = "Lizard Jungle Level";
+
+
+    this.lizards = [];
+    this.lizards.push(new LizardPeople(2, 3, 1, this.tileset,
+      "I heard the treasure was in the part of the forest that's shaped sort of like a 5."));
+    this.lizards.push(new LizardPeople(5, 10, 2, this.tileset,
+      "I thought the treasure was on the south side of a tree."));
+    this.lizards.push(new LizardPeople(23, 20, 3, this.tileset,
+      "Supposedly, the treasure is hidden in a tree somewhere!"));
+    this.lizards.push(new LizardPeople(12, 14, 4, this.tileset,
+      "The stories say that the treasure is close to the western edge of the forest."));
+    this.lizards.push(new LizardPeople(4, 8, 1, this.tileset,
+      "A friend told me that if you get to the grove with three trees, you've gone too far"));
   }
 
   /** @method
@@ -44,12 +52,16 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    * @param y Y grid coordinate of the interacted tile (in front of player).
    */
   playerInteracted(player, x, y) {
-    console.log("Player interacted with " + x + "," + y);
+    //console.log("Player interacted with " + x + "," + y);
     if (x === 2 && y === 11) {
       //draw text box like yay you found it
       //set both finished and success to true
     }
-    //check if lizard location
+    this.lizards.forEach(function(lizard){
+      if (x == lizard.x && y == lizard.y) {
+        console.log(lizard.text);
+      }
+    });
   }
 
   /**
@@ -100,6 +112,8 @@ export default class LizardJungleLevel extends BasePlanetLevel {
   render(elapsedTime, context, player) {
     this.tileset.render(elapsedTime, context);
     player.render(elapsedTime, context);
-    //draw lizards underneath
+    this.lizards.forEach(function(lizard) {
+      lizard.render(context);
+    })
   }
 }

@@ -17,6 +17,42 @@
                  "type":"string",
                  "value":"false"
                 }]
+        },
+        {
+         "id":15,
+         "properties":[
+                {
+                 "name":"passable",
+                 "type":"string",
+                 "value":"false"
+                }]
+        },
+        {
+         "id":16,
+         "properties":[
+                {
+                 "name":"passable",
+                 "type":"string",
+                 "value":"false"
+                }]
+        },
+        {
+         "id":17,
+         "properties":[
+                {
+                 "name":"passable",
+                 "type":"string",
+                 "value":"false"
+                }]
+        },
+        {
+         "id":18,
+         "properties":[
+                {
+                 "name":"passable",
+                 "type":"string",
+                 "value":"false"
+                }]
         }],
  "tilewidth":32,
  "type":"tileset",
