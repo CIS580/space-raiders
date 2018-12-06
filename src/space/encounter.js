@@ -7,6 +7,10 @@ import PlayerShip from "./objects/realization/playerShip";
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'starBackground';
 
+/** Safety margin object can be in when not in screen bounds, before they are removed */
+const SAFE_EXIT_MARGIN = 30.0;
+
+
 /**
  * @class Encounter
  *
@@ -40,7 +44,6 @@ export default class Encounter {
 
         let playerShip = new PlayerShip(this, new Vector(this.width / 2, this.height / 2));
         this.addObject(playerShip);
-
 
         this.camera.bindTo(playerShip);
     }
@@ -139,7 +142,19 @@ export default class Encounter {
                 object.initialized = true;
             }
         });
-        this.gameObjects.forEach(object => object.update(elapsedTime, input));
+        this.gameObjects.forEach(object => {
+            object.update(elapsedTime, input);
+
+            if (
+                object.position.x < -object.radius - SAFE_EXIT_MARGIN ||
+                this.width + object.radius + SAFE_EXIT_MARGIN < object.position.x ||
+                object.position.y < -object.radius - SAFE_EXIT_MARGIN ||
+                this.height + object.radius + SAFE_EXIT_MARGIN < object.position.y
+            ) {
+                this.removeObject(this);
+            }
+
+        });
         this.handleCollisions();
 
         this.camera.update(elapsedTime);
