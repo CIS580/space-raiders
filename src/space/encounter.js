@@ -42,10 +42,10 @@ export default class Encounter {
     initialize() {
         // TODO: Prepare game objects and win conditions
 
-        let playerShip = new PlayerShip(this, new Vector(this.width / 2, this.height / 2));
-        this.addObject(playerShip);
+        this.playerShip = new PlayerShip(this, new Vector(this.width / 2, this.height / 2));
+        this.addObject(this.playerShip);
 
-        this.camera.bindTo(playerShip);
+        this.camera.bindTo(this.playerShip);
     }
 
     /**
@@ -179,5 +179,11 @@ export default class Encounter {
 
         this.camera.render(context);
         this.gameObjects.forEach(object => object.render(elapsedTime, context));
+
+        if (this.playerShip) {
+            context.font = "20px Georgia";
+            context.fillText("Health: " + this.playerShip.health, 10, 35);
+            context.fillText("Shields: " + Math.round(this.playerShip.shieldHealth), game.WIDTH - 110, 35);
+        }
     }
 }

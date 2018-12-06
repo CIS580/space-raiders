@@ -37,13 +37,17 @@ export default class EncounterObject {
         this.angularVelocity = 0;
 
         this.destroyCounter = undefined;
+        this.health = 100;
+        this.killable = false;
     }
 
     /**
      * Starts the destroy animation
      */
     startDestroyAnimation() {
-        this.destroyCounter = DESTROY_DURATION;
+        if (this.destroyCounter === undefined) {
+            this.destroyCounter = DESTROY_DURATION;
+        }
     }
 
     /**
@@ -138,6 +142,15 @@ export default class EncounterObject {
      */
     render(elapsedTime, context) {
         this.superRender(elapsedTime, context);
+    }
+
+    hit(amount) {
+        if (!this.killable) return;
+
+        this.health -= amount;
+        if (this.health <= 0) {
+            this.startDestroyAnimation();
+        }
     }
 
     initialize() {}
