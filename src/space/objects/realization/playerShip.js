@@ -60,6 +60,8 @@ const TURNING_ANGULAR_VELOCITY = Math.PI;
 /** Cooldown for shooting */
 const GUN_COOLDOWN = 300.0;
 
+const SHIELD_HEALTH_MAX = 10.0;
+
 /**
  * @class PlayerShip
  *
@@ -84,6 +86,11 @@ export default class PlayerShip extends EncounterObject {
         this.gunCooldown = GUN_COOLDOWN;
 
         this.engineAnimationFlicker = 0.0;
+
+        this.killable = true;
+
+        this.shieldHealth = 0;
+        this.health = 100;
     }
 
     /**
@@ -194,6 +201,11 @@ export default class PlayerShip extends EncounterObject {
         this.angularVelocity = this.targetAngularVelocity;
     }
 
+    updateShields(elapsedTime) {
+        this.shieldHealth += elapsedTime / 1000.0;
+        if (this.shieldHealth > SHIELD_HEALTH_MAX) this.shieldHealth = SHIELD_HEALTH_MAX
+    }
+
     /**
      * Updates the encounter object state
      *
@@ -206,6 +218,7 @@ export default class PlayerShip extends EncounterObject {
         this.handleWeaponCommands(input);
 
         this.updateVelocities(elapsedTime);
+        this.updateShields(elapsedTime);
         this.superUpdate(elapsedTime, input);
     }
 
@@ -242,8 +255,11 @@ export default class PlayerShip extends EncounterObject {
         let renderRadius = this.radius * this.radiusScale;
 
         // TODO Render and animate shields
-        let shieldScale = 1;
+        let shieldScale = this.shieldHealth / SHIELD_HEALTH_MAX;
+        let lastAlpha = g.globalAlpha;
+        g.globalAlpha = lastAlpha * shieldScale;
         g.drawImage(this.assetShield, (-renderRadius * 1.5 + shieldOffset) * shieldScale, (-renderRadius * 1.5) * shieldScale, renderRadius * 3 * shieldScale, renderRadius * 3 * shieldScale);
+        g.globalAlpha = lastAlpha;
 
 
         g.drawImage(texture, -renderRadius, -renderRadius, renderRadius * 2, renderRadius * 2);
@@ -261,5 +277,16 @@ export default class PlayerShip extends EncounterObject {
         this.assetPlayer = AssetLoader.getAsset(PLAYER_ASSET_NAME);
         this.assetPlayerLeft = AssetLoader.getAsset(PLAYER_LEFT_ASSET_NAME);
         this.assetPlayerRight = AssetLoader.getAsset(PLAYER_RIGHT_ASSET_NAME);
+    }
+
+    hit(amount) {
+        this.shieldHealth -= amount;
+        if (this.shieldHealth < 0) {
+            this.health += this.shieldHealth;
+            this.shieldHealth = 0;
+        }
+        if (this.health <= 0) {
+            this.startDestroyAnimation();
+        }
     }
 }

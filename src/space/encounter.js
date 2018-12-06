@@ -7,6 +7,10 @@ import PlayerShip from "./objects/realization/playerShip";
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'starBackground';
 
+/** Safety margin object can be in when not in screen bounds, before they are removed */
+const SAFE_EXIT_MARGIN = 30.0;
+
+
 /**
  * @class Encounter
  *
@@ -27,7 +31,7 @@ export default class Encounter {
         this.width = Math.max(width, game.WIDTH);
         this.height = Math.max(height, game.HEIGHT);
 
-        this.camera = new Camera(game.WIDTH, game.HEIGHT, new Vector(0, 0));
+        this.camera = new Camera(new Vector(this.width, this.height), new Vector(game.WIDTH, game.HEIGHT));
         this.prepareBackground();
         this.initialize();
     }
@@ -38,9 +42,10 @@ export default class Encounter {
     initialize() {
         // TODO: Prepare game objects and win conditions
 
-        let playerShip = new PlayerShip(this, new Vector(this.width / 2, this.height / 2));
-        this.gameObjects.push(playerShip);
-        this.camera.bindTo(playerShip);
+        this.playerShip = new PlayerShip(this, new Vector(this.width / 2, this.height / 2));
+        this.addObject(this.playerShip);
+
+        this.camera.bindTo(this.playerShip);
     }
 
     /**
@@ -112,6 +117,16 @@ export default class Encounter {
     }
 
     /**
+     * Adds new object to gameObjects
+     *
+     * @param {EncounterObject} object - game object to be added to game
+     */
+    addObject(object) {
+        this.gameObjects.push(object);
+    }
+
+
+    /**
      * Updates the encounter state
      *
      * @param {DOMHighResTimeStamp} elapsedTime - time elapsed from last frame
@@ -127,7 +142,19 @@ export default class Encounter {
                 object.initialized = true;
             }
         });
-        this.gameObjects.forEach(object => object.update(elapsedTime, input));
+        this.gameObjects.forEach(object => {
+            object.update(elapsedTime, input);
+
+            if (
+                object.position.x < -object.radius - SAFE_EXIT_MARGIN ||
+                this.width + object.radius + SAFE_EXIT_MARGIN < object.position.x ||
+                object.position.y < -object.radius - SAFE_EXIT_MARGIN ||
+                this.height + object.radius + SAFE_EXIT_MARGIN < object.position.y
+            ) {
+                this.removeObject(this);
+            }
+
+        });
         this.handleCollisions();
 
         this.camera.update(elapsedTime);
@@ -151,6 +178,12 @@ export default class Encounter {
         // TODO: Add additional rendering
 
         this.camera.render(context);
-        this.gameObjects.forEach(object => object.render && object.render(elapsedTime, context));
+        this.gameObjects.forEach(object => object.render(elapsedTime, context));
+
+        if (this.playerShip) {
+            context.font = "20px Georgia";
+            context.fillText("Health: " + this.playerShip.health, 10, 35);
+            context.fillText("Shields: " + Math.round(this.playerShip.shieldHealth), game.WIDTH - 110, 35);
+        }
     }
 }

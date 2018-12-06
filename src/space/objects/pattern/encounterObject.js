@@ -1,8 +1,5 @@
 import Vector from "../../utils/vector";
 
-/** Safety margin object can be in when not in screen bounds, before they are removed */
-const SAFE_EXIT_MARGIN = 10.0;
-
 /** Factor to convert milisecond to seconds */
 const MILISECOND_TO_SECOND_FACTOR = 1.0 / 1000.0;
 
@@ -40,58 +37,17 @@ export default class EncounterObject {
         this.angularVelocity = 0;
 
         this.destroyCounter = undefined;
+        this.health = 100;
+        this.killable = false;
     }
 
     /**
      * Starts the destroy animation
      */
     startDestroyAnimation() {
-        this.destroyCounter = DESTROY_DURATION;
-    }
-
-    /**
-     * Checks, whether the object has outside the encounter map on the left side
-     *
-     * @returns True in case object left the game map on the left side, false otherwise
-     */
-    isTooFarLeft() {
-        return this.position.x < -this.radius - SAFE_EXIT_MARGIN;
-    }
-
-    /**
-     * Checks, whether the object has outside the encounter map on the right side
-     *
-     * @returns True in case object left the game map on the right side, false otherwise
-     */
-    isTooFarRight() {
-        return this.encounter.width + this.radius + SAFE_EXIT_MARGIN < this.position.x;
-    }
-
-    /**
-     * Checks, whether the object has outside the encounter map on the top side
-     *
-     * @returns True in case object left the game map on the top side, false otherwise
-     */
-    isTooFarTop() {
-        return this.position.y < -this.radius - SAFE_EXIT_MARGIN;
-    }
-
-    /**
-     * Checks, whether the object has outside the encounter map on the bottom side
-     *
-     * @returns True in case object left the game map on the bottom side, false otherwise
-     */
-    isTooFarBottom() {
-        return this.encounter.height + this.radius + SAFE_EXIT_MARGIN < this.position.y;
-    }
-
-    /**
-     * Checks, whether the object has left the game area
-     * 
-     * @returns True in case object left the game area, false otherwise
-     */
-    hasLeftGameArea() {
-        return this.isTooFarTop() || this.isTooFarBottom() || this.isTooFarLeft() || this.isTooFarRight();
+        if (this.destroyCounter === undefined) {
+            this.destroyCounter = DESTROY_DURATION;
+        }
     }
 
     /**
@@ -132,10 +88,6 @@ export default class EncounterObject {
     superUpdate(elapsedTime, input) {
         this.updatePhysics(elapsedTime);
 
-        if (this.hasLeftGameArea()) {
-            this.encounter.removeObject(this);
-        }
-
         this.updateDestroyAnimation(elapsedTime);
     }
 
@@ -163,6 +115,16 @@ export default class EncounterObject {
     }
 
     /**
+     * Checks, whether this game object collides with given game object
+     *
+     * @param {GameObject} other The other game object to check
+     * @returns True in case checked game objects are colliding, false otherwise
+     */
+    collidesWith(other) {
+        return (this.radius + other.radius) < Vector.magnitude(Vector.subtract(this.position, other.position));
+    }
+
+    /**
      * Updates the encounter object state
      *
      * @param {DOMHighResTimeStamp} elapsedTime - time elapsed from last frame
@@ -180,6 +142,15 @@ export default class EncounterObject {
      */
     render(elapsedTime, context) {
         this.superRender(elapsedTime, context);
+    }
+
+    hit(amount) {
+        if (!this.killable) return;
+
+        this.health -= amount;
+        if (this.health <= 0) {
+            this.startDestroyAnimation();
+        }
     }
 
     initialize() {}
