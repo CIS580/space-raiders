@@ -76,9 +76,8 @@ export default class BasePlanetLevel {
 
   /** @method
    * Draw text using the static context (after scrolling).
-   * @param staticContext
+   * Only use this for drawing items on top of the screen.
+   * @param staticContext - The context to draw on top of the screen and scrolling elements.
    */
-  renderText(staticContext) {
-
-  }
+  renderStatic(elapsedTime, staticContext, player) {}
 }
