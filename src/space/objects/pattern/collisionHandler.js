@@ -19,13 +19,27 @@ class EncounterCollisionHandler {
         return EncounterCollisionHandler.instance;
     }
 
-    /**
-     * Handles the collision of player-controlled spaceship and asteroid
-     *
-     * @param {PlayerShip} player - player-controlled spaceship which collided
-     * @param {Asteroid} asteroid - asteroid which collided
-     */
-    handlePlayerAsteroidCollision(player, asteroid) {
+    handleEnemyShipCollision(enemyShip, object) {
+        // TODO: Implement actual handling
+    }
+
+    handleExplosiveCollision(explosive, object) {
+        // TODO: Implement actual handling
+    }
+
+    handleExplosionCollision(explosion, object) {
+        // TODO: Implement actual handling
+    }
+
+    handleAsteroidCollision(asteroid, object) {
+        // TODO: Implement actual handling
+    }
+
+    handleBlackHoleCollision(blackHole, object) {
+        // TODO: Implement actual handling
+    }
+
+    handleBlackHoleRadiusCollision(blackHoleRadius, object) {
         // TODO: Implement actual handling
     }
 
@@ -36,11 +50,59 @@ class EncounterCollisionHandler {
      * @param {EncounterObject} other - the other game object which collided
      */
     handleCollision(object, other) {
+        if (object.type === 0 || other.type === 0) {
+            throw "Unknown type!";
+        }
         let collisionType = object.type | other.type;
         switch (collisionType) {
-            case Type.PLAYER_SHIP | Type.ASTEROID:
-                (object.type == Type.PLAYER_SHIP) ? this.handlePlayerAsteroidCollision(object, other)
-                                                  : this.handlePlayerAsteroidCollision(other, object);
+            case Type.ENEMY_SHIP | Type.ALLY_SHIP:
+            case Type.ENEMY_SHIP | Type.PLAYER_SHIP:
+                (object.type === Type.ENEMY_SHIP)
+                    ? this.handleEnemyShipCollision(object, other) : this.handleEnemyShipCollision(other, object);
+                break;
+
+            case Type.ASTEROID | Type.ASTEROID:
+            case Type.ASTEROID | Type.PLAYER_SHIP:
+            case Type.ASTEROID | Type.ALLY_SHIP:
+            case Type.ASTEROID | Type.ENEMY_SHIP:
+                (object.type === Type.ASTEROID)
+                    ? this.handleAsteroidCollision(object, other) : this.handleAsteroidCollision(other, object);
+                break;
+
+            case Type.EXPLOSIVE | Type.EXPLOSIVE:
+            case Type.EXPLOSIVE | Type.PLAYER_SHIP:
+            case Type.EXPLOSIVE | Type.ALLY_SHIP:
+            case Type.EXPLOSIVE | Type.ENEMY_SHIP:
+            case Type.EXPLOSIVE | Type.ASTEROID:
+                (object.type === Type.EXPLOSIVE)
+                    ? this.handleExplosiveCollision(object, other) : this.handleExplosiveCollision(other, object);
+                break;
+
+            case Type.EXPLOSION | Type.PLAYER_SHIP:
+            case Type.EXPLOSION | Type.ALLY_SHIP:
+            case Type.EXPLOSION | Type.ENEMY_SHIP:
+            case Type.EXPLOSION | Type.ASTEROID:
+            case Type.EXPLOSION | Type.EXPLOSIVE:
+                (object.type === Type.EXPLOSION)
+                    ? this.handleExplosionCollision(object, other) : this.handleExplosionCollision(other, object);
+                break;
+
+            case Type.BLACK_HOLE_RADIUS | Type.PLAYER_SHIP:
+            case Type.BLACK_HOLE_RADIUS | Type.ALLY_SHIP:
+            case Type.BLACK_HOLE_RADIUS | Type.ENEMY_SHIP:
+            case Type.BLACK_HOLE_RADIUS | Type.ASTEROID:
+            case Type.BLACK_HOLE_RADIUS | Type.EXPLOSIVE:
+                (object.type === Type.BLACK_HOLE_RADIUS)
+                    ? this.handleBlackHoleRadiusCollision(object, other) : this.handleBlackHoleRadiusCollision(other, object);
+                break;
+
+            case Type.BLACK_HOLE | Type.PLAYER_SHIP:
+            case Type.BLACK_HOLE | Type.ALLY_SHIP:
+            case Type.BLACK_HOLE | Type.ENEMY_SHIP:
+            case Type.BLACK_HOLE | Type.ASTEROID:
+            case Type.BLACK_HOLE | Type.EXPLOSIVE:
+                (object.type === Type.BLACK_HOLE)
+                    ? this.handleBlackHoleCollision(object, other) : this.handleBlackHoleCollision(other, object);
                 break;
 
             default:
