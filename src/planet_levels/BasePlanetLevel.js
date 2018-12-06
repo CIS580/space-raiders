@@ -79,4 +79,16 @@ export default class BasePlanetLevel {
    * @param {PlanetPlayer} player - representation of the player
    */
   render(elapsedTime, context, player) {}
+<<<<<<< HEAD
 }
+=======
+
+  /** @method
+   * Draw text using the static context (after scrolling).
+   * @param staticContext
+   */
+  renderText(staticContext) {
+
+  }
+}
+>>>>>>> planetbranch
