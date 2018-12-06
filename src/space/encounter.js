@@ -161,8 +161,8 @@ export default class Encounter {
         });
 
         // TODO: Add additional rendering
-        this.gameObjects.forEach(object => object.render && object.render(elapsedTime, context));
 
         this.camera.render(context);
+        this.gameObjects.forEach(object => object.render(elapsedTime, context));
     }
 }
