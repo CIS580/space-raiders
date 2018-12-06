@@ -39,7 +39,9 @@ export default class Encounter {
         // TODO: Prepare game objects and win conditions
 
         let playerShip = new PlayerShip(this, new Vector(this.width / 2, this.height / 2));
-        this.gameObjects.push(playerShip);
+        this.addObject(playerShip);
+
+
         this.camera.bindTo(playerShip);
     }
 
@@ -112,6 +114,16 @@ export default class Encounter {
     }
 
     /**
+     * Adds new object to gameObjects
+     *
+     * @param {EncounterObject} object - game object to be added to game
+     */
+    addObject(object) {
+        this.gameObjects.push(object);
+    }
+
+
+    /**
      * Updates the encounter state
      *
      * @param {DOMHighResTimeStamp} elapsedTime - time elapsed from last frame
@@ -149,8 +161,8 @@ export default class Encounter {
         });
 
         // TODO: Add additional rendering
+        this.gameObjects.forEach(object => object.render && object.render(elapsedTime, context));
 
         this.camera.render(context);
-        this.gameObjects.forEach(object => object.render && object.render(elapsedTime, context));
     }
 }
