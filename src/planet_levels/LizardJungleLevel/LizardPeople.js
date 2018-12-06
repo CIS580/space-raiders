@@ -5,6 +5,23 @@ export default class LizardPeople {
     this.direction = direction;
     this.text = text;
     this.tileset = tileset;
+    this.count = 1;
+  }
+
+  update(elapsedTime) {
+    this.count++;
+    if ((this.count % 45 === 0) && (this.x === 7)) {
+      this.direction = Math.floor(Math.random()*3)+1;
+      this.count = 0;
+    }
+    else if ((this.count % 75 === 0) && (this.x === 12)) {
+      this.direction = Math.floor(Math.random()*3)+1;
+      this.count = 0;
+    }
+    else if ((this.count % 90 === 0) && (this.x === 21)) {
+      this.direction = Math.floor(Math.random()*3)+1;
+      this.count = 0;
+    }
   }
 
   render(ctx) {

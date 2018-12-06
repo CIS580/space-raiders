@@ -30,19 +30,31 @@ export default class LizardJungleLevel extends BasePlanetLevel {
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
     this.name = "Lizard Jungle Level";
+    this.message = [];
+    this.final = false;
 
+    this.message.push("Welcome to hurgerbluger. The legends say that there's treasure hidden in these trees.");
+    this.message.push("Maybe talking to the locals will give some clues as to its location!");
 
     this.lizards = [];
-    this.lizards.push(new LizardPeople(2, 3, 1, this.tileset,
+    this.lizards.push(new LizardPeople(2, 2, 4, this.tileset,
       "I heard the treasure was in the part of the forest that's shaped sort of like a 5."));
-    this.lizards.push(new LizardPeople(5, 10, 2, this.tileset,
+    this.lizards.push(new LizardPeople(21, 9, 2, this.tileset,
       "I thought the treasure was on the south side of a tree."));
     this.lizards.push(new LizardPeople(23, 20, 3, this.tileset,
       "Supposedly, the treasure is hidden in a tree somewhere!"));
-    this.lizards.push(new LizardPeople(12, 14, 4, this.tileset,
+    this.lizards.push(new LizardPeople(12, 14, 1, this.tileset,
       "The stories say that the treasure is close to the western edge of the forest."));
-    this.lizards.push(new LizardPeople(4, 8, 1, this.tileset,
-      "A friend told me that if you get to the grove with three trees, you've gone too far"));
+    this.lizards.push(new LizardPeople(4, 7, 1, this.tileset,
+      "A friend told me that if you get to the grove with three trees, you've gone too far."));
+    this.lizards.push(new LizardPeople(22, 1, 3, this.tileset,
+      "There's treasure somewhere??"));
+    this.lizards.push(new LizardPeople(29, 5, 3, this.tileset,
+      "Have you seen Rathalgus lately? I swear he's gone crazy muttering about some treasure."));
+    this.lizards.push(new LizardPeople(29, 6, 4, this.tileset,
+      "I thought Rathalgus was just always like that..."));
+    this.lizards.push(new LizardPeople(7, 17, 3, this.tileset,
+      "Rathalgus knows. Rathalgus knows treasure is here somewhere. Rathalgus KNOWS."));
   }
 
   /** @method
@@ -53,16 +65,27 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    */
   playerInteracted(player, x, y) {
     //console.log("Player interacted with " + x + "," + y);
-    if (x === 2 && y === 14 && player.y === 15) {
-      //draw text box like yay you found it
-      //set both finished and success to true
-      console.log('this one!');
+    if (!this.final && x === 2 && y === 14 && player.y === 15) {
+      this.message.push('Nestled in a hole in a tree trunk you find a small statue of a lizard.');
+      this.message.push("It looks painstakingly hand carved. This must be the treasure!");
+      this.final = true;
+      return;
     }
+    var message = '';
     this.lizards.forEach(function(lizard){
       if (x == lizard.x && y == lizard.y) {
-        console.log(lizard.text);
+        message = lizard.text;
       }
     });
+    if (this.message.length !== 0 && message !== '') this.message.length = 0;
+    else if (message === '') {
+      this.message.length = 0;
+      if (this.final) {
+        this.finished = true;
+        this.success = true;
+      }
+    }
+    else this.message.push(message);
   }
 
   /**
@@ -70,7 +93,6 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    * @param player Representation of the player.
    */
   playerMoved(player) {
-    //console.log("Player at " + player.x + "," + player.y);
   }
 
   /**
@@ -89,6 +111,7 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    * @return True if the player may pass, false if the requested tile is "blocked".
    */
   tilePassable(x, y) {
+    if (this.message.length > 0) return false;
     var flag = false;
     this.lizards.forEach(function(lizard) {
       if (x === lizard.x && y === lizard.y) {
@@ -108,6 +131,9 @@ export default class LizardJungleLevel extends BasePlanetLevel {
    */
   update(elaspedTime, input, game, player) {
     player.update(elaspedTime, input, game);
+    this.lizards.forEach(function(lizard) {
+      lizard.update(elaspedTime);
+    })
   }
 
   /** @method
@@ -123,5 +149,27 @@ export default class LizardJungleLevel extends BasePlanetLevel {
     this.lizards.forEach(function(lizard) {
       lizard.render(context);
     })
+  }
+
+  /** @method
+   * Draw text using the static context (after scrolling).
+   * Only use this for drawing items on top of the screen.
+   * @param staticContext - The context to draw on top of the screen and scrolling elements.
+   */
+  renderStatic(elapsedTime, staticContext, player) {
+    if (this.message.length > 0) {
+      staticContext.fillStyle = 'white';
+      staticContext.fillRect(0, 576, 1024, 256);
+      staticContext.fillStyle = 'black';
+      staticContext.font = '24px Arial';
+      for (var i = 0; i < this.message.length; i++) {
+        staticContext.fillText(this.message[i], 60, 630+40*i);
+      }
+      staticContext.font = '18px Arial';
+      staticContext.fillText('Press F to continue', 800, 730);
+    }
+    else {
+      staticContext.fillStyle = 'transparent';
+    }
   }
 }
