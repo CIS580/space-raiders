@@ -163,6 +163,16 @@ export default class EncounterObject {
     }
 
     /**
+     * Checks, whether this game object collides with given game object
+     *
+     * @param {GameObject} other The other game object to check
+     * @returns True in case checked game objects are colliding, false otherwise
+     */
+    collidesWith(other) {
+        return (this.radius + other.radius) < Vector.magnitude(Vector.subtract(this.position, other.position));
+    }
+
+    /**
      * Updates the encounter object state
      *
      * @param {DOMHighResTimeStamp} elapsedTime - time elapsed from last frame
