@@ -30,6 +30,13 @@ class EncounterCollisionHandler {
     }
 
     /**
+     *  TODO
+     *  Type.SLOW | Type.ALLY_SHIP:
+     */
+    handleSlow(slow,ship) {
+        //ship.velocity = Vector.subtract(ship.velocity,slow.SLOW_VECTOR);
+    }
+    /**
      * Handles collision of two encounter game objects
      *
      * @param {EncounterObject} object - one of the object which collided

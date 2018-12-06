@@ -9,7 +9,8 @@ var EncounterObjectType = {
     ASTEROID :    0b00001000,
     BLACK_HOLE :  0b00010000,
     LOOP_HOLE :   0b00100000,
-    EXPLOSIVE :   0b01000000
+    EXPLOSIVE :   0b01000000,
+    SLOW :        0b10000000,
 };
 
 Object.freeze(EncounterObjectType);

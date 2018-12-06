@@ -73,7 +73,7 @@ export default class Encounter {
      * @returns True in case given game objects have collided, false otherwise
      */
     areColliding(object, other) {
-        return (object.radius + other.radius) < Vector.magnitude(Vector.subtract(object, other));
+        return object.areColliding(other) && other.areColliding(object);
     }
 
     /**
