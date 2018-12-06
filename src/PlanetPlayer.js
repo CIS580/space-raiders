@@ -7,11 +7,41 @@ export default class PlanetPlayer {
 
   /**
    * Create the player for a specific level.
+   * Loads the player animation images.
    * @param {BasePlanetLevel} level - The level this player belongs to.
    */
   constructor(level) {
     this.level = level;
     this.movePlayerToSpawn();
+
+    this.imagesLoading = 2;
+    this.playerJson = require('../dist/resources/planet_player/PlanetPlayer.json');
+
+    // Load the tileset image.
+    this.gunImage = new Image();
+    this.noGunImage = new Image();
+
+    this.gunImage.onload = (() => {
+      this.imagesLoading--;
+    });
+
+    this.noGunImage.onload = (() => {
+      this.imagesLoading--;
+    });
+
+    this.gunImage.src = "resources/planet_player/astrogun.png";
+    this.noGunImage.src = "resources/planet_player/astroman.png";
+
+    /// Load the tileset. Create an array of properties for each tile type which can be easily queried.
+    this.tileset = [];
+    for(let i = 0; i < this.playerJson.tilecount; i++) {
+      let properties = [];
+      properties["id"] = i;
+      properties["imageX"] = this.playerJson.spacing + ((i % this.playerJson.columns) * (32 + this.playerJson.margin));
+      properties["imageY"] = this.playerJson.spacing + (Math.floor(i / this.playerJson.columns) * (32 + this.playerJson.margin));
+
+      this.tileset[i] = properties;
+    }
   }
 
   /**
@@ -108,11 +138,31 @@ export default class PlanetPlayer {
    * @param {DOMHighResTimeStamp} elapsedTime - The amount of time elapsed this frame.
    * @param {CanvasRenderingContext2D} context - The rendering context.
    */
-  render(elapsedTime, context) {
+  render(elapsedTime, context, isHoldingGun) {
+    if(isHoldingGun === undefined) {
+      isHoldingGun = false;
+    }
+
+    let sourceImage;
+    if(isHoldingGun) {
+      sourceImage = this.gunImage;
+    } else {
+      sourceImage = this.noGunImage;
+    }
+
+    let imageY = (this.faceDirection + 2) % 4;
+    let tile = this.tileset[imageY * 3];
+    context.drawImage(
+      sourceImage,
+      tile["imageX"],                                           // X position within the image
+      tile["imageY"],                                           // Y position within the image
+      32,                                                       // Width of the tile within the image
+      32,                                                       // Height of the tile within the image
+      this.x * 32,                                              // X position within the rendered context
+      this.y * 32,                                              // Y position within the rendered context
+      32,                                                       // Width of the tile within the rendered context
+      32);
+
     //TODO player drawing, animation, smooth relocation
-    context.fillStyle = "blue";
-    context.beginPath();
-    context.arc(this.x * 32 + 16, this.y * 32 + 16, 16, 0, 2*Math.PI);
-    context.fill();
   }
 }
