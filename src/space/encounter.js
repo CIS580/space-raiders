@@ -31,7 +31,7 @@ export default class Encounter {
         this.width = Math.max(width, game.WIDTH);
         this.height = Math.max(height, game.HEIGHT);
 
-        this.camera = new Camera(game.WIDTH, game.HEIGHT, new Vector(0, 0));
+        this.camera = new Camera(new Vector(this.width, this.height), new Vector(game.WIDTH, game.HEIGHT));
         this.prepareBackground();
         this.initialize();
     }
