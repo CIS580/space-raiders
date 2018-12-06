@@ -34,7 +34,7 @@ class EncounterCollisionHandler {
      *  Type.SLOW | Type.ALLY_SHIP:
      */
     handleSlow(slow,ship) {
-        //ship.velocity = Vector.subtract(ship.velocity,slow.SLOW_VECTOR);
+        //ship.velocity = Vector.multiply(ship.velocity,slow.SLOW_FORCE);
     }
     /**
      * Handles collision of two encounter game objects

@@ -1,10 +1,8 @@
 import EncounterObject from "../pattern/encounterObject";
 import Type from "../pattern/encounterObjectType";
-import Vector from "../../utils/vector";
 
 const SLOW_RADIUS = 300;
-const SLOW_FORCE = 10;
-const SLOW_VECTOR = new Vector(SLOW_FORCE, SLOW_FORCE);
+const SLOW_FORCE = 0.3;
 
 export default class Slow extends EncounterObject {
     constructor(encounter, position) {
