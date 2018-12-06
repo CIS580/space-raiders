@@ -12,6 +12,19 @@ export default class PlanetPlayer {
    */
   constructor(level) {
     this.level = level;
+
+    this.animationDuration = 150;
+    this.animationMsPerImage = 100;
+
+    this.animationXOffset = 0;
+    this.animationYOffset = 0;
+    this.animationDirection = 0;
+    this.animationXOffset = 0;
+    this.animationYOffset = 0;
+    this.animationTimer = 0;
+    this.animationImageSequence = 0;
+    this.animationImageTile = undefined;
+
     this.movePlayerToSpawn();
 
     this.imagesLoading = 2;
@@ -77,43 +90,80 @@ export default class PlanetPlayer {
    * @param {Game} game - The game object. Not currently used.
    */
   update(elaspedTime, input, game) {
-    // TODO change to keypressed when animation locks in place (to allow hold down movement)
-    let moveLeft = input.keyDown('ArrowLeft') || false;
-    let moveRight = input.keyDown('ArrowRight') || false;
-    let moveUp = input.keyDown('ArrowUp') || false;
-    let moveDown = input.keyDown('ArrowDown') || false;
+    let moveLeft = input.keyPressed('ArrowLeft') || false;
+    let moveRight = input.keyPressed('ArrowRight') || false;
+    let moveUp = input.keyPressed('ArrowUp') || false;
+    let moveDown = input.keyPressed('ArrowDown') || false;
     let interact = input.keyDown('f') || false;
     let fire = input.keyDown(' ') || false;
+
+    if(this.animationTimer > 0) {
+      this.animationTimer -= elaspedTime;
+      this.animationImageSequence += elaspedTime;
+
+      if(this.animationTimer <= 0) {
+        this.animationXOffset = 0;
+        this.animationYOffset = 0;
+        if(this.animationDirection % 2 === 0) {
+          this.y += this.animationDirection - 1;
+        } else {
+          this.x += this.animationDirection - 2;
+        }
+
+        this.level.playerMoved(this);
+      } else {
+        if(this.animationDirection % 2 === 0) { // north or south
+          this.animationYOffset = (this.animationDirection - 1) * (32 - (32 * (this.animationTimer / this.animationDuration)));
+        } else {
+          this.animationXOffset = (this.animationDirection - 2) * (32 - (32 * (this.animationTimer / this.animationDuration)));
+        }
+      }
+    }
 
     // If more than one button is pressed down, we won't move.
     // This is to prevent some uncertain movement when the player is spamming the keys.
 
     // Asks the level if the target tile is passable before moving there.
     // Face direction will change regardless if the tile is passable.
-    if(moveLeft + moveRight + moveUp + moveDown === 1) {
-      if(moveLeft) {
-        if(this.level.tilePassable(this.x - 1, this.y)) {
-          this.x--;
+
+    if(this.animationTimer <= 0) {
+      if(moveLeft + moveRight + moveUp + moveDown === 1) {
+        if(moveLeft) {
+          this.faceDirection = 1;
+          if(this.level.tilePassable(this.x - 1, this.y)) {
+            this.animationTimer += this.animationDuration;
+            this.animationDirection = this.faceDirection;
+          }
+        } else if (moveRight) {
+          this.faceDirection = 3;
+          if(this.level.tilePassable(this.x + 1, this.y)) {
+            this.animationTimer += this.animationDuration;
+            this.animationDirection = this.faceDirection;
+          }
+        } else if (moveUp) {
+          this.faceDirection = 0;
+          if(this.level.tilePassable(this.x, this.y - 1)) {
+            this.animationTimer += this.animationDuration;
+            this.animationDirection = this.faceDirection;
+          }
+        } else if (moveDown) {
+          this.faceDirection = 2;
+          if(this.level.tilePassable(this.x, this.y + 1)) {
+            this.animationTimer += this.animationDuration;
+            this.animationDirection = this.faceDirection;
+          }
         }
-        this.faceDirection = 1;
-      } else if (moveRight) {
-        if(this.level.tilePassable(this.x + 1, this.y)) {
-          this.x++;
-        }
-        this.faceDirection = 3;
-      } else if (moveUp) {
-        if(this.level.tilePassable(this.x, this.y - 1)) {
-          this.y--;
-        }
-        this.faceDirection = 0;
-      } else if (moveDown) {
-        if(this.level.tilePassable(this.x, this.y + 1)) {
-          this.y++;
-        }
-        this.faceDirection = 2;
+      } else {
+        this.animationTimer = 0;
+        this.animationImageSequence = this.animationMsPerImage - 1;
       }
-      this.level.playerMoved(this);
     }
+
+    this.animationImageTile =
+      this.tileset[
+        (((this.faceDirection + 2) % 4) * 3) +
+        Math.floor(this.animationImageSequence / this.animationMsPerImage) % 3
+        ];
 
     if(interact) {
       if(this.faceDirection % 2 === 0) {  // Are we facing north or south?
@@ -137,32 +187,32 @@ export default class PlanetPlayer {
    * Draw here as if your visible grid is infinite, scrolling within a viewport is done by the PlanetLevelManager.
    * @param {DOMHighResTimeStamp} elapsedTime - The amount of time elapsed this frame.
    * @param {CanvasRenderingContext2D} context - The rendering context.
+   * @param {boolean} isHoldingGun - Whether or not the player should be drawn holding a weapon. Defaults to false if
+   * it isn't provided.
    */
   render(elapsedTime, context, isHoldingGun) {
-    if(isHoldingGun === undefined) {
-      isHoldingGun = false;
+    if(this.imagesLoading === 0) {
+      if(isHoldingGun === undefined) {
+          isHoldingGun = false;
+      }
+
+      let sourceImage;
+      if(isHoldingGun) {
+          sourceImage = this.gunImage;
+      } else {
+          sourceImage = this.noGunImage;
+      }
+
+      context.drawImage(
+          sourceImage,
+          this.animationImageTile["imageX"],                        // X position within the image
+          this.animationImageTile["imageY"],                        // Y position within the image
+          32,                                                       // Width of the tile within the image
+          32,                                                       // Height of the tile within the image
+          (this.x) * 32 + this.animationXOffset,                    // X position within the rendered context
+          (this.y) * 32 + this.animationYOffset,                    // Y position within the rendered context
+          32,                                                       // Width of the tile within the rendered context
+          32);                                                      // Height of the tile within the rendered context
     }
-
-    let sourceImage;
-    if(isHoldingGun) {
-      sourceImage = this.gunImage;
-    } else {
-      sourceImage = this.noGunImage;
-    }
-
-    let imageY = (this.faceDirection + 2) % 4;
-    let tile = this.tileset[imageY * 3];
-    context.drawImage(
-      sourceImage,
-      tile["imageX"],                                           // X position within the image
-      tile["imageY"],                                           // Y position within the image
-      32,                                                       // Width of the tile within the image
-      32,                                                       // Height of the tile within the image
-      this.x * 32,                                              // X position within the rendered context
-      this.y * 32,                                              // Y position within the rendered context
-      32,                                                       // Width of the tile within the rendered context
-      32);
-
-    //TODO player drawing, animation, smooth relocation
   }
 }

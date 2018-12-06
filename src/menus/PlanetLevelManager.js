@@ -113,10 +113,11 @@ export default class PlanetLevelManager {
         this.scrollingContext.clearRect(0, 0, this.scrollingCanvas.width, this.scrollingCanvas.height);
       }
 
+      let animationAdjustedPlayerX = this.player.x + (this.player.animationXOffset / 32);
       // Check if we need to scroll x dimension.
-      if(this.lastCalculatedTilemapWidth > game.GRID_WIDTH && this.player.x > this.leftEdge) {
-        if(this.player.x < this.rightEdge) {
-          this.scrollingXOffset = (this.player.x - this.leftEdge) * 32;
+      if(this.lastCalculatedTilemapWidth > game.GRID_WIDTH && animationAdjustedPlayerX > this.leftEdge) {
+        if(animationAdjustedPlayerX < this.rightEdge) {
+          this.scrollingXOffset = (this.player.x - this.leftEdge) * 32 + this.player.animationXOffset;
         } else {
           this.scrollingXOffset = (this.rightEdge - this.leftEdge) * 32;
         }
@@ -124,10 +125,11 @@ export default class PlanetLevelManager {
         this.scrollingXOffset = 0;
       }
 
+      let animationAdjustedPlayerY = this.player.y + (this.player.animationYOffset / 32);
       // Check if we need to scroll y dimension.
-      if(this.lastCalculatedTilemapHeight > game.GRID_HEIGHT && this.player.y > this.topEdge) {
-        if(this.player.y < this.bottomEdge) {
-          this.scrollingYOffset = (this.player.y - this.topEdge) * 32;
+      if(this.lastCalculatedTilemapHeight > game.GRID_HEIGHT && animationAdjustedPlayerY > this.topEdge) {
+        if(animationAdjustedPlayerY < this.bottomEdge) {
+          this.scrollingYOffset = (this.player.y - this.topEdge) * 32 + this.player.animationYOffset;
         } else {
           this.scrollingYOffset = (this.bottomEdge - this.topEdge) * 32;
         }
@@ -157,7 +159,7 @@ export default class PlanetLevelManager {
         this.drawingWidth,
         this.drawingHeight);
 
-      this.level.renderText(context);
+      this.level.renderStatic(elapsedTime, context, this.player);
     }
   }
 }
