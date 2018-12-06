@@ -112,4 +112,11 @@ export default class SamplePlanetLevel extends BasePlanetLevel {
     this.tileset.render(elapsedTime, context);
     player.render(elapsedTime, context);
   }
+
+  /** @method
+   * Draw items using the static context (after scrolling).
+   * Only use this for drawing items on top of the screen.
+   * @param staticContext - The context to draw on top of the screen and scrolling elements.
+   */
+  renderStatic(elapsedTime, staticContext, player) {}
 }
