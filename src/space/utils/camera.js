@@ -1,7 +1,7 @@
 import Vector from "./vector";
 
 /** Boundary on screen to start follow player when moving beyond */
-const FOLLOW_BOUNDARY = 0.4;
+const FOLLOW_BOUNDARY = 0.3;
 
 /** Color used for background rendering */
 const BACKGROUND_COLOR = "black";
@@ -16,17 +16,19 @@ export default class Camera {
     /**
      * Constructs base camera
      *
-     * @param {Number} width - width of the canvas to render on
-     * @param {Number} height - height of the canvas to render on
-     * @param {Vector} offset - starting offset for the camera
+     * @param {Vector} baseLayerDimensions - dimensions of the base layer for the camera
+     * @param {Vector} canvasDimensions - dimensions of the main game canvas
      */
-    constructor(width, height, offset) {
-        this.width = width;
-        this.height = height;
+    constructor(baseLayerDimensions, canvasDimensions) {
+        this.baseLayerDimensions = baseLayerDimensions;
+        this.canvasDimensions = canvasDimensions;
 
-        this.offset = offset;
+        this.delta = new Vector(0, 0);
+
+        this.previousOffset = new Vector(0, 0);
+        this.offset = new Vector(0, 0);
+
         this.target = null;
-
         this.layers = [];
     }
 
@@ -37,6 +39,9 @@ export default class Camera {
      */
     bindTo(target) {
         this.target = target;
+        this.offset = new Vector(-target.position.x + this.canvasDimensions.x / 2,
+                                 -target.position.y + this.canvasDimensions.y / 2);
+        this.previousOffset = new Vector(0, 0);
     }
 
     /**
@@ -56,11 +61,14 @@ export default class Camera {
      * @param {2DContext} context - context to render layers onto
      */
     render(context) {
+        context.translate(this.delta.x, this.delta.y);
+
         context.fillStyle = BACKGROUND_COLOR;
-        context.fillRect(0, 0, this.width, this.height);
+        context.fillRect(-this.offset.x, -this.offset.y, this.canvasDimensions.x, this.canvasDimensions.y);
 
         this.layers.forEach(layer => {
-            context.drawImage(layer.canvas, layer.offset.x, layer.offset.y);
+            let layerOffset = Vector.add(layer.offset, Vector.multiply(this.offset, 1.0 - layer.speed));
+            context.drawImage(layer.canvas, -layerOffset.x, -layerOffset.y);
         });
     }
 
@@ -71,15 +79,13 @@ export default class Camera {
      */
     update(deltaT) {
         let deltaX = this.computeDeltaX(deltaT);
-        this.offset.x += deltaX;
+        this.offset.x = this.clamp(-this.baseLayerDimensions.x + this.canvasDimensions.x, this.offset.x - deltaX, 0.0);
 
         let deltaY = this.computeDeltaY(deltaT);
-        this.offset.y += deltaY;
+        this.offset.y = this.clamp(-this.baseLayerDimensions.y + this.canvasDimensions.y, this.offset.y - deltaY, 0.0);
 
-        this.layers.forEach(layer => {
-            layer.offset.x = this.clamp(0, layer.offset.x - layer.speed * deltaX, layer.canvas.width - this.width);
-            layer.offset.y = this.clamp(0, layer.offset.y - layer.speed * deltaY, layer.canvas.height - this.height);
-        });
+        this.delta = Vector.subtract(this.offset, this.previousOffset);
+        this.previousOffset = new Vector( this.offset.x, this.offset.y );
     }
 
     /**
@@ -93,9 +99,9 @@ export default class Camera {
             return 0.0;
         }
 
-        let cameraX = this.target.x - this.offset.x;
-        let leftBoundary = this.width * FOLLOW_BOUNDARY;
-        let rightBoundary = this.width * (1 - FOLLOW_BOUNDARY);
+        let cameraX = this.target.position.x + this.offset.x;
+        let leftBoundary = this.canvasDimensions.x * FOLLOW_BOUNDARY;
+        let rightBoundary = this.canvasDimensions.x * (1 - FOLLOW_BOUNDARY);
 
         if (cameraX < leftBoundary) {
             return cameraX - leftBoundary;
@@ -119,9 +125,9 @@ export default class Camera {
             return 0.0;
         }
 
-        let cameraY = this.target.x - this.offset.y;
-        let topBoundary = this.height * FOLLOW_BOUNDARY;
-        let bottomBoundary = this.height * (1 - FOLLOW_BOUNDARY);
+        let cameraY = this.target.position.y + this.offset.y;
+        let topBoundary = this.canvasDimensions.y * FOLLOW_BOUNDARY;
+        let bottomBoundary = this.canvasDimensions.y * (1 - FOLLOW_BOUNDARY);
 
         if (cameraY < topBoundary) {
             return cameraY - topBoundary;
