@@ -156,6 +156,8 @@ export default class PlanetLevelManager {
         0,
         this.drawingWidth,
         this.drawingHeight);
+
+      this.level.renderText(context);
     }
   }
 }
