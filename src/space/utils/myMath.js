@@ -8,7 +8,7 @@ export default class MyMath {
      *
      * @param v1 Vector
      * @param v2 Vector
-     * @returns {number} Distance
+     * @returns {number} Distance from two points
      */
     static distance(v1,v2) {
         let dX = MyMath.dX(v1,v2);
