@@ -130,25 +130,25 @@ export default class PlanetPlayer {
       if(moveLeft + moveRight + moveUp + moveDown === 1) {
         if(moveLeft) {
           this.faceDirection = 1;
-          if(this.level.tilePassable(this.x - 1, this.y)) {
+          if(this.checkIfTileIsPassible(this.x - 1, this.y)) {
             this.animationTimer += this.animationDuration;
             this.animationDirection = this.faceDirection;
           }
         } else if (moveRight) {
           this.faceDirection = 3;
-          if(this.level.tilePassable(this.x + 1, this.y)) {
+          if(this.checkIfTileIsPassible(this.x + 1, this.y)) {
             this.animationTimer += this.animationDuration;
             this.animationDirection = this.faceDirection;
           }
         } else if (moveUp) {
           this.faceDirection = 0;
-          if(this.level.tilePassable(this.x, this.y - 1)) {
+          if(this.checkIfTileIsPassible(this.x, this.y - 1)) {
             this.animationTimer += this.animationDuration;
             this.animationDirection = this.faceDirection;
           }
         } else if (moveDown) {
           this.faceDirection = 2;
-          if(this.level.tilePassable(this.x, this.y + 1)) {
+          if(this.checkIfTileIsPassible(this.x, this.y + 1)) {
             this.animationTimer += this.animationDuration;
             this.animationDirection = this.faceDirection;
           }
@@ -180,6 +180,21 @@ export default class PlanetPlayer {
         this.level.playerFired(this, this.x + (this.faceDirection - 2), this.y);
       }
     }
+  }
+
+  /**
+   * Check if a tile (grid coordinates) is validly passable.
+   * Used internally for PlanetPlayer, but could be used externally if needed.
+   * @param x - X grid coordinate
+   * @param y - Y grid coordinate
+   * @returns {boolean} True if the tile is valid to be walked into; false if it is out-of-bounds or not passable.
+   */
+  checkIfTileIsPassible(x, y) {
+    return x >= 0 &&
+      x < this.level.tileset.tilemapJson.width &&
+      y >= 0 &&
+      y < this.level.tileset.tilemapJson.height &&
+      this.level.tilePassable(x, y);
   }
 
   /** @method
