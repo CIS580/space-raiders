@@ -120,8 +120,8 @@ export default class Overworld {
 	    for(var i=0, j=this.starList.length; i<j; i++) {
 			star = this.starList[i];
 
-			star.x += elapsedTime/1000*vx;
-			star.y += elapsedTime/1000*vy;
+			star.x += elapsedTime/1000*vx*star.vx/5;
+			star.y += elapsedTime/1000*vy*star.vx/5;
 			if(star.x < -star.vx){
 				star.x = this.game.WIDTH;
 				star.y = Math.floor(Math.random() * this.game.HEIGHT)
