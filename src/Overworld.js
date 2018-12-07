@@ -12,6 +12,13 @@ export default class Overworld {
 			}
 		};
 		
+		this.ShipSprites = new Image;
+		this.ShipSprites.src = 'resources/Overworld_Ship_Sprites.png';
+		this.BackgroundSprites = new Image;
+		this.BackgroundSprites.src = 'resources/Overworld_Background_Sprites.png';
+		this.BackgroundAnimationRow = 0;
+		this.BackgroundAnimationTimer = 0;
+		
 		this.map.start.right = this.map.test;
 		this.map.test.left = this.map.start;
 		
@@ -196,5 +203,29 @@ export default class Overworld {
 		context.restore();
 		
 		context.restore();
+		
+		this.renderBackgroundSprites(context,elapsedTime);
+	}
+	
+	renderBackgroundSprites(context,elapsedTime){
+		
+		if(this.BackgroundAnimationTimer >= 300){
+			this.BackgroundAnimationRow++;
+			if(this.BackgroundAnimationRow > 3){
+				this.BackgroundAnimationRow = 0;
+			}
+			this.BackgroundAnimationTimer = 0;
+		}
+		
+		context.drawImage(this.BackgroundSprites,3 * 63,this.BackgroundAnimationRow * 63,63,63,100,100,63,63);
+		context.drawImage(this.BackgroundSprites,4 * 63,this.BackgroundAnimationRow * 63,63,63,50,600,63,63);
+		
+		context.drawImage(this.BackgroundSprites,2 * 32, 256 + this.BackgroundAnimationRow * 32,32,32,800,700,32,32);
+		context.drawImage(this.BackgroundSprites,0 * 32, 256 + this.BackgroundAnimationRow * 32,32,32,500,30,32,32);
+		
+		context.drawImage(this.BackgroundSprites,0 * 32, 386,32,32,500,600,32,32);
+		context.drawImage(this.BackgroundSprites,2 * 32, 386,32,32,700,150,32,32);
+		
+		this.BackgroundAnimationTimer += elapsedTime;
 	}
 }
