@@ -39,6 +39,10 @@ class AssetLoader {
         this.getAsset("jetFlame2");
         this.getAsset("shield");
 
+        this.getAsset("starSmall");
+        this.getAsset("starBig");
+
+
         // TODO: Preload required images
     }
 

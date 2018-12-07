@@ -15,7 +15,7 @@ export default class StartScreen {
   update(elaspedTime, input, game) {
     // TODO: Load inital game state object
     if(input.keyPressed(' ')) {
-      game.pushGameState(new Encounter(game, 1024, 768));
+      game.pushGameState(new Encounter(game, 1024 * 3, 768 * 3));
     }
   }
   /** @method

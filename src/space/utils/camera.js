@@ -23,9 +23,6 @@ export default class Camera {
         this.baseLayerDimensions = baseLayerDimensions;
         this.canvasDimensions = canvasDimensions;
 
-        this.delta = new Vector(0, 0);
-
-        this.previousOffset = new Vector(0, 0);
         this.offset = new Vector(0, 0);
 
         this.target = null;
@@ -41,7 +38,6 @@ export default class Camera {
         this.target = target;
         this.offset = new Vector(-target.position.x + this.canvasDimensions.x / 2,
                                  -target.position.y + this.canvasDimensions.y / 2);
-        this.previousOffset = new Vector(0, 0);
     }
 
     /**
@@ -61,15 +57,15 @@ export default class Camera {
      * @param {2DContext} context - context to render layers onto
      */
     render(context) {
-        context.translate(this.delta.x, this.delta.y);
-
         context.fillStyle = BACKGROUND_COLOR;
         context.fillRect(-this.offset.x, -this.offset.y, this.canvasDimensions.x, this.canvasDimensions.y);
 
         this.layers.forEach(layer => {
-            let layerOffset = Vector.add(layer.offset, Vector.multiply(this.offset, 1.0 - layer.speed));
-            context.drawImage(layer.canvas, -layerOffset.x, -layerOffset.y);
+            let layerOffset = Vector.add(layer.offset, Vector.multiply(this.offset, layer.speed));
+            context.drawImage(layer.canvas, layerOffset.x, layerOffset.y);
         });
+
+        context.translate(this.offset.x, this.offset.y);
     }
 
     /**
@@ -84,8 +80,6 @@ export default class Camera {
         let deltaY = this.computeDeltaY(deltaT);
         this.offset.y = this.clamp(-this.baseLayerDimensions.y + this.canvasDimensions.y, this.offset.y - deltaY, 0.0);
 
-        this.delta = Vector.subtract(this.offset, this.previousOffset);
-        this.previousOffset = new Vector( this.offset.x, this.offset.y );
     }
 
     /**
