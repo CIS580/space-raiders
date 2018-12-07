@@ -1,7 +1,7 @@
 /** @function nineSlice
   * The fillText function does not contain any way to deal with wrap around or multiple lines. 
-	The bulk of this has to do with managing that.
-	This also isn't a nineslice implementation at all, that is just the name that we are running with.
+    The bulk of this has to do with managing that.
+    This also isn't a nineslice implementation at all, that is just the name that we are running with.
   * @param {int} x - the x coordinate of where the upper left of the text box should go
   * @param {int} y - the y coordinate of where the upper left of the text box should go
   * @param {string} name - the planet name
@@ -18,19 +18,19 @@ function nineSlice(x, y, name, color, txt){
     var arrLength = charArr.length; //length of char arr
     var maxLineLength = 55; //max amount of characters on one line
     var planetName = name //string
-	var planetColor = color; //hex string
-	var lineSpace = 14; //buffer space between lines
-	var fontSize = 12; //size of text
-	var planetNameLength = 35; //length of space that the planet name and buffer space takes up
-	var borderBuffer = 10; //space between text and border
-	var borderDimension = 1; //width, or length, of border around text
+    var planetColor = color; //hex string
+    var lineSpace = 14; //buffer space between lines
+    var fontSize = 12; //size of text
+    var planetNameLength = 35; //length of space that the planet name and buffer space takes up
+    var borderBuffer = 10; //space between text and border
+    var borderDimension = 1; //width, or length, of border around text
     
     var newCharArr = [];
     var lengthCounter = 0; //counts vertical length of text
 	
-	ctx.font = fontSize + "px Times New Roman";//font of the Planet Name
+    ctx.font = fontSize + "px Times New Roman";//font of the Planet Name
     ctx.fillStyle = planetColor; //color of the planet
-	ctx.fillText(planetName, textX, textY-6);//writing the Planet Name on screen
+    ctx.fillText(planetName, textX, textY-6);//writing the Planet Name on screen
     
     /**
 	Since fillText does not have multiline functionality, this for loop allows for that
@@ -52,7 +52,7 @@ function nineSlice(x, y, name, color, txt){
             }
             newCharArr[fauxI] = charArr[i];
             lengthCounter += lineSpace;
-			ctx.font = fontSize-2 + "px Arial";
+	    ctx.font = fontSize-2 + "px Arial";
             ctx.fillText(newCharArr.join(""), textX, textY+lengthCounter);
         }
         else{
@@ -70,18 +70,18 @@ function nineSlice(x, y, name, color, txt){
 	//on screen and clear array. Then draw border around it.
 	//Otherwise, if the array is empty, create the broder.
     if(newCharArr !== []){
-		ctx.font = fontSize-2 + "px Arial";
-		ctx.fillStyle = planetColor;
+	ctx.font = fontSize-2 + "px Arial";
+	ctx.fillStyle = planetColor;
         ctx.fillText(newCharArr.join(""), textX, textY+lengthCounter+lineSpace);
         newCharArr = [];
 		
 		
-		ctx.fillStyle = "white";
-		ctx.fillRect(textX-lineSpace, textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength); //left border (x, y, width, length)
-		ctx.fillRect(textX-lineSpace+(maxLineLength*(Math.floor(fontSize/2))), textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength); //right border
-		//(x, y, width, length)
-		ctx.fillRect(textX-lineSpace, textY-lineSpace-borderBuffer, maxLineLength*(Math.floor(fontSize/2)), borderDimension);//top border (x, y, width, length)
-		ctx.fillRect(textX-lineSpace, textY+lengthCounter+lineSpace+borderBuffer, maxLineLength*(Math.floor(fontSize/2)), borderDimension); //bottom border (x, y, width, length)
+	ctx.fillStyle = "white";
+	ctx.fillRect(textX-lineSpace, textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength); //left border (x, y, width, length)
+	ctx.fillRect(textX-lineSpace+(maxLineLength*(Math.floor(fontSize/2))), textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength); //right border
+	//(x, y, width, length)
+	ctx.fillRect(textX-lineSpace, textY-lineSpace-borderBuffer, maxLineLength*(Math.floor(fontSize/2)), borderDimension);//top border (x, y, width, length)
+	ctx.fillRect(textX-lineSpace, textY+lengthCounter+lineSpace+borderBuffer, maxLineLength*(Math.floor(fontSize/2)), borderDimension); //bottom border (x, y, width, length)
     }
 	else{
 		ctx.fillStyle = "white";
