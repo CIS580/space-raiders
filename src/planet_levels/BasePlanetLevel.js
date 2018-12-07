@@ -56,12 +56,6 @@ export default class BasePlanetLevel {
    */
   tilePassable(x, y) {}
 
-  drawText(text, context) {
-    context.fillStyle = 'white';
-    context.fillRect(0, 768, 256, 768);
-
-  }
-
   /** @method
    * Update any entities within this planet level, including the player.
    * @param {DOMHighResTimeStamp} elaspedTime - the amount of time elapsed this frame

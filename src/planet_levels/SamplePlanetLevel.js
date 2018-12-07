@@ -33,6 +33,16 @@ export default class SamplePlanetLevel extends BasePlanetLevel {
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
     this.name = "Sample Planet Level";
+
+    //TO DISPLAY TEXT ADD THIS TO YOUR CLASS
+    //You'll have changes in playerInteracted, tilePassable, and renderStatic.
+    //MAKE SURE YOU GET THEM ALL 
+    //If you need more reference, feel free to look at the implementation in LizardJungleLevel
+    this.message = [];
+    this.message.push('starting text');
+    //push each line individually
+    //you'll have to check if something goes off the screen and adjust for that by breaking
+    //it into multiple push statements
   }
 
   /** @method
@@ -43,23 +53,36 @@ export default class SamplePlanetLevel extends BasePlanetLevel {
    */
   playerInteracted(player, x, y) {
     console.log("Player interacted with " + x + "," + y);
-    if(this.map === undefined) {
-      this.map = 0;
+
+    //This code handles interacting with things and properly clearing the box
+    //I would suggest copying this exactly and then changing the if to whatever you need
+    var message = '';
+    if (x == 5) {
+      message = "wow!";
     }
-    this.map++;
-    this.map %= 3;
-    switch(this.map) {
-      case 0:
-        this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap.json"));
-        break;
-      case 1:
-        this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_large.json"));
-        break;
-      case 2:
-        this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_small.json"));
-        break;
+    if (this.message.length !== 0 && message !== '') this.message.length = 0;
+    else if (message === '') {
+      this.message.length = 0;
     }
-    player.movePlayerToSpawn();
+    else this.message.push(message);
+
+    // if(this.map === undefined) {
+    //   this.map = 0;
+    // }
+    // this.map++;
+    // this.map %= 3;
+    // switch(this.map) {
+    //   case 0:
+    //     this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap.json"));
+    //     break;
+    //   case 1:
+    //     this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_large.json"));
+    //     break;
+    //   case 2:
+    //     this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_small.json"));
+    //     break;
+    // }
+    // player.movePlayerToSpawn();
   }
 
   /**
@@ -87,6 +110,7 @@ export default class SamplePlanetLevel extends BasePlanetLevel {
    * @return True if the player may pass, false if the requested tile is "blocked".
    */
   tilePassable(x, y) {
+    if (this.message.length > 0) return false; //Add this line so you can't move when the text box is there
     return this.tileset.getTile(x, y)["passable"] === true;
   }
 
@@ -118,5 +142,21 @@ export default class SamplePlanetLevel extends BasePlanetLevel {
    * Only use this for drawing items on top of the screen.
    * @param staticContext - The context to draw on top of the screen and scrolling elements.
    */
-  renderStatic(elapsedTime, staticContext, player) {}
-}
+  renderStatic(elapsedTime, staticContext, player) {
+    //just copy and paste all of this
+      if (this.message.length > 0) {
+        staticContext.fillStyle = 'white';
+        staticContext.fillRect(0, 576, 1024, 256);
+        staticContext.fillStyle = 'black';
+        staticContext.font = '24px Arial';
+        for (var i = 0; i < this.message.length; i++) {
+          staticContext.fillText(this.message[i], 60, 630+40*i);
+        }
+        staticContext.font = '18px Arial';
+        staticContext.fillText('Press F to continue', 800, 730);
+      }
+      else {
+        staticContext.fillStyle = 'transparent';
+      }
+    }
+  }
