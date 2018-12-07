@@ -26,6 +26,8 @@ export default class Slow extends EncounterObject {
         context.fillStyle = 'rgba(0, 0, 0, 0.08)';
         context.fill();
         context.stroke();
+        context.fillStyle = "rgba(0, 0, 0, 1)";
+        context.strokeStyle = "rgba(0, 0, 0, 1)";
     }
 
     remove(element) {
