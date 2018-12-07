@@ -1,3 +1,5 @@
+import TempMenu from "./TempMenu"
+
 export default class Overworld {
 	constructor(game)
 	{
@@ -75,6 +77,10 @@ export default class Overworld {
 			} else if(!this.flag){
 				this.flag = true;
 				//do encounter
+				if(Math.random()>.5)
+				{
+					console.log("Encounter");
+				}
 			}
 			this.time += elapsedTime/1000;
 			this.x = this.lerp(this.time,this.currentNode.x,this.nextNode.x);
@@ -84,8 +90,14 @@ export default class Overworld {
 				this.state = "stop";
 				this.time = 0;
 				this.currentNode = this.nextNode;
+				game.pushGameState(new TempMenu(["hello","hi"],this.callback,game));
 			}
 		}
+	}
+	
+	callback(string)
+	{
+		console.log(string);
 	}
 	
 	drawNode(context,x,y)
@@ -217,14 +229,14 @@ export default class Overworld {
 			this.BackgroundAnimationTimer = 0;
 		}
 		
-		context.drawImage(this.BackgroundSprites,3 * 63,this.BackgroundAnimationRow * 63,63,63,100,100,63,63);
-		context.drawImage(this.BackgroundSprites,4 * 63,this.BackgroundAnimationRow * 63,63,63,50,600,63,63);
+		context.drawImage(this.BackgroundSprites,3 * 63,this.BackgroundAnimationRow * 63,63,63,100-this.x,100-this.y,63,63);
+		context.drawImage(this.BackgroundSprites,4 * 63,this.BackgroundAnimationRow * 63,63,63,50-this.x,600-this.y,63,63);
 		
-		context.drawImage(this.BackgroundSprites,2 * 32, 256 + this.BackgroundAnimationRow * 32,32,32,800,700,32,32);
-		context.drawImage(this.BackgroundSprites,0 * 32, 256 + this.BackgroundAnimationRow * 32,32,32,500,30,32,32);
+		context.drawImage(this.BackgroundSprites,2 * 32, 256 + this.BackgroundAnimationRow * 32,32,32,800-this.x,700-this.y,32,32);
+		context.drawImage(this.BackgroundSprites,0 * 32, 256 + this.BackgroundAnimationRow * 32,32,32,500-this.x,30-this.y,32,32);
 		
-		context.drawImage(this.BackgroundSprites,0 * 32, 386,32,32,500,600,32,32);
-		context.drawImage(this.BackgroundSprites,2 * 32, 386,32,32,700,150,32,32);
+		context.drawImage(this.BackgroundSprites,0 * 32, 386,32,32,500-this.x,600-this.y,32,32);
+		context.drawImage(this.BackgroundSprites,2 * 32, 386,32,32,700-this.x,150-this.y,32,32);
 		
 		this.BackgroundAnimationTimer += elapsedTime;
 	}
