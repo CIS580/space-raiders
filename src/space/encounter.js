@@ -5,9 +5,10 @@ import Vector from "./utils/vector";
 import PlayerShip from "./objects/realization/playerShip";
 
 /** Name of the image used for the background */
-const BACKGROUND_IMAGE = 'starBackground';
-const STAR_SMALL_IMAGE = 'starSmall';
-const STAR_BIG_IMAGE = 'starBig';
+const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
+const STAR_SMALL_IMAGE = 'spaceBackground/starSmall';
+const STAR_BIG_IMAGE = 'spaceBackground/starBig';
+const PLANET_IMAGE_PREFIX = 'spaceBackground/planet-';
 
 /** Safety margin object can be in when not in screen bounds, before they are removed */
 const SAFE_EXIT_MARGIN = 30.0;
@@ -77,13 +78,14 @@ export default class Encounter {
             }
         }
 
-        let amount = Math.sqrt(this.width * this.height) / 15;
+
         this.camera.addLayer(buffer, 0.2, new Vector(0, 0));
         for (let i = 0; i < 3; i ++) {
             let starBuffer = this.createLayer();
             let starCtx = starBuffer.getContext('2d');
             starCtx.globalAlpha = 0.7;
 
+            let amount = Math.sqrt(this.width * this.height) / 20;
             for (let j = 0; j < amount; j++) {
                 let star = starSmallImage;
                 if (Math.random() < 0.5) star = starBigImage;
@@ -92,6 +94,20 @@ export default class Encounter {
 
                 starCtx.drawImage(star, x, y);
             }
+
+            if (i < 2) {
+                amount = Math.floor(Math.random() * 3);
+                starCtx.globalAlpha = 1;
+                for (let j = 0; j < amount; j++) {
+                    let planet = AssetLoader.getAsset(PLANET_IMAGE_PREFIX + (Math.floor(Math.random() * 12) + 1));
+                    let size = Math.random() * 500 + 250;
+                    let x = Math.random() * this.width;
+                    let y = Math.random() * this.height;
+
+                    starCtx.drawImage(planet, x - size / 2, y - size / 2, size, size);
+                }
+            }
+
 
             this.camera.addLayer(starBuffer, 0.5 + i / 4.0, new Vector(0, 0));
         }
