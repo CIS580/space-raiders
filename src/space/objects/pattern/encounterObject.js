@@ -154,4 +154,13 @@ export default class EncounterObject {
     }
 
     initialize() {}
+
+    /**
+     * Check if two objects collide, basic circle shape
+     * @param other
+     * @returns {boolean}
+     */
+    areColliding(other) {
+        return (this.radius + other.radius) < Vector.magnitude(Vector.subtract(this.position, other.position));
+    }
 }
