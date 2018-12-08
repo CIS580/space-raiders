@@ -164,6 +164,6 @@ export default class EncounterObject {
      * @returns {boolean}
      */
     areColliding(other) {
-        return (this.radius + other.radius) < Vector.magnitude(Vector.subtract(this.position, other.position));
+        return (MyMath.distance(this.position,other.position) < this.radius + other.radius);
     }
 }
