@@ -124,7 +124,7 @@ export default class EncounterObject {
      * @returns True in case checked game objects are colliding, false otherwise
      */
     collidesWith(other) {
-        return (MyMath.distance(object.position,other.position) < this.radius + other.radius);
+        return (MyMath.distance(this.position,other.position) < this.radius + other.radius);
     }
 
     /**
