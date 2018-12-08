@@ -30,14 +30,20 @@ class AssetLoader {
      * Preloads images needed
      */
     preloadImages() {
-        this.getAsset("starBackground");
-
         this.getAsset("player");
         this.getAsset("playerLeft");
         this.getAsset("playerRight");
         this.getAsset("jetFlame1");
         this.getAsset("jetFlame2");
         this.getAsset("shield");
+
+        this.getAsset("spaceBackground/starBackground");
+        this.getAsset("spaceBackground/starSmall");
+        this.getAsset("spaceBackground/starBig");
+        for (let i = 1; i <= 12; i++) {
+            this.getAsset("spaceBackground/planet-" + i );
+        }
+
 
         // TODO: Preload required images
     }

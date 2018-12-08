@@ -254,11 +254,11 @@ export default class PlayerShip extends EncounterObject {
 
         let renderRadius = this.radius * this.radiusScale;
 
-        // TODO Render and animate shields
-        let shieldScale = this.shieldHealth / SHIELD_HEALTH_MAX;
+        let shieldAnimation = 1 - this.shieldHealth / SHIELD_HEALTH_MAX;
+        shieldAnimation = -shieldAnimation * shieldAnimation * shieldAnimation + 1;
         let lastAlpha = g.globalAlpha;
-        g.globalAlpha = lastAlpha * shieldScale;
-        g.drawImage(this.assetShield, (-renderRadius * 1.5 + shieldOffset) * shieldScale, (-renderRadius * 1.5) * shieldScale, renderRadius * 3 * shieldScale, renderRadius * 3 * shieldScale);
+        g.globalAlpha = lastAlpha * shieldAnimation;
+        g.drawImage(this.assetShield, (-renderRadius * 1.5 + shieldOffset) * shieldAnimation, (-renderRadius * 1.5) * shieldAnimation, renderRadius * 3 * shieldAnimation, renderRadius * 3 * shieldAnimation);
         g.globalAlpha = lastAlpha;
 
 

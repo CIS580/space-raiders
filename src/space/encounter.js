@@ -7,7 +7,11 @@ import PlayerShip from "./objects/realization/playerShip";
 import Slow from "./objects/realization/aoeObject";
 import Asteroid from "./objects/realization/asteroid";
 
-const BACKGROUND_IMAGE = 'starBackground';
+/** Name of the image used for the background */
+const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
+const STAR_SMALL_IMAGE = 'spaceBackground/starSmall';
+const STAR_BIG_IMAGE = 'spaceBackground/starBig';
+const PLANET_IMAGE_PREFIX = 'spaceBackground/planet-';
 
 /** Safety margin object can be in when not in screen bounds, before they are removed */
 const SAFE_EXIT_MARGIN = 30.0;
@@ -50,26 +54,66 @@ export default class Encounter {
         this.camera.bindTo(this.playerShip);
     }
 
+    /* private */ createLayer() {
+        let buffer = document.createElement('canvas');
+        buffer.width = this.width;
+        buffer.height = this.height;
+
+        return buffer;
+    }
+
     /**
      * Prepares the background image
      */
     prepareBackground() {
-        this.backgroundBuffer = document.createElement('canvas');
-        this.backgroundBuffer.width = this.width;
-        this.backgroundBuffer.height = this.height;
-        this.backgroundBufferCtx = this.backgroundBuffer.getContext('2d');
+        let buffer = this.createLayer();
+        let ctx = buffer.getContext('2d');
 
         let backgroundImage = AssetLoader.getAsset(BACKGROUND_IMAGE);
+        let starSmallImage = AssetLoader.getAsset(STAR_SMALL_IMAGE);
+        let starBigImage = AssetLoader.getAsset(STAR_BIG_IMAGE);
         let imageWidth = backgroundImage.width;
         let imageHeight = backgroundImage.height;
 
         for (let x = 0; x < this.width; x += imageWidth) {
             for (let y = 0; y < this.height; y += imageHeight) {
-                this.backgroundBufferCtx.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
+                ctx.drawImage(backgroundImage, x, y, imageWidth, imageHeight);
             }
         }
 
-        this.camera.addLayer(this.backgroundBuffer, 1.0, new Vector(0, 0));
+
+        this.camera.addLayer(buffer, 0.2, new Vector(0, 0));
+        for (let i = 0; i < 3; i ++) {
+            let starBuffer = this.createLayer();
+            let starCtx = starBuffer.getContext('2d');
+            starCtx.globalAlpha = 0.7;
+
+            let amount = Math.sqrt(this.width * this.height) / 20;
+            for (let j = 0; j < amount; j++) {
+                let star = starSmallImage;
+                if (Math.random() < 0.5) star = starBigImage;
+                let x = Math.random() * this.width;
+                let y = Math.random() * this.height;
+
+                starCtx.drawImage(star, x, y);
+            }
+
+            if (i < 2) {
+                amount = Math.floor(Math.random() * 3);
+                starCtx.globalAlpha = 1;
+                for (let j = 0; j < amount; j++) {
+                    let planet = AssetLoader.getAsset(PLANET_IMAGE_PREFIX + (Math.floor(Math.random() * 12) + 1));
+                    let size = Math.random() * 500 + 250;
+                    let x = Math.random() * this.width;
+                    let y = Math.random() * this.height;
+
+                    starCtx.drawImage(planet, x - size / 2, y - size / 2, size, size);
+                }
+            }
+
+
+            this.camera.addLayer(starBuffer, 0.5 + i / 4.0, new Vector(0, 0));
+        }
     }
 
     /**
@@ -182,8 +226,10 @@ export default class Encounter {
 
         // TODO: Add additional rendering
 
+        context.save();
         this.camera.render(context);
         this.gameObjects.forEach(object => object.render(elapsedTime, context));
+        context.restore();
 
         if (this.playerShip) {
             context.font = "20px Georgia";
