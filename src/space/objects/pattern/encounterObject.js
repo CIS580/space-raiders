@@ -1,6 +1,7 @@
-import Vector from "../../utils/vector";
-
 /** Factor to convert milisecond to seconds */
+import Vector from "../../utils/vector";
+import MyMath from "../../utils/myMath";
+
 const MILISECOND_TO_SECOND_FACTOR = 1.0 / 1000.0;
 
 /** Duration of destroy animation */
@@ -39,6 +40,8 @@ export default class EncounterObject {
         this.destroyCounter = undefined;
         this.health = 100;
         this.killable = false;
+
+        this.mass = 50;
     }
 
     /**
@@ -121,7 +124,7 @@ export default class EncounterObject {
      * @returns True in case checked game objects are colliding, false otherwise
      */
     collidesWith(other) {
-        return (this.radius + other.radius) < Vector.magnitude(Vector.subtract(this.position, other.position));
+        return (MyMath.distance(object.position,other.position) < this.radius + other.radius);
     }
 
     /**
