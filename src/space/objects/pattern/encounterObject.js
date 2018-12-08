@@ -1,7 +1,7 @@
-/** Factor to convert milisecond to seconds */
 import Vector from "../../utils/vector";
 import MyMath from "../../utils/myMath";
 
+/** Factor to convert milisecond to seconds */
 const MILISECOND_TO_SECOND_FACTOR = 1.0 / 1000.0;
 
 /** Duration of destroy animation */
