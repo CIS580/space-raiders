@@ -3,6 +3,8 @@
   */
 import PlanetLevelManager from "./PlanetLevelManager";
 import SamplePlanetLevel from "../planet_levels/SamplePlanetLevel";
+import JungleArenaLevel from "../planet_levels/JungleArenaLevel/JungleArenaLevel";
+import LizardJungleLevel from "../planet_levels/LizardJungleLevel/LizardJungleLevel";
 
 export default class StartScreen {
   /** @method
@@ -14,7 +16,7 @@ export default class StartScreen {
   update(elaspedTime, input, game) {
     // TODO: Load inital game state object
     if(input.keyPressed(' ')) {
-      game.pushGameState(new PlanetLevelManager(new SamplePlanetLevel()));;
+      game.pushGameState(new PlanetLevelManager(new JungleArenaLevel()));;
     }
   }
   /** @method

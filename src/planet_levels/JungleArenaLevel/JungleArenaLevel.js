@@ -26,10 +26,16 @@ export default class JungleArenaLevel extends BasePlanetLevel {
     this.activeEnemies = [];
     this.loadingEnemies = false;
     this.gameover = '';
+    this.message = [];
+    this.message.push('You must overcome all foes to obtain the treasure');
+    this.message.push('Press and hold fire to activate shield');
+    this.message.push('When the shield is blue shots can be reflected and enemies defeated');
+    this.renderingText = true;
 
     //Treasure Info
     this.spritesheet = new Image();
     this.success = false;
+    this.finished = false;
     this.spritesheet.src = "resources/planet_tilesets/jungle_arena_level/jungletileset.png";
     this.treasureSprite = {
         image: this.spritesheet,
@@ -62,7 +68,21 @@ export default class JungleArenaLevel extends BasePlanetLevel {
   playerInteracted(player, x, y) {
     if(x === this.treasureSprite.x && y === this.treasureSprite.y){
       this.success = true;
+      this.finished = true;
     }
+    if(this.gameover === 'lose'){
+      player.movePlayerToSpawn()
+            this.enemyCount = 2;
+            this.waves = 5;
+            this.currentwave = 1
+            this.activeEnemies = [];
+            this.loadingEnemies = false;
+            this.gameover = '';
+            this.activeEnemies.push(new ArenaEnemy(11,4));
+            this.activeEnemies.push(new ArenaEnemy(20,4));
+    }
+    this.message = [];
+    this.renderingText = false;
   }
 
   /**
@@ -101,86 +121,97 @@ export default class JungleArenaLevel extends BasePlanetLevel {
    */
   update(elapsedTime, input, game, player) {
       player.update(elapsedTime, input, game);
-      if(input.keyUp(' ') && !this.shieldRecharging){
-        this.shieldRecharging = true;
-        this.shieldRechargeTime = 0;
-      }
-      else if(input.keyDown(' ')){
+      if(!this.renderingText){
         if(this.gameover === 'lose'){
-          player.movePlayerToSpawn()
-          this.enemyCount = 2;
-          this.waves = 5;
-          this.currentwave = 1
-          this.activeEnemies = [];
-          this.loadingEnemies = false;
-          this.gameover = '';
-          this.activeEnemies.push(new ArenaEnemy(11,4));
-          this.activeEnemies.push(new ArenaEnemy(20,4));
+          this.message.push('Game Over');
+          this.renderingText = true;
         }
-        else if(!this.shieldRecharging){
-          this.shieldActivated = true;
-          this.shieldTime += elapsedTime;
-        }
-      }
-      else if(input.keyPressed(' ') && !this.shieldRecharging){
-          this.shieldActivated = true;
-          this.shieldTime += elapsedTime;
-      }
-      else{
-        this.shieldActivated = false;
-        this.shieldTime = 0;
-      }
-      if(this.shieldRecharging){
-        this.shieldRechargeTime += elapsedTime;
-        if(this.shieldRechargeTime > 1000){
-          this.shieldRecharging = false;
+        if(input.keyUp(' ') && !this.shieldRecharging){
+          this.shieldRecharging = true;
           this.shieldRechargeTime = 0;
         }
-
-      }
-
-      //Update enemies or start next wave if they are all dead. Spawn treasure if all waves completed
-      if(this.activeEnemies.length === 0 && !this.loadingEnemies){
-        if(this.waves > 0){
-          this.loadingEnemies = true;
-          setTimeout(() => {
-            this.waves--;
-            this.currentwave++;
-            this.enemyCount++;
-            for(var i=0; i < this.enemyCount; i++){
-              var randx = Math.round(Math.random() * (23 - 8) + 8);
-              var randy = Math.round(Math.random() * (22 - 1) + 1);
-              do{
-                randx = Math.round(Math.random() * (23 - 8) + 8);
-                randy = Math.round(Math.random() * (22 - 1) + 1);
-              }
-              while(randx === player.x && randy === player.y);
-              this.activeEnemies.push(new ArenaEnemy(randx,randy));
-            }
-            this.loadingEnemies = false;      
-          }, 3000);
+        else if(input.keyDown(' ')){
+          if(this.gameover === 'lose'){
+            player.movePlayerToSpawn()
+            this.enemyCount = 2;
+            this.waves = 5;
+            this.currentwave = 1
+            this.activeEnemies = [];
+            this.loadingEnemies = false;
+            this.gameover = '';
+            this.activeEnemies.push(new ArenaEnemy(11,4));
+            this.activeEnemies.push(new ArenaEnemy(20,4));
+          }
+          else if(!this.shieldRecharging){
+            this.shieldActivated = true;
+            this.shieldTime += elapsedTime;
+          }
+        }
+        else if(input.keyPressed(' ') && !this.shieldRecharging){
+            this.shieldActivated = true;
+            this.shieldTime += elapsedTime;
         }
         else{
-          this.gameover = 'win';
+          this.shieldActivated = false;
+          this.shieldTime = 0;
         }
-      }
-      else{
-        this.activeEnemies.forEach((enemy, index) => {
-            if(this.shieldActivated && this.shieldTime < 300){
-              if(enemy.x === player.x || enemy.x === player.x + 1 || enemy.x === player.x - 1){
-                if(enemy.y === player.y || enemy.y === player.y + 1 || enemy.y === player.y - 1){
-                  enemy.dying = true;
+        if(this.shieldRecharging){
+          this.shieldRechargeTime += elapsedTime;
+          if(this.shieldRechargeTime > 1000){
+            this.shieldRecharging = false;
+            this.shieldRechargeTime = 0;
+          }
+  
+        }
+  
+        //Update enemies or start next wave if they are all dead. Spawn treasure if all waves completed
+        if(this.activeEnemies.length === 0 && !this.loadingEnemies){
+          if(this.waves > 0){
+            this.loadingEnemies = true;
+            setTimeout(() => {
+              this.waves--;
+              this.currentwave++;
+              this.enemyCount++;
+              for(var i=0; i < this.enemyCount; i++){
+                var randx = Math.round(Math.random() * (23 - 8) + 8);
+                var randy = Math.round(Math.random() * (22 - 1) + 1);
+                do{
+                  randx = Math.round(Math.random() * (23 - 8) + 8);
+                  randy = Math.round(Math.random() * (22 - 1) + 1);
+                }
+                while(randx === player.x && randy === player.y);
+                this.activeEnemies.push(new ArenaEnemy(randx,randy));
+              }
+              this.loadingEnemies = false;    
+            }, 3000);
+          }
+          else{
+            if(this.gameover !== 'win'){
+              this.gameover = 'win';
+              this.message.push('You have proven yourself worthy!');
+              this.message.push('Now claim your treasure and leave');
+              this.renderingText = true;
+            }
+          }
+        }
+        else{
+          this.activeEnemies.forEach((enemy, index) => {
+              if(this.shieldActivated && this.shieldTime < 300){
+                if(enemy.x === player.x || enemy.x === player.x + 1 || enemy.x === player.x - 1){
+                  if(enemy.y === player.y || enemy.y === player.y + 1 || enemy.y === player.y - 1){
+                    enemy.dying = true;
+                  }
                 }
               }
-            }
-            if(enemy.dead){
-              this.activeEnemies.splice(index, 1);
-            }
-            this.checkFireballCollision(enemy, player);
-            enemy.update(elapsedTime, player, this.tileset, this.shieldTime);
-        });
+              if(enemy.dead){
+                this.activeEnemies.splice(index, 1);
+              }
+              this.checkFireballCollision(enemy, player);
+              enemy.update(elapsedTime, player, this.tileset, this.shieldTime);
+          });
+        }
       }
-    
+      
   }
 
   /** @method
@@ -216,7 +247,7 @@ export default class JungleArenaLevel extends BasePlanetLevel {
    * @param {PlanetPlayer} player - representation of the player
    */
   render(elapsedTime, context, player) {
-    if(this.gameover !== 'lose'){
+    if(this.gameover !== 'lose' && !this.renderingText){
       this.tileset.render(elapsedTime, context);
       player.render(elapsedTime, context);
   
@@ -245,8 +276,27 @@ export default class JungleArenaLevel extends BasePlanetLevel {
     else{
       //show game over message
     }
-    
-    
-    
+  }
+
+  /** @method
+   * Draw text using the static context (after scrolling).
+   * Only use this for drawing items on top of the screen.
+   * @param staticContext - The context to draw on top of the screen and scrolling elements.
+   */
+  renderStatic(elapsedTime, staticContext, player) {
+    if (this.message.length > 0) {
+      staticContext.fillStyle = 'black';
+      staticContext.fillRect(0, 576, 1024, 256);
+      staticContext.fillStyle = 'white';
+      staticContext.font = '24px Arial';
+      for (var i = 0; i < this.message.length; i++) {
+        staticContext.fillText(this.message[i], 60, 630+40*i);
+      }
+      staticContext.font = '18px Arial';
+      staticContext.fillText('Press F to continue', 800, 730);
+    }
+    else {
+      staticContext.fillStyle = 'transparent';
+    }
   }
 }
