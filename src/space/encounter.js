@@ -1,8 +1,11 @@
+/** Name of the image used for the background */
 import AssetLoader from "./utils/assetLoader";
 import Camera from "./utils/camera";
 import CollisionHandler from "./objects/pattern/collisionHandler";
 import Vector from "./utils/vector";
 import PlayerShip from "./objects/realization/playerShip";
+import Slow from "./objects/realization/aoeObject";
+import Asteroid from "./objects/realization/asteroid";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
@@ -121,7 +124,10 @@ export default class Encounter {
      * @returns True in case given game objects have collided, false otherwise
      */
     areColliding(object, other) {
-        return object.areColliding(other) && other.areColliding(object);
+        //forcing both methods to be called, so AoE object can detect object leaving its radius
+        let col1 = object.areColliding(other);
+        let col2 = other.areColliding(object);
+        return col1 && col2;
     }
 
     /**

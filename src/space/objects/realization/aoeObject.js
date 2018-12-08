@@ -1,5 +1,6 @@
 import EncounterObject from "../pattern/encounterObject";
 import Type from "../pattern/encounterObjectType";
+import Vector from "../../utils/vector";
 
 const SLOW_RADIUS = 300;
 const SLOW_FORCE = 0.3;
@@ -11,7 +12,7 @@ export default class Slow extends EncounterObject {
     }
 
     isContained(object) {
-        for (var i = 0; i < this.containing.length; i++) {
+        for (let i = 0; i < this.containing.length; i++) {
             if (object === this.containing[i])
                 return true;
         }
@@ -26,6 +27,10 @@ export default class Slow extends EncounterObject {
         context.fillStyle = 'rgba(0, 0, 0, 0.08)';
         context.fill();
         context.stroke();
+
+        //restore to default color
+        context.fillStyle = "rgba(0, 0, 0, 1)";
+        context.strokeStyle = "rgba(0, 0, 0, 1)";
     }
 
     remove(element) {

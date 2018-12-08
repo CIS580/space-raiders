@@ -1,11 +1,12 @@
-import Type from "./encounterObjectType";
-import EncounterObject from "./encounterObject";
-
 /**
  * @class EncounterCollisionHandler
  *
  * A class providing means to handle encounter game object colission
  */
+import Type from "./encounterObjectType";
+import EncounterObject from "./encounterObject";
+import MyMath from "../../utils/myMath";
+
 class EncounterCollisionHandler {
 
     /**
@@ -33,6 +34,7 @@ class EncounterCollisionHandler {
 
     handleAsteroidCollision(asteroid, object) {
         // TODO: Implement actual handling
+        MyMath.bounce(asteroid,object);
     }
 
     handleBlackHoleCollision(blackHole, object) {
@@ -47,8 +49,9 @@ class EncounterCollisionHandler {
      *  TODO
      *  Type.SLOW | Type.ALLY_SHIP:
      */
-    handleSlow(slow,ship) {
-        //ship.velocity = Vector.multiply(ship.velocity,slow.SLOW_FORCE);
+    handleSlow(slow,other) {
+        //other.velocity = Vector.multiply(other.velocity,slow.SLOW_FORCE);
+        //other.velocityMagnitude *= slow.SLOW_FORCE;
     }
     /**
      * Handles collision of two encounter game objects
