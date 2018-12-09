@@ -20,8 +20,14 @@ class EncounterCollisionHandler {
         return EncounterCollisionHandler.instance;
     }
 
-    handleEnemyShipCollision(enemyShip, object) {
-        // TODO: Implement actual handling
+    handleShipsCollision(ship1, ship2) {
+        MyMath.bounce(ship1, ship2);
+        switch (ship1.type | ship2.type) {
+            case Type.ENEMY_SHIP | Type.PLAYER_SHIP:
+            case Type.ENEMY_SHIP | Type.ALLY_SHIP:
+                // TODO: Implement ramming dmg
+                break;
+        }
     }
 
     handleExplosiveCollision(explosive, object) {
@@ -35,6 +41,12 @@ class EncounterCollisionHandler {
     handleAsteroidCollision(asteroid, object) {
         // TODO: Implement actual handling
         MyMath.bounce(asteroid,object);
+        switch (object.type) {
+            case Type.PLAYER_SHIP:
+            case Type.ALLY_SHIP:
+                // TODO: Implement ramming dmg
+                break;
+        }
     }
 
     handleBlackHoleCollision(blackHole, object) {
@@ -45,11 +57,9 @@ class EncounterCollisionHandler {
         // TODO: Implement actual handling
     }
 
-    /**
-     *  TODO
-     *  Type.SLOW | Type.ALLY_SHIP:
-     */
+
     handleSlow(slow,other) {
+        // TODO: Implement actual handling
         //other.velocity = Vector.multiply(other.velocity,slow.SLOW_FORCE);
         //other.velocityMagnitude *= slow.SLOW_FORCE;
     }
@@ -65,11 +75,12 @@ class EncounterCollisionHandler {
         }
         let collisionType = object.type | other.type;
         switch (collisionType) {
+            case Type.ALLY_SHIP | Type.ALLY_SHIP:
+            case Type.ALLY_SHIP | Type.PLAYER_SHIP:
             case Type.ENEMY_SHIP | Type.ALLY_SHIP:
             case Type.ENEMY_SHIP | Type.PLAYER_SHIP:
-                (object.type === Type.ENEMY_SHIP)
-                    ? this.handleEnemyShipCollision(object, other) : this.handleEnemyShipCollision(other, object);
-                break;
+                 this.handleShipsCollision(object, other);
+                 break;
 
             case Type.ASTEROID | Type.ASTEROID:
             case Type.ASTEROID | Type.PLAYER_SHIP:
@@ -113,6 +124,12 @@ class EncounterCollisionHandler {
             case Type.BLACK_HOLE | Type.EXPLOSIVE:
                 (object.type === Type.BLACK_HOLE)
                     ? this.handleBlackHoleCollision(object, other) : this.handleBlackHoleCollision(other, object);
+                break;
+
+            case Type.SLOW | Type.PLAYER_SHIP:
+            case Type.SLOW | Type.ALLY_SHIP:
+                (object.type === Type.SLOW)
+                    ? this.handleSlow(object, other) : this.handleSlow(other, object);
                 break;
 
             default:
