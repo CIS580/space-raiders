@@ -44,7 +44,9 @@ class AssetLoader {
             this.getAsset("spaceBackground/planet-" + i );
         }
 
-        ASTEROID_ASSETS.forEach(ass => {
+
+        // Aparently there is some importing issue and it cant get it directly from Asteroids.js
+        ["001","002","003","004"].forEach(ass => {
             this.getAsset("spaceMeteors/" + ass)
         });
 

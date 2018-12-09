@@ -13,7 +13,7 @@ const AST_MAX_SPEED = 200;
 const AST_MIN_SPEED = 100;
 const AST_MIN_RADIUS = 30;
 const AST_MAX_RADIUS = 80;
-export const ASTEROID_ASSETS = ["001","002","003","004"];
+const ASTEROID_ASSETS = ["001","002","003","004"];
 
 class Asteroid extends EncounterObject {
 
