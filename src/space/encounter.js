@@ -4,7 +4,6 @@ import Camera from "./utils/camera";
 import CollisionHandler from "./objects/pattern/collisionHandler";
 import Vector from "./utils/vector";
 import PlayerShip from "./objects/realization/playerShip";
-import Slow from "./objects/realization/aoeObject";
 import AsteroidCreator from "./objects/realization/asteroid";
 
 /** Name of the image used for the background */
@@ -33,6 +32,8 @@ export default class Encounter {
      */
     constructor(game, width, height) {
         this.gameObjects = [];
+        this.markedForDeletion = [];
+        this.markedForInsertion = [];
 
         this.width = Math.max(width, game.WIDTH);
         this.height = Math.max(height, game.HEIGHT);
@@ -52,6 +53,14 @@ export default class Encounter {
         this.addObject(this.playerShip);
 
         this.camera.bindTo(this.playerShip);
+
+        AsteroidCreator.createLineAsteroidShower(
+            this,
+            new Vector(this.width / 2 - 350, this.height / 2 + 100),
+            20,
+            90,
+            true
+            ).forEach(asteroid => this.addObject(asteroid))
     }
 
     /* private */ createLayer() {
@@ -162,7 +171,8 @@ export default class Encounter {
      * @param {EncounterObject} object - game object to be removed from game
      */
     removeObject(object) {
-        this.gameObjects.splice(this.gameObjects.indexOf(object), 1);
+        // Postpone removing of objects to make sure we are not accessing gameObjects array while iterating trough it
+        if (object !== undefined && object !== null) this.markedForDeletion.push(object);
     }
 
     /**
@@ -171,7 +181,8 @@ export default class Encounter {
      * @param {EncounterObject} object - game object to be added to game
      */
     addObject(object) {
-        this.gameObjects.push(object);
+        // Postpone adding of objects to make sure we are not accessing gameObjects array while iterating trough it
+        if (object !== undefined && object !== null) this.markedForInsertion.push(object);
     }
 
 
@@ -200,13 +211,19 @@ export default class Encounter {
                 object.position.y < -object.radius - SAFE_EXIT_MARGIN ||
                 this.height + object.radius + SAFE_EXIT_MARGIN < object.position.y
             ) {
-                this.removeObject(this);
+                this.removeObject(object);
             }
 
         });
         this.handleCollisions();
 
         this.camera.update(elapsedTime);
+
+        this.markedForDeletion.forEach(object => this.gameObjects.splice(this.gameObjects.indexOf(object), 1));
+        this.markedForDeletion = [];
+        this.markedForInsertion.forEach(object => this.gameObjects.push(object));
+        this.markedForInsertion.forEach(object => object.initialize());
+        this.markedForInsertion = [];
     }
 
     /**
@@ -217,13 +234,6 @@ export default class Encounter {
      * @param {Game} game - reference to the upper-most game object
      */
     render(elapsedTime, context, game) {
-        this.gameObjects.forEach(object => {
-            if (!object.initialized) {
-                object.initialize();
-                object.initialized = true;
-            }
-        });
-
         // TODO: Add additional rendering
 
         context.save();
