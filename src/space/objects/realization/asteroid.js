@@ -79,7 +79,7 @@ export default class AsteroidCreator {
             let asteroid = new Asteroid(encounter,new Vector(posTmp.x,posTmp.y),MyMath.randomBetween(AST_MIN_RADIUS,AST_MAX_RADIUS));
             asteroid.velocity = (new Vector(Math.sin(angleTmp), -Math.cos(angleTmp))).multiply(MyMath.randomBetween(AST_MIN_SPEED,AST_MAX_SPEED));
             asteroids.push(asteroid);
-            angleTmp = angle * MyMath.randomBetween(0.85,1.16);
+            angleTmp = angle * MyMath.randomBetween(0.95,1.05);
             posTmp.subtract(this.offsetCalculator(asteroid,vertical, horizontal));
         }
         return asteroids;
