@@ -5,7 +5,7 @@ import CollisionHandler from "./objects/pattern/collisionHandler";
 import Vector from "./utils/vector";
 import PlayerShip from "./objects/realization/playerShip";
 import Slow from "./objects/realization/aoeObject";
-import Asteroid from "./objects/realization/asteroid";
+import AsteroidCreator from "./objects/realization/asteroid";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
