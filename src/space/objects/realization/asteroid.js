@@ -13,15 +13,15 @@ const AST_MAX_SPEED = 200;
 const AST_MIN_SPEED = 100;
 const AST_MIN_RADIUS = 30;
 const AST_MAX_RADIUS = 80;
-const ASSET = ["spaceMeteors_001","spaceMeteors_002","spaceMeteors_003","spaceMeteors_004"];
+export const ASTEROID_ASSETS = ["001","002","003","004"];
 
 class Asteroid extends EncounterObject {
 
     constructor(encounter, position,radius) {
-        super(encounter, Type.ASTEROID,radius, position);
+        super(encounter, Type.ASTEROID,radius, position, AssetLoader.getAsset("spaceMeteors/" + ASTEROID_ASSETS[Math.floor(MyMath.randomBetween(0, ASTEROID_ASSETS.length))]));
         this.mass = this.radius / 2;
         this.velocity = new Vector(Math.random() * AST_MAX_SPEED * 2 - AST_MAX_SPEED,Math.random() * AST_MAX_SPEED * 2 - AST_MAX_SPEED);
-        this.asset = AssetLoader.getAsset(ASSET[Math.floor(MyMath.randomBetween(0,4))]);
+        this.angularVelocity = Math.random() * 3 - 1.5;
     }
 
 

@@ -44,8 +44,11 @@ class AssetLoader {
             this.getAsset("spaceBackground/planet-" + i );
         }
 
+        ASTEROID_ASSETS.forEach(ass => {
+            this.getAsset("spaceMeteors/" + ass)
+        });
 
-        // TODO: Preload required images
+        // TODO: Preload all required images
     }
 
     /**
