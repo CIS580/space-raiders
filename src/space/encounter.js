@@ -83,12 +83,12 @@ export default class Encounter {
 
 
         this.camera.addLayer(buffer, 0.2, new Vector(0, 0));
-        for (let i = 0; i < 3; i ++) {
+        for (let i = 0; i < 7; i ++) {
             let starBuffer = this.createLayer();
             let starCtx = starBuffer.getContext('2d');
             starCtx.globalAlpha = 0.7;
 
-            let amount = Math.sqrt(this.width * this.height) / 20;
+            let amount = Math.sqrt(this.width * this.height) / 40;
             for (let j = 0; j < amount; j++) {
                 let star = starSmallImage;
                 if (Math.random() < 0.5) star = starBigImage;
@@ -98,10 +98,9 @@ export default class Encounter {
                 starCtx.drawImage(star, x, y);
             }
 
-            if (i < 2) {
-                amount = Math.floor(Math.random() * 3);
+            if (i < 6) {
                 starCtx.globalAlpha = 1;
-                for (let j = 0; j < amount; j++) {
+                if (Math.random() < 0.5) {
                     let planet = AssetLoader.getAsset(PLANET_IMAGE_PREFIX + (Math.floor(Math.random() * 12) + 1));
                     let size = Math.random() * 500 + 250;
                     let x = Math.random() * this.width;
@@ -112,7 +111,7 @@ export default class Encounter {
             }
 
 
-            this.camera.addLayer(starBuffer, 0.5 + i / 4.0, new Vector(0, 0));
+            this.camera.addLayer(starBuffer, 0.5 + i / 12.0, new Vector(0, 0));
         }
     }
 
