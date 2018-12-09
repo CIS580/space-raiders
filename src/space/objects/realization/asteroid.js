@@ -52,8 +52,8 @@ export default class AsteroidCreator {
      * @returns {Vector}
      */
     static offsetCalculator(asteroid,vertical,horizontal) {
-        let xOffset = vertical ? 0 : asteroid.radius * MyMath.randomBetween(0.6,1.2);
-        let yOffset = horizontal ? 0 : asteroid.radius * MyMath.randomBetween(0.6,1.2);
+        let xOffset = vertical ? 0 : asteroid.radius * MyMath.randomBetween(0.2,1.2);
+        let yOffset = horizontal ? 0 : asteroid.radius * MyMath.randomBetween(0.2,1.2);
         return new Vector(xOffset,yOffset);
     }
 
@@ -74,7 +74,7 @@ export default class AsteroidCreator {
         let angleTmp = angle;
         let posTmp = new Vector(position.x,position.y);
         for(let i = 0; i < count; i++) {
-            if(i !== 0)
+            if(vertical !== undefined && i !== 0)
                 posTmp.subtract(this.offsetCalculator(asteroids[i - 1],vertical, horizontal));
             let asteroid = new Asteroid(encounter,new Vector(posTmp.x,posTmp.y),MyMath.randomBetween(AST_MIN_RADIUS,AST_MAX_RADIUS));
             asteroid.velocity = (new Vector(Math.sin(angleTmp), -Math.cos(angleTmp))).multiply(MyMath.randomBetween(AST_MIN_SPEED,AST_MAX_SPEED));
