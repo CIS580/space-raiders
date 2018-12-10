@@ -5,6 +5,7 @@ import CollisionHandler from "./objects/pattern/collisionHandler";
 import Vector from "./utils/vector";
 import PlayerShip from "./objects/realization/playerShip";
 import AsteroidCreator from "./objects/realization/asteroid";
+import Barrel from "./objects/realization/barrel";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
@@ -60,7 +61,13 @@ export default class Encounter {
             20,
             90,
             true
-            ).forEach(asteroid => this.addObject(asteroid))
+            ).forEach(asteroid => this.addObject(asteroid));
+
+
+        let barrelSpacing = 80;
+        for (let i = 0; i < 5; i++) {
+            this.addObject(new Barrel(this, new Vector(this.width / 2 - 2 * barrelSpacing + i * barrelSpacing, this.height / 2 + 2 * barrelSpacing)))
+        }
     }
 
     /* private */ createLayer() {
