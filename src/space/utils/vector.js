@@ -180,6 +180,8 @@ export default class Vector {
 
         this.x = this.x / magnitude;
         this.y = this.y / magnitude;
+
+        return this;
     }
 
     /**

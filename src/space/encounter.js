@@ -133,8 +133,8 @@ export default class Encounter {
      */
     areColliding(object, other) {
         //forcing both methods to be called, so AoE object can detect object leaving its radius
-        let col1 = object.areColliding(other);
-        let col2 = other.areColliding(object);
+        let col1 = object.collidesWith(other);
+        let col2 = other.collidesWith(object);
         return col1 && col2;
     }
 

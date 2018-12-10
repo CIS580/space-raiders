@@ -157,13 +157,4 @@ export default class EncounterObject {
     }
 
     initialize() {}
-
-    /**
-     * Check if two objects collide, basic circle shape
-     * @param other
-     * @returns {boolean}
-     */
-    areColliding(other) {
-        return (MyMath.distance(this.position,other.position) < this.radius + other.radius);
-    }
 }
