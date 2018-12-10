@@ -36,8 +36,8 @@ export default class Slow extends EncounterObject {
         this.containing.splice(index, 1);
     }
 
-    areColliding(other) {
-        if (other.areColliding(this)) {
+    collidesWith(other) {
+        if (other.collidesWith(this)) {
             if (this.isContained(other)) {
                 return false;
             }
