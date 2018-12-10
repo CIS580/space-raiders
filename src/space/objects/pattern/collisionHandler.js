@@ -43,11 +43,15 @@ class EncounterCollisionHandler {
     }
 
     handleBlackHoleCollision(blackHole, object) {
-        // TODO: Implement actual handling
+        blackHole.applyGravityTo(object);
     }
 
     handleBlackHoleRadiusCollision(blackHoleRadius, object) {
         // TODO: Implement actual handling
+    }
+
+    handleLoopHoleCollision(loopHole, object){
+        loopHole.transfer(object);
     }
 
     /**
@@ -118,6 +122,13 @@ class EncounterCollisionHandler {
             case Type.BLACK_HOLE | Type.EXPLOSIVE:
                 (object.type === Type.BLACK_HOLE)
                     ? this.handleBlackHoleCollision(object, other) : this.handleBlackHoleCollision(other, object);
+                break;
+
+            case Type.LOOP_HOLE | Type.PLAYER_SHIP:
+            case Type.LOOP_HOLE | Type.ALLY_SHIP:
+            case Type.LOOP_HOLE | Type.ENEMY_SHIP:
+                (object.type === Type.LOOP_HOLE)
+                    ? this.handleLoopHoleCollision(object, other) : this.handleLoopHoleCollision(other, object);
                 break;
 
             default:
