@@ -10,7 +10,7 @@
   * @param {context} ctx - the screen context
   */
 
-function nineSlice(x, y, name, color, txt){
+function nineSlice(x, y, name, color, txt, ctx){
     var textContent = txt;
     var textX = x;
     var textY = y;
