@@ -7,6 +7,7 @@ import PlayerShip from "./objects/realization/playerShip";
 import AsteroidCreator from "./objects/realization/asteroid";
 import Barrel from "./objects/realization/barrel";
 import Duck from "./objects/realization/duck";
+import EnemyShip, { EnemyType } from "./objects/realization/enemyShip";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
@@ -55,6 +56,9 @@ export default class Encounter {
         this.addObject(this.playerShip);
 
         this.camera.bindTo(this.playerShip);
+
+        this.addObject(new EnemyShip(this, new Vector(this.width / 4 * 3, this.height / 2), EnemyType.UFO));
+        this.addObject(new EnemyShip(this, new Vector(this.width / 4, this.height / 2)));
 
         // AsteroidCreator.createLineAsteroidShower(
         //     this,
