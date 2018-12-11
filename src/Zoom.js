@@ -15,7 +15,6 @@ export default class Zoom {
 
 		if(input.keyDown(' '))
 		{
-			console.log("in space");
 			//this.callback(this.strings[this.selected]);
 			game.popGameState();
 		}
