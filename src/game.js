@@ -38,9 +38,6 @@ export default class Game {
     // Set up the game state stack
     this.gameState = []
     this.gameState.push(new StartScreen());
-	
-	//REMOVE THIS
-	this.gameState.push(new Overworld(this));
   }
   /** @method pushGameState
     * Pushes the provided game state to the

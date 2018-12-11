@@ -1,43 +1,61 @@
 import TempMenu from "./TempMenu"
 import Zoom from "./Zoom"
+import PlanetLevelManager from "./menus/PlanetLevelManager";
+import SamplePlanetLevel from "./planet_levels/SamplePlanetLevel";
 
 export default class Overworld {
 	constructor(game)
 	{
 		this.map = {
-			start: {
+			erena: {
+				name: "Erena",
+				description: "Erena's desolate surface is almost completely covered   in sand. The planet's devasting climate and frequent   high winds gave scientists the impression that Erena   was uninhabitable, but there may be more to Erena than meets the eye...",
 				x: 0, y: 0,
-				img: null,
-				description: ""
+				options: ["Sample","Exit"]
 			},
-			test: {
-				x: 100, y: 10
+			clareo: {
+				name: "Clareo IV",
+				description: "Clareo IV is a luscious forested planet with livable weather conditions for the human species. Despite the accommodating climate, there are foreseen diplomatic problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.",
+				x: 300, y: 45,
+				options: ["Exit"]
+			},
+			zuberon: {
+				name: "Zuberon",
+				description: "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known about Zuberon's previous inhabitants, the Satchuan, except that their impact on the planet indicates obvious signs of intelligence.",
+				x: -100, y: 180,
+				options: ["Exit"],
+			},
+			thermos: {
+				name: "Thermos",
+				description: "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea, and the hoard of blood-lusting creatures that roam the surface looking for the next source of food to satisfy their hellish appetites.",
+				x: -500, y: -200,
+				options: ["Exit"]
 			}
 		};
 
 		this.ShipSprites = new Image;
-		this.ShipSprites.src = 'resources/Overworld_Ship_Sprites.png';
+		this.ShipSprites.src = 'resources/overworld_assets/img/Overworld_Ship_Sprites.png';
 		this.BackgroundSprites = new Image;
-		this.BackgroundSprites.src = 'resources/Overworld_Background_Sprites.png';
+		this.BackgroundSprites.src = 'resources/overworld_assets/img/Overworld_Background_Sprites.png';
 		this.BackgroundAnimationRow = 0;
 		this.BackgroundAnimationTimer = 0;
+		this.planetSprites = new Image;
+		this.planetSprites.src = "resources/overworld_assets/img/colored_planets.png";
 
-		this.map.start.right = this.map.test;
-		this.map.test.left = this.map.start;
+		this.map.erena.right = this.map.clareo;
+		this.map.clareo.left = this.map.erena;
+		this.map.erena.down = this.map.zuberon;
+		this.map.zuberon.up = this.map.erena;
+		this.map.erena.left = this.map.thermos;
+		this.map.thermos.right = this.map.erena;
 
-		this.currentNode = this.map.start;
+		this.currentNode = this.map.erena;
 		this.nextNode = this.currentNode;
 		this.x = 0;
 		this.y = 0;
 		this.time = 0;
 		this.state = "stop";
 		this.game = game;
-
-		this.erenaDescription = "Erena's desolate surface is almost completely covered   in sand. The planet's devasting climate and frequent   high winds gave scientists the impression that Erena   was uninhabitable, but there may be more to Erena than meets the eye...";
-		this.clareoDescription = "Clareo IV is a luscious forested planet with livable weather conditions for the human species. Despite the accommodating climate, there are foreseen diplomatic problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.";
-		this.zuberonDescription = "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known about Zuberon's previous inhabitants, the Satchuan, except that their impact on the planet indicates obvious signs of intelligence.";
-		this.thermosDescription = "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea, and the hoard of blood-lusting creatures that roam the surface looking for the next source of food to satisfy their hellish appetites.";
-
 
 		this.starList = []
 		for (var i = 0; i < 50; i++) {
@@ -48,6 +66,8 @@ export default class Overworld {
 			};
 			this.starList.push(star);
 		  }
+		  
+		  this.game.pushGameState(new PlanetLevelManager(new SamplePlanetLevel(),this.callback2));
 	}
 
 
@@ -64,16 +84,16 @@ export default class Overworld {
 		{
 			
 			// TODO: Load inital game state object
-			if(input.keyPressed('w')&&this.currentNode.up) {
+			if(input.keyPressed('ArrowUp')&&this.currentNode.up) {
 				this.state = "move";
 				this.nextNode = this.currentNode.up;
-			} else if(input.keyPressed('a')&&this.currentNode.left) {
+			} else if(input.keyPressed('ArrowLeft')&&this.currentNode.left) {
 				this.state = "move";
 				this.nextNode = this.currentNode.left;
-			} else if(input.keyPressed('s')&&this.currentNode.down) {
+			} else if(input.keyPressed('ArrowDown')&&this.currentNode.down) {
 				this.state = "move";
 				this.nextNode = this.currentNode.down;
-			} else if(input.keyPressed('d')&&this.currentNode.right) {
+			} else if(input.keyPressed('ArrowRight')&&this.currentNode.right) {
 				this.state = "move";
 				this.nextNode = this.currentNode.right;
 			}
@@ -98,17 +118,26 @@ export default class Overworld {
 				this.state = "stop";
 				this.time = 0;
 				this.currentNode = this.nextNode;
-				game.pushGameState(new TempMenu(["hello","hi"],this.callback,game));
-				game.pushGameState(new Zoom(this.currentNode.x + 400, this.currentNode.y + 400,this.callback,game));
+				game.pushGameState(new TempMenu(this.currentNode.options,this.callback,game));
+				//game.pushGameState(new Zoom(this.currentNode.x + 400, this.currentNode.y + 400,this.callback,game));
 			}
 		}
 	}
 
 	callback(string)
 	{
-		console.log(string);
+		if(string!="Exit")
+		{
+			var state = null;
+			if(string=="Sample") state = new SamplePlanetLevel(); 
+			if(state!=null) this.game.pushGameState(new PlanetLevelManager(state),this.caller.callback2);
+		}
 	}
 
+	callback2(success)
+	{
+	}
+	
 	drawNode(context,x,y)
 	{
 		context.beginPath();
@@ -213,6 +242,11 @@ export default class Overworld {
 		context.lineTo(x2-this.x+game.WIDTH/2,y2-this.y+game.HEIGHT/2);
 		context.stroke();
 	}
+	
+	drawPlanet(context,game,index,x,y)
+	{
+		context.drawImage(this.planetSprites,Math.floor(index/2)*64,Math.floor(index%2)*64,64,64,x-32-this.x+game.WIDTH/2,y-32-this.y+game.HEIGHT/2,64,64);
+	}
 
 	  /** @method
 		* Renders the starting screen.
@@ -258,42 +292,19 @@ export default class Overworld {
 		context.save();
 		
 		
+		this.drawLine(context,game,this.map.erena.x,this.map.erena.y,this.map.clareo.x,this.map.clareo.y);
+		this.drawLine(context,game,this.map.erena.x,this.map.erena.y,this.map.zuberon.x,this.map.zuberon.y);
+		this.drawLine(context,game,this.map.erena.x,this.map.erena.y,this.map.thermos.x,this.map.thermos.y);
 
-		if(this.currentNode.up)
-		{
-			this.drawLine(context,game,this.currentNode.x,this.currentNode.y,this.currentNode.up.x,this.currentNode.up.y);
-		}
-		if(this.currentNode.left)
-		{
-			this.drawLine(context,game,this.currentNode.x,this.currentNode.y,this.currentNode.left.x,this.currentNode.left.y);
-		}
-		if(this.currentNode.down)
-		{
-			this.drawLine(context,game,this.currentNode.x,this.currentNode.y,this.currentNode.down.x,this.currentNode.down.y);
-		}
-		if(this.currentNode.right)
-		{
-			this.drawLine(context,game,this.currentNode.x,this.currentNode.y,this.currentNode.right.x,this.currentNode.right.y);
-		}
-
-		this.drawNode(context,this.currentNode.x-this.x+game.WIDTH/2,this.currentNode.y-this.y+game.HEIGHT/2);
-
-		if(this.currentNode.up)
-		{
-			this.drawNode(context,this.currentNode.up.x-this.x+game.WIDTH/2,this.currentNode.up.y-this.y+game.HEIGHT/2);
-		}
-		if(this.currentNode.left)
-		{
-			this.drawNode(context,this.currentNode.left.x-this.x+game.WIDTH/2,this.currentNode.left.y-this.y+game.HEIGHT/2);
-		}
-		if(this.currentNode.down)
-		{
-			this.drawNode(context,this.currentNode.down.x-this.x+game.WIDTH/2,this.currentNode.down.y-this.y+game.HEIGHT/2);
-		}
-		if(this.currentNode.right)
-		{
-			this.drawNode(context,this.currentNode.right.x-this.x+game.WIDTH/2,this.currentNode.right.y-this.y+game.HEIGHT/2);
-		}
+		this.drawPlanet(context,game,0,this.map.erena.x,this.map.erena.y);
+		this.drawPlanet(context,game,1,this.map.clareo.x,this.map.clareo.y);
+		this.drawPlanet(context,game,2,this.map.zuberon.x,this.map.zuberon.y);
+		this.drawPlanet(context,game,3,this.map.thermos.x,this.map.thermos.y);
+		
+		//this.drawNode(context,this.map.erena.x-this.x+game.WIDTH/2,this.map.erena.y-this.y+game.HEIGHT/2);
+		//this.drawNode(context,this.map.clareo.x-this.x+game.WIDTH/2,this.map.clareo.y-this.y+game.HEIGHT/2);
+		//this.drawNode(context,this.map.zuberon.x-this.x+game.WIDTH/2,this.map.zuberon.y-this.y+game.HEIGHT/2);
+		//this.drawNode(context,this.map.thermos.x-this.x+game.WIDTH/2,this.map.thermos.y-this.y+game.HEIGHT/2);
 
 		//TODO draw player
 
@@ -315,7 +326,7 @@ export default class Overworld {
 		//textbox rendering, done after the background sprite render so that the stars don't
 		//overlap the text
 		if(this.state === "stop"){
-			this.nineSlice(400, 650, "Erena", "#00ff00", this.erenaDescription, context);
+			this.nineSlice(400, 650, this.currentNode.name, "#00ff00", this.currentNode.description, context);
 		}
 	}
 

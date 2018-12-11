@@ -5,6 +5,7 @@ export default class TempMenu {
 		this.strings = strings;
 		this.callback = callback;
 		this.caller = game.gameState[game.gameState.length-1];
+		this.game = game;
 	}
 	
 	update(elapsedTime,input,game)
@@ -21,8 +22,8 @@ export default class TempMenu {
 		}
 		if(input.keyDown(' '))
 		{
-			this.callback(this.strings[this.selected]);
 			game.popGameState();
+			this.callback(this.strings[this.selected]);
 		}
 	}
 	
