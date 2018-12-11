@@ -33,10 +33,10 @@ export default class Overworld {
 		this.state = "stop";
 		this.game = game;
 
-		var erenaDescription = "Erena's desolate surface is almost completely covered in sand. The planet's devasting climate and frequent high winds gave scientists the impression that Erena was uninhabitable, but there may be more to Erena than meets the eye...";
-		var clareoDescription = "Clareo IV is a luscious forested planet with livable weather conditions for the human species. Despite the accommodating climate, there are foreseen diplomatic problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.";
-		var zuberonDescription = "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known about Zuberon's previous inhabitants, the Satchuan, except that their impact on the planet indicates obvious signs of intelligence.";
-		var thermosDescription = "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea, and the hoard of blood-lusting creatures that roam the surface looking for the next source of food to satisfy their hellish appetites.";
+		this.erenaDescription = "Erena's desolate surface is almost completely covered   in sand. The planet's devasting climate and frequent   high winds gave scientists the impression that Erena   was uninhabitable, but there may be more to Erena than meets the eye...";
+		this.clareoDescription = "Clareo IV is a luscious forested planet with livable weather conditions for the human species. Despite the accommodating climate, there are foreseen diplomatic problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.";
+		this.zuberonDescription = "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known about Zuberon's previous inhabitants, the Satchuan, except that their impact on the planet indicates obvious signs of intelligence.";
+		this.thermosDescription = "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea, and the hoard of blood-lusting creatures that roam the surface looking for the next source of food to satisfy their hellish appetites.";
 
 
 		this.starList = []
@@ -62,6 +62,7 @@ export default class Overworld {
 	update(elapsedTime, input, game) {
 		if(this.state=="stop")
 		{
+			
 			// TODO: Load inital game state object
 			if(input.keyPressed('w')&&this.currentNode.up) {
 				this.state = "move";
@@ -119,6 +120,89 @@ export default class Overworld {
 		context.arc(x,y,18,0,2*Math.PI);
 		context.fill();
 	}
+	
+	nineSlice(x, y, name, color, txt, ctx){
+		var textContent = txt;
+		var textX = x;
+		var textY = y;
+		var charArr = Array.from(textContent); //string converted to char arr
+		var arrLength = charArr.length; //length of char arr
+		var maxLineLength = 55; //max amount of characters on one line
+		var planetName = name //string
+		var planetColor = color; //hex string
+		var lineSpace = 14; //buffer space between lines
+		var fontSize = 14; //size of text
+		var planetNameLength = 35; //length of space that the planet name and buffer space takes up
+		var borderBuffer = 10; //space between text and border
+		var borderDimension = 3; //width, or length, of border around text
+		
+		var newCharArr = [];
+		var lengthCounter = 0; //counts vertical length of text
+		
+		ctx.font = fontSize + "px Times New Roman";//font of the Planet Name
+		ctx.fillStyle = planetColor; //color of the planet
+		ctx.fillText(planetName, textX, textY-6);//writing the Planet Name on screen
+		
+		/**
+		Since fillText does not have multiline functionality, this for loop allows for that
+		fauxI takes the iterator and looks for when i is at the desired max length.
+		It then draws the text that has been iterated through on screen and clears the array
+		and then moves onto the next line by increasing the lengthCounter
+		**/
+		for(var i = 0; i < arrLength; i++){
+			var fauxI = i % maxLineLength;
+			if(fauxI === 0 && charArr[i] === " "){
+				newCharArr[fauxI] = "";
+			}
+			else if(fauxI % (maxLineLength-1) === 0 && fauxI !== 0){
+				if(charArr[i+1] !== " " && charArr[i] !== "."){
+					newCharArr[fauxI+1] = "-"
+				}
+				else{
+					newCharArr[fauxI+1] = "";
+				}
+				newCharArr[fauxI] = charArr[i];
+				lengthCounter += lineSpace;
+				ctx.font = fontSize-2 + "px Arial";
+				ctx.fillText(newCharArr.join(""), textX, textY+lengthCounter);
+			}
+			else{
+				newCharArr[fauxI] = charArr[i];
+			}
+			
+			if(i === arrLength - 1){
+				for(var j = fauxI + 1; j < newCharArr.length; j++){
+					newCharArr[j] = "";
+				}
+			}
+		}
+		
+		//If the array is not after going through the entire char arr, write the remaining text
+		//on screen and clear array. Then draw border around it.
+		//Otherwise, if the array is empty, create the broder.
+		if(newCharArr !== []){
+			ctx.font = fontSize-2 + "px Arial";
+			ctx.fillStyle = planetColor;
+			ctx.fillText(newCharArr.join(""), textX, textY+lengthCounter+lineSpace);
+			newCharArr = [];
+			
+			
+			ctx.fillStyle = "#696969";
+			ctx.fillRect(textX-lineSpace, textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength); //left border (x, y, width, length)
+			ctx.fillRect(textX-lineSpace+(maxLineLength*(Math.floor(fontSize/2.3))), textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength+2); //right border
+			//(x, y, width, length)
+			ctx.fillRect(textX-lineSpace, textY-lineSpace-borderBuffer, maxLineLength*(Math.floor(fontSize/2.3)), borderDimension);//top border (x, y, width, length)
+			ctx.fillRect(textX-lineSpace, textY+lengthCounter+lineSpace+borderBuffer, maxLineLength*(Math.floor(fontSize/2.3)), borderDimension); //bottom border (x, y, width, length)
+		}
+		else{
+			ctx.fillStyle = "#696969";
+			ctx.fillRect(textX-lineSpace, textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength); //left border (x, y, width, length)
+			ctx.fillRect(textX-lineSpace+(maxLineLength*(Math.floor(fontSize/2.3))), textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength+2); //right border
+			//(x, y, width, length)
+			ctx.fillRect(textX-lineSpace, textY-lineSpace-borderBuffer, maxLineLength*(Math.floor(fontSize/2.3)), borderDimension);//top border (x, y, width, length)
+			ctx.fillRect(textX-lineSpace, textY+lengthCounter+lineSpace+borderBuffer, maxLineLength*(Math.floor(fontSize/2.3)), borderDimension); //bottom border (x, y, width, length)
+		}
+	}
 
 	drawLine(context,game,x1,y1,x2,y2)
 	{
@@ -172,6 +256,8 @@ export default class Overworld {
 		}
 
 		context.save();
+		
+		
 
 		if(this.currentNode.up)
 		{
@@ -225,6 +311,12 @@ export default class Overworld {
 		context.restore();
 
 		this.renderBackgroundSprites(context,elapsedTime);
+		
+		//textbox rendering, done after the background sprite render so that the stars don't
+		//overlap the text
+		if(this.state === "stop"){
+			this.nineSlice(400, 650, "Erena", "#00ff00", this.erenaDescription, context);
+		}
 	}
 
 	renderBackgroundSprites(context,elapsedTime){
