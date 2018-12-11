@@ -327,7 +327,7 @@ export default class Overworld {
 		//textbox rendering, done after the background sprite render so that the stars don't
 		//overlap the text
 		if(this.state === "stop"){
-			this.nineSlice(400, 650, this.currentNode.name, "#00ff00", this.currentNode.description, context);
+			this.nineSlice((game.WIDTH/2)-150, 650, this.currentNode.name, this.currentNode.color, this.currentNode.description, context);
 		}
 	}
 
