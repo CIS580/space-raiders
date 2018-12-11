@@ -99,7 +99,7 @@ export default class Overworld {
 				this.time = 0;
 				this.currentNode = this.nextNode;
 				game.pushGameState(new TempMenu(["hello","hi"],this.callback,game));
-				game.pushGameState(new Zoom(this.currentNode.x + 400, this.currentNode.y + 400,this.callback,game));
+				game.pushGameState(new Zoom(game.WIDTH/2, game.HEIGHT/2,this.callback,game));
 			}
 		}
 	}

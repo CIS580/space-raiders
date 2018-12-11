@@ -6,14 +6,23 @@ export default class Zoom {
 		this.callback = callback;
 		this.caller = game.gameState[game.gameState.length-1];
 		this.selected = 0;
+		this.counter = 0;
 	}
 
 	update(elapsedTime,input,game)
 	{
+		/*
 		if(input.keyDown(' '))
 		{
-			console.log(elapsedTime);
+			console.log("in space");
 			//this.callback(this.strings[this.selected]);
+			game.popGameState();
+		}
+		*/
+		this.counter += 5;
+
+		if (this.counter > 1000) {
+			this.counter = 1000;
 			game.popGameState();
 		}
 	}
@@ -23,7 +32,7 @@ export default class Zoom {
 		this.caller.render(elapsedTime,context,game);
 		context.beginPath();
 		context.fillStyle = "pink";
-		context.arc(this.x, this.y,500,0,2*Math.PI);
+		context.arc(this.x, this.y,Math.floor(this.counter),0,2*Math.PI);
 		context.fill();
 		context.closePath();
 	}
