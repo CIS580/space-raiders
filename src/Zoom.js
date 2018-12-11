@@ -1,3 +1,5 @@
+import TempMenu from "./TempMenu";
+
 export default class Zoom {
 	constructor(x, y, callback,game)
 	{
@@ -5,24 +7,28 @@ export default class Zoom {
 		this.y = y;
 		this.callback = callback;
 		this.caller = game.gameState[game.gameState.length-1];
+		this.selected = 0;
+		this.counter = 0;
 	}
 
 	update(elapsedTime,input,game)
 	{
-		if(input.keyDown('w'))
+
+		/*if(input.keyDown(' '))
 		{
-			this.selected--;
-			if(this.selected<0) this.selected = 0;
-		}
-		if(input.keyDown('s'))
-		{
-			this.selected++;
-			if(this.selected>=this.strings.length) this.selected = this.selected-1;
-		}
-		if(input.keyDown(' '))
-		{
-			this.callback(this.strings[this.selected]);
+			console.log("in space");
+			//this.callback(this.strings[this.selected]);
 			game.popGameState();
+		}*/
+		this.counter += 5;
+
+		if (this.counter > 250) {
+			this.counter = 250;
+			if(!this.flag)
+			{
+				this.flag = true;
+				game.pushGameState(new TempMenu(this.caller.currentNode.options,this.caller.callback,game));
+			}
 		}
 	}
 
@@ -31,13 +37,8 @@ export default class Zoom {
 		this.caller.render(elapsedTime,context,game);
 		context.beginPath();
 		context.fillStyle = "pink";
-		context.arc(this.x, this.y,20,0,2*Math.PI);
-		context.fillText("<-- FILL WITH PLANET COLOR", this.x+50, this.y);
-		context.fillText("Alex will make bigger", this.x+50, this.y+50);
+		context.arc(this.x, this.y,Math.floor(this.counter),0,2*Math.PI);
 		context.fill();
-
-
-
-
+		context.closePath();
 	}
 }

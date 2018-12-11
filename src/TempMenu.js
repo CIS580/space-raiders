@@ -23,6 +23,7 @@ export default class TempMenu {
 		if(input.keyDown(' '))
 		{
 			game.popGameState();
+			game.popGameState();
 			this.callback(this.strings[this.selected]);
 		}
 	}

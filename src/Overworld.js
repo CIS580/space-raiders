@@ -82,7 +82,7 @@ export default class Overworld {
 	update(elapsedTime, input, game) {
 		if(this.state=="stop")
 		{
-			
+
 			// TODO: Load inital game state object
 			if(input.keyPressed('ArrowUp')&&this.currentNode.up) {
 				this.state = "move";
@@ -118,8 +118,7 @@ export default class Overworld {
 				this.state = "stop";
 				this.time = 0;
 				this.currentNode = this.nextNode;
-				game.pushGameState(new TempMenu(this.currentNode.options,this.callback,game));
-				//game.pushGameState(new Zoom(this.currentNode.x + 400, this.currentNode.y + 400,this.callback,game));
+				game.pushGameState(new Zoom(game.WIDTH/2, game.HEIGHT/2,this.callback,game));
 			}
 		}
 	}
@@ -149,7 +148,7 @@ export default class Overworld {
 		context.arc(x,y,18,0,2*Math.PI);
 		context.fill();
 	}
-	
+
 	nineSlice(x, y, name, color, txt, ctx){
 		var textContent = txt;
 		var textX = x;
@@ -164,14 +163,14 @@ export default class Overworld {
 		var planetNameLength = 35; //length of space that the planet name and buffer space takes up
 		var borderBuffer = 10; //space between text and border
 		var borderDimension = 3; //width, or length, of border around text
-		
+
 		var newCharArr = [];
 		var lengthCounter = 0; //counts vertical length of text
-		
+
 		ctx.font = fontSize + "px Times New Roman";//font of the Planet Name
 		ctx.fillStyle = planetColor; //color of the planet
 		ctx.fillText(planetName, textX, textY-6);//writing the Planet Name on screen
-		
+
 		/**
 		Since fillText does not have multiline functionality, this for loop allows for that
 		fauxI takes the iterator and looks for when i is at the desired max length.
@@ -198,14 +197,14 @@ export default class Overworld {
 			else{
 				newCharArr[fauxI] = charArr[i];
 			}
-			
+
 			if(i === arrLength - 1){
 				for(var j = fauxI + 1; j < newCharArr.length; j++){
 					newCharArr[j] = "";
 				}
 			}
 		}
-		
+
 		//If the array is not after going through the entire char arr, write the remaining text
 		//on screen and clear array. Then draw border around it.
 		//Otherwise, if the array is empty, create the broder.
@@ -214,8 +213,8 @@ export default class Overworld {
 			ctx.fillStyle = planetColor;
 			ctx.fillText(newCharArr.join(""), textX, textY+lengthCounter+lineSpace);
 			newCharArr = [];
-			
-			
+
+
 			ctx.fillStyle = "#696969";
 			ctx.fillRect(textX-lineSpace, textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength); //left border (x, y, width, length)
 			ctx.fillRect(textX-lineSpace+(maxLineLength*(Math.floor(fontSize/2.3))), textY-lineSpace-borderBuffer, borderDimension, lengthCounter+lineSpace+planetNameLength+2); //right border
@@ -290,8 +289,6 @@ export default class Overworld {
 		}
 
 		context.save();
-		
-		
 		this.drawLine(context,game,this.map.erena.x,this.map.erena.y,this.map.clareo.x,this.map.clareo.y);
 		this.drawLine(context,game,this.map.erena.x,this.map.erena.y,this.map.zuberon.x,this.map.zuberon.y);
 		this.drawLine(context,game,this.map.erena.x,this.map.erena.y,this.map.thermos.x,this.map.thermos.y);
@@ -322,7 +319,7 @@ export default class Overworld {
 		context.restore();
 
 		this.renderBackgroundSprites(context,elapsedTime);
-		
+
 		//textbox rendering, done after the background sprite render so that the stars don't
 		//overlap the text
 		if(this.state === "stop"){
