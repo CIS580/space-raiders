@@ -19,14 +19,14 @@ export default class Overworld {
 				description: "Clareo IV is a luscious forested planet with livable weather conditions for the human species. Despite the accommodating climate, there are foreseen diplomatic problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.",
 				x: 300, y: 45,
 				options: ["Exit"],
-				color: "#add8e6"
+				color: "#228b22"
 			},
 			zuberon: {
 				name: "Zuberon",
 				description: "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known about Zuberon's previous inhabitants, the Satchuan, except that their impact on the planet indicates obvious signs of intelligence.",
 				x: -100, y: 180,
 				options: ["Exit"],
-				color: "#228b22"
+				color: "#add8e6"
 			},
 			thermos: {
 				name: "Thermos",
@@ -298,8 +298,8 @@ export default class Overworld {
 		this.drawLine(context,game,this.map.erena.x,this.map.erena.y,this.map.thermos.x,this.map.thermos.y);
 
 		this.drawPlanet(context,game,0,this.map.erena.x,this.map.erena.y);
-		this.drawPlanet(context,game,1,this.map.clareo.x,this.map.clareo.y);
-		this.drawPlanet(context,game,2,this.map.zuberon.x,this.map.zuberon.y);
+		this.drawPlanet(context,game,1,this.map.zuberon.x,this.map.zuberon.y);
+		this.drawPlanet(context,game,2,this.map.clareo.x,this.map.clareo.y);
 		this.drawPlanet(context,game,3,this.map.thermos.x,this.map.thermos.y);
 
 		//this.drawNode(context,this.map.erena.x-this.x+game.WIDTH/2,this.map.erena.y-this.y+game.HEIGHT/2);
