@@ -2,12 +2,6 @@ import TempMenu from "./TempMenu"
 import Zoom from "./Zoom"
 
 export default class Overworld {
-	
-	var erenaDescription = "Erena's desolate surface is almost completely covered in sand. The planet's devasting climate and frequent high winds gave scientists the impression that Erena was uninhabitable, but there may be more to Erena than meets the eye...";
-	var clareoDescription = "Clareo IV is a luscious forested planet with livable weather conditions for the human species. Despite the accommodating climate, there are foreseen diplomatic problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.";
-	var zuberonDescription = "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known about Zuberon's previous inhabitants, the Satchuan, except that their impact on the planet indicates obvious signs of intelligence.";
-	var thermosDescription = "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea, and the hoard of blood-lusting creatures that roam the surface looking for the next source of food to satisfy their hellish appetites.";
-	
 	constructor(game)
 	{
 		this.map = {
@@ -38,6 +32,12 @@ export default class Overworld {
 		this.time = 0;
 		this.state = "stop";
 		this.game = game;
+
+		var erenaDescription = "Erena's desolate surface is almost completely covered in sand. The planet's devasting climate and frequent high winds gave scientists the impression that Erena was uninhabitable, but there may be more to Erena than meets the eye...";
+		var clareoDescription = "Clareo IV is a luscious forested planet with livable weather conditions for the human species. Despite the accommodating climate, there are foreseen diplomatic problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.";
+		var zuberonDescription = "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known about Zuberon's previous inhabitants, the Satchuan, except that their impact on the planet indicates obvious signs of intelligence.";
+		var thermosDescription = "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea, and the hoard of blood-lusting creatures that roam the surface looking for the next source of food to satisfy their hellish appetites.";
+
 
 		this.starList = []
 		for (var i = 0; i < 50; i++) {
