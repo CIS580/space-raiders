@@ -11,19 +11,17 @@ export default class Zoom {
 
 	update(elapsedTime,input,game)
 	{
-		/*
+
 		if(input.keyDown(' '))
 		{
 			console.log("in space");
 			//this.callback(this.strings[this.selected]);
 			game.popGameState();
 		}
-		*/
 		this.counter += 5;
 
 		if (this.counter > 1000) {
 			this.counter = 1000;
-			game.popGameState();
 		}
 	}
 
