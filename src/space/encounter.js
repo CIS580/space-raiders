@@ -6,6 +6,7 @@ import Vector from "./utils/vector";
 import PlayerShip from "./objects/realization/playerShip";
 import AsteroidCreator from "./objects/realization/asteroid";
 import Barrel from "./objects/realization/barrel";
+import Duck from "./objects/realization/duck";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
@@ -55,18 +56,25 @@ export default class Encounter {
 
         this.camera.bindTo(this.playerShip);
 
-        AsteroidCreator.createLineAsteroidShower(
-            this,
-            new Vector(this.width / 2 - 350, this.height / 2 + 100),
-            20,
-            90,
-            true
-            ).forEach(asteroid => this.addObject(asteroid));
+        // AsteroidCreator.createLineAsteroidShower(
+        //     this,
+        //     new Vector(this.width / 2 - 350, this.height / 2 + 100),
+        //     20,
+        //     90,
+        //     true
+        //     ).forEach(asteroid => this.addObject(asteroid));
+        //
+        //
+        // let barrelSpacing = 80;
+        // for (let i = 0; i < 5; i++) {
+        //     this.addObject(new Barrel(this, new Vector(this.width / 2 - 2 * barrelSpacing + i * barrelSpacing, this.height / 2 + 2 * barrelSpacing)))
+        // }
 
-
-        let barrelSpacing = 80;
-        for (let i = 0; i < 5; i++) {
-            this.addObject(new Barrel(this, new Vector(this.width / 2 - 2 * barrelSpacing + i * barrelSpacing, this.height / 2 + 2 * barrelSpacing)))
+        let spawnPos = new Vector(this.width / 2 - 600, this.height / 2 - 30);
+        for (let x = 0; x < 10; x ++) {
+            for (let y = 0; y < 2; y++) {
+                this.addObject(new Duck(this, new Vector(spawnPos.x + x * 30, spawnPos.y + y * 30)))
+            }
         }
     }
 

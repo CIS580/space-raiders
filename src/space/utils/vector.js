@@ -234,6 +234,10 @@ export default class Vector {
         return Math.sqrt(this.x * this.x + this.y * this.y);
     }
 
+    angle() {
+        return Math.atan2(this.y, this.x)
+    }
+
     /**
      * Creates a string representation of this vector
      *
