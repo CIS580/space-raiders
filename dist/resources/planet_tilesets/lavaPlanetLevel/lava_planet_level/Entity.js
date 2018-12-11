@@ -178,7 +178,7 @@ export default class Entity {
     getFrame(direction, number){
         var frame = new Image(32, 32);
 		//"resources/planet_tilesets/lava_planet_level/tiles.png"	
-        frame.src = "../resources/planet_tilesets/LavaPlanetLevel/lavaGolemAnimation/lavaGolem-" + direction + "-" + number +".png"; //change this path to location of animation folder for entity
+        frame.src = "./resources/planet_tilesets/LavaPlanetLevel/lavaGolemAnimation/lavaGolem-" + direction + "-" + number +".png"; //change this path to location of animation folder for entity
         return frame;
     }
 	
