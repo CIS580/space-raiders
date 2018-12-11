@@ -11,9 +11,13 @@ export default class PlanetLevelManager {
    * Typically should be called like:
    *   new PlanetLevelManager(new SamplePlanetLevel());
    * @param level - The level to manager and call render/update functions for.
+   * @param setSuccessCallback - Function that takes one parameter. This callback will be run when the users completes
+   * the current level. The parameter will be true if the player succeeded in the level, false if the player failed in
+   * the level (did not get the treasure). This PlanetLevelManager will be popped off the stack after callback is called.
    */
-  constructor(level) {
+  constructor(level, setSuccessCallback) {
     this.finished = false;
+    this.setSuccessCallback = setSuccessCallback;
 
     this.level = level;
     this.player = new PlanetPlayer(this.level);
@@ -84,7 +88,14 @@ export default class PlanetLevelManager {
    */
   update(elaspedTime, input, game) {
     if(this.level.finished) {
-      this.finished = true;
+      if(!this.finished) {
+        // Only call the callback and pop game state once.
+        if(this.setSuccessCallback !== undefined && this.setSuccessCallback !== null) {
+          this.setSuccessCallback(this.playerSucceeded());
+        }
+        game.popGameState();
+        this.finished = true;
+      }
     } else {
       this.level.update(elaspedTime, input, game, this.player);
 
