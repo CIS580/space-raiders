@@ -20,8 +20,8 @@ export default class Zoom {
 		}
 		this.counter += 5;
 
-		if (this.counter > 1000) {
-			this.counter = 1000;
+		if (this.counter > 250) {
+			this.counter = 250;
 		}
 	}
 
