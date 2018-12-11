@@ -86,6 +86,17 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./dist/resources/planet_player/PlanetPlayer.json":
+/*!********************************************************!*\
+  !*** ./dist/resources/planet_player/PlanetPlayer.json ***!
+  \********************************************************/
+/*! exports provided: columns, image, imageheight, imagewidth, margin, name, spacing, tilecount, tiledversion, tileheight, tilewidth, type, version, default */
+/***/ (function(module) {
+
+eval("module.exports = {\"columns\":3,\"image\":\"astrogun.png\",\"imageheight\":128,\"imagewidth\":96,\"margin\":0,\"name\":\"AstroGun\",\"spacing\":0,\"tilecount\":12,\"tiledversion\":\"1.2.1\",\"tileheight\":32,\"tilewidth\":32,\"type\":\"tileset\",\"version\":1.2};\n\n//# sourceURL=webpack:///./dist/resources/planet_player/PlanetPlayer.json?");
+
+/***/ }),
+
 /***/ "./dist/resources/planet_tilesets/sample_planet_level/tilemap.json":
 /*!*************************************************************************!*\
   !*** ./dist/resources/planet_tilesets/sample_planet_level/tilemap.json ***!

@@ -11,9 +11,13 @@ export default class PlanetLevelManager {
    * Typically should be called like:
    *   new PlanetLevelManager(new SamplePlanetLevel());
    * @param level - The level to manager and call render/update functions for.
+   * @param setSuccessCallback - Function that takes one parameter. This callback will be run when the users completes
+   * the current level. The parameter will be true if the player succeeded in the level, false if the player failed in
+   * the level (did not get the treasure). This PlanetLevelManager will be popped off the stack after callback is called.
    */
-  constructor(level) {
+  constructor(level, setSuccessCallback) {
     this.finished = false;
+    this.setSuccessCallback = setSuccessCallback;
 
     this.level = level;
     this.player = new PlanetPlayer(this.level);
@@ -84,7 +88,14 @@ export default class PlanetLevelManager {
    */
   update(elaspedTime, input, game) {
     if(this.level.finished) {
-      this.finished = true;
+      if(!this.finished) {
+        // Only call the callback and pop game state once.
+        if(this.setSuccessCallback !== undefined && this.setSuccessCallback !== null) {
+          this.setSuccessCallback(this.playerSucceeded());
+        }
+        game.popGameState();
+        this.finished = true;
+      }
     } else {
       this.level.update(elaspedTime, input, game, this.player);
 
@@ -113,10 +124,11 @@ export default class PlanetLevelManager {
         this.scrollingContext.clearRect(0, 0, this.scrollingCanvas.width, this.scrollingCanvas.height);
       }
 
+      let animationAdjustedPlayerX = this.player.x + (this.player.animationXOffset / 32);
       // Check if we need to scroll x dimension.
-      if(this.lastCalculatedTilemapWidth > game.GRID_WIDTH && this.player.x > this.leftEdge) {
-        if(this.player.x < this.rightEdge) {
-          this.scrollingXOffset = (this.player.x - this.leftEdge) * 32;
+      if(this.lastCalculatedTilemapWidth > game.GRID_WIDTH && animationAdjustedPlayerX > this.leftEdge) {
+        if(animationAdjustedPlayerX < this.rightEdge) {
+          this.scrollingXOffset = (this.player.x - this.leftEdge) * 32 + this.player.animationXOffset;
         } else {
           this.scrollingXOffset = (this.rightEdge - this.leftEdge) * 32;
         }
@@ -124,10 +136,11 @@ export default class PlanetLevelManager {
         this.scrollingXOffset = 0;
       }
 
+      let animationAdjustedPlayerY = this.player.y + (this.player.animationYOffset / 32);
       // Check if we need to scroll y dimension.
-      if(this.lastCalculatedTilemapHeight > game.GRID_HEIGHT && this.player.y > this.topEdge) {
-        if(this.player.y < this.bottomEdge) {
-          this.scrollingYOffset = (this.player.y - this.topEdge) * 32;
+      if(this.lastCalculatedTilemapHeight > game.GRID_HEIGHT && animationAdjustedPlayerY > this.topEdge) {
+        if(animationAdjustedPlayerY < this.bottomEdge) {
+          this.scrollingYOffset = (this.player.y - this.topEdge) * 32 + this.player.animationYOffset;
         } else {
           this.scrollingYOffset = (this.bottomEdge - this.topEdge) * 32;
         }
@@ -156,6 +169,8 @@ export default class PlanetLevelManager {
         0,
         this.drawingWidth,
         this.drawingHeight);
+
+      this.level.renderStatic(elapsedTime, context, this.player);
     }
   }
 }
