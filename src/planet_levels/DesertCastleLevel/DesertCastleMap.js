@@ -1,5 +1,5 @@
 import BasePlanetLevel from "../BasePlanetLevel";
-import PlanetTileset from "../../PlanetTileset";
+import DesertTileset from "./planet_levels/DesertCastleLevel/dss";
 import Scorpion from "./Scorpion";
 import Crab from "./Crab";
 
@@ -28,7 +28,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
     // Third argument (image) is relative to the dist folder.
     this.tileset = new PlanetTileset(
       require("../../dist/resources/planet_tilesets/sample_planet_level/dss.json"),
-      require("../../dist/resources/planet_tilesets/sample_planet_level/desert-castle.json"),
+      require("../../dist/resources/planet_tilesets/sample_planet_level/DesertCastleMap.json"),
       "resources/planet_tilesets/sample_planet_level/dss.png");
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
