@@ -257,7 +257,7 @@ export default class Encounter {
 
         if (this.playerShip) {
             context.font = "20px Georgia";
-            context.fillText("Health: " + this.playerShip.health, 10, 35);
+            context.fillText("Health: " + Math.round(this.playerShip.health), 10, 35);
             context.fillText("Shields: " + Math.round(this.playerShip.shieldHealth), game.WIDTH - 110, 35);
         }
     }

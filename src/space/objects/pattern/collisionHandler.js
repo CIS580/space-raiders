@@ -6,7 +6,7 @@
 import Type from "./encounterObjectType";
 import EncounterObject from "./encounterObject";
 import MyMath from "../../utils/myMath";
-import Explosion from "../realization/explosion";
+import Explosion, {EXPLOSION_DAMAGE} from "../realization/explosion";
 import Vector from "../../utils/vector";
 
 
@@ -28,13 +28,12 @@ class EncounterCollisionHandler {
     }
 
     handleExplosiveCollision(explosive, object) {
-        // TODO: Implement actual handling
-        explosive.encounter.addObject(new Explosion(explosive.encounter, new Vector(explosive.position.x, explosive.position.y)));
-        explosive.encounter.removeObject(explosive);
+        // TODO: Implement handling of remove life to explosive
+        explosive.hit(5)
     }
 
     handleExplosionCollision(explosion, object) {
-        // TODO: Implement actual handling
+        object.hit(EXPLOSION_DAMAGE)
     }
 
     handleAsteroidCollision(asteroid, object) {

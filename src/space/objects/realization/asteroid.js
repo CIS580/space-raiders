@@ -22,6 +22,8 @@ class Asteroid extends EncounterObject {
         this.mass = this.radius / 2;
         this.velocity = new Vector(Math.random() * AST_MAX_SPEED * 2 - AST_MAX_SPEED,Math.random() * AST_MAX_SPEED * 2 - AST_MAX_SPEED);
         this.angularVelocity = Math.random() * 3 - 1.5;
+        this.killable = true;
+        this.health = radius;
     }
 
 
