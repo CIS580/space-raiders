@@ -39,7 +39,6 @@ class EncounterCollisionHandler {
     }
 
     handleAsteroidCollision(asteroid, object) {
-        // TODO: Implement actual handling
         MyMath.bounce(asteroid,object);
         switch (object.type) {
             case Type.PLAYER_SHIP:
@@ -59,10 +58,10 @@ class EncounterCollisionHandler {
 
 
     handleSlow(slow,other) {
-        // TODO: Implement actual handling
-        //other.velocity = Vector.multiply(other.velocity,slow.SLOW_FORCE);
-        //other.velocityMagnitude *= slow.SLOW_FORCE;
+        other.velocity = Vector.multiply(other.velocity,slow.SLOW_FORCE);
+        other.velocityMagnitude *= slow.SLOW_FORCE;
     }
+
     /**
      * Handles collision of two encounter game objects
      *
