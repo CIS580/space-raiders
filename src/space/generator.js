@@ -197,6 +197,7 @@ export default class Generator {
         while (next !== null) {
             next = next.decide();
         }
+        // encounter.addObject(new BlackHole(this.encounter, new Vector(encounter.width / 2, encounter.height / 2 + 100)))
     }
 
     /* private */ createLayer() {
@@ -274,7 +275,7 @@ export default class Generator {
         // TODO keep adding things like asteroids
     }
 
-    // Shouldnt be, no time
+    // Shouldnt be static, no time
     static nextRandom() {
         // TODO deterministic random
         return Math.random();

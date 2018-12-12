@@ -31,7 +31,7 @@ export default class Barrel extends EncounterObject {
         super(encounter, Type.EXPLOSIVE, BARREL_ACTIVATE_RADIUS, position, AssetLoader.getAsset(BARREL_INACTIVE_ASSET_NAME));
         this.health = BARREL_HEALTH;
         this.killable = false;
-        this.cooldown = BARREL_COOLDOWN
+        this.cooldown = BARREL_COOLDOWN;
         this.inactive = true;
     }
 
@@ -51,16 +51,6 @@ export default class Barrel extends EncounterObject {
         }
 
         this.superUpdate(elapsedTime, input);
-    }
-
-    /**
-     * Renders content of the encounter object to the screen
-     *
-     * @param {DOMHighResTimeStamp} elapsedTime - time elapsed from last frame
-     * @param {CanvasRenderingContext2D} context - context to render content on
-     */
-    render(elapsedTime, context) {
-        this.superRender(elapsedTime, context);
     }
 
     /**
