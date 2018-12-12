@@ -15,7 +15,7 @@ export default class StartScreen {
   update(elaspedTime, input, game) {
     // TODO: Load inital game state object
     if(input.keyDown(' ')) {
-      game.pushGameState(new Overworld(game));
+      game.pushGameState(new PlanetLevelManager(new SamplePlanetLevel()));
     }
   }
   /** @method
