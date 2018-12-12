@@ -40,7 +40,6 @@ export default class Zoom {
 
 	render(elapsedTime,context,game)
 	{
-		console.log(this.name);
 		context.imageSmoothingEnabled = false;
 		if(this.planetSprites.complete){
 			this.caller.render(elapsedTime,context,game);
