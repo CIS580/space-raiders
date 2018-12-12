@@ -78,7 +78,7 @@ export default class Encounter {
         // Postpone removing of objects to make sure we are not accessing gameObjects array while iterating trough it
         if (object !== undefined && object !== null) {
             this.markedForDeletion.push(object);
-            this.generator.onObjectDestroyed(object)
+            this.generator.onObjectDestroyed(object);
         }
     }
 
