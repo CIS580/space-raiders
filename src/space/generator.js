@@ -108,7 +108,7 @@ export default class Generator {
             );
             console.log("[INFO] Adding barrel")
         };
-        barrelD.decisionIsTrue = () => { return Generator.nextRandom() < 0.95 };
+        barrelD.decisionIsTrue = () => { return Generator.nextRandom() < 0.8 };
         root.sequence.push(barrelD);
 
         let asteroidD = new Decision();
@@ -119,19 +119,28 @@ export default class Generator {
             );
             console.log("[INFO] Adding asteroid")
         };
-        asteroidD.decisionIsTrue = () => { return Generator.nextRandom() < 0.95 };
+        asteroidD.decisionIsTrue = () => { return Generator.nextRandom() < 0.6 };
         root.sequence.push(asteroidD);
+
+        let asteroidShowerD = new Decision();
+        asteroidShowerD.yesDecision = asteroidShowerD;
+        asteroidShowerD.yesApply = () => {
+            let asteroids = AsteroidCreator.createPointAsteroidShower(encounter, new Vector(Generator.nextRandom() * encounter.width, Generator.nextRandom() * encounter.height), MyMath.randomBetween(2, 10), Generator.nextRandom() * Math.PI * 2)
+            asteroids.forEach(object => encounter.addObject(object));
+            console.log("[INFO] Adding asteroid shower")
+        };
+        asteroidShowerD.decisionIsTrue = () => { return Generator.nextRandom() < 0.5 };
+        root.sequence.push(asteroidShowerD);
 
         let blackHoleD = new Decision();
         blackHoleD.yesDecision = blackHoleD;
         blackHoleD.yesApply = () => {
             encounter.addObject(
                 new BlackHole(encounter, new Vector(Generator.nextRandom() * encounter.width, Generator.nextRandom() * encounter.height))
-            )
-            ;
+            );
             console.log("[INFO] Adding BH")
         };
-        blackHoleD.decisionIsTrue = () => { return Generator.nextRandom() < 0.60 };
+        blackHoleD.decisionIsTrue = () => { return Generator.nextRandom() < 0.6 };
         root.sequence.push(blackHoleD);
 
         let duckD = new Decision();
@@ -139,17 +148,29 @@ export default class Generator {
         duckD.yesApply = () => {
             encounter.addObject(
                 new Duck(encounter, new Vector(Generator.nextRandom() * encounter.width, Generator.nextRandom() * encounter.height))
-            )
-            ;
+            );
             console.log("[INFO] Adding duck")
         };
-        duckD.decisionIsTrue = () => { return Generator.nextRandom() < 0.60 };
+        duckD.decisionIsTrue = () => { return Generator.nextRandom() < 0.6 };
         root.sequence.push(duckD);
 
+        let duckSquadD = new Decision();
+        duckSquadD.yesDecision = duckSquadD;
+        duckSquadD.yesApply = () => {
+            let pos = new Vector(Generator.nextRandom() * encounter.width, Generator.nextRandom() * encounter.height);
+            for (let x = 0; x < 10; x ++) {
+                for (let y = 0; y < 2; y ++) {
+                    encounter.addObject(
+                        new Duck(encounter, Vector.add(pos, new Vector(x * 40, y * 40)))
+                    );
+                }
+            }
 
+            console.log("[INFO] Adding duck squad")
+        };
+        duckSquadD.decisionIsTrue = () => { return Generator.nextRandom() < 0.6 };
+        root.sequence.push(duckSquadD);
 
-
-        // TODO Batch of objects (ducks/asteroid)
 
         // Sequence for each [object]
         //    Want more [object]
@@ -176,28 +197,6 @@ export default class Generator {
         while (next !== null) {
             next = next.decide();
         }
-
-        // AsteroidCreator.createLineAsteroidShower(
-        //     encounter,
-        //     new Vector(encounter.width / 2 - 350, encounter.height / 2 + 100),
-        //     20,
-        //     90,
-        //     true
-        //     ).forEach(asteroid => encounter.addObject(asteroid));
-        //
-        //
-        // let barrelSpacing = 80;
-        // for (let i = 0; i < 5; i++) {
-        //     encounter.addObject(new Barrel(encounter, new Vector(encounter.width / 2 - 2 * barrelSpacing + i * barrelSpacing, encounter.height / 2 + 2 * barrelSpacing)))
-        // }
-
-
-        // let spawnPos = new Vector(encounter.width / 2 - 600, encounter.height / 2 - 30);
-        // for (let x = 0; x < 10; x ++) {
-        //    for (let y = 0; y < 2; y++) {
-        //        encounter.addObject(new Duck(encounter, new Vector(spawnPos.x + x * 30, spawnPos.y + y * 30)))
-        //    }
-        // }
     }
 
     /* private */ createLayer() {
