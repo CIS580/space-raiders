@@ -151,7 +151,7 @@ export default class Overworld {
 
 			if (string === "Castle") state = new DesertMazeLevel();
 			else if (string === "Maze") state = new DesertMazeLevel();
-			else if (string === "Shack") state = new DesertShackLevel();
+			else if (string === "Shack") state = new BrandonShaverPlanetLevel();
 
 			else if (string === "Jungle") state = new JungleArenaLevel();
 			else if (string === "Lizard") state = new LizardJungleLevel();
