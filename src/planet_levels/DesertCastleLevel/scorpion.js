@@ -11,7 +11,7 @@ export default class Scorpion {
 	 */
 	constructor(x, y, facingLeft) {
 		this.img = new Image();
-		this.img.src = "scorpionRight.png";
+		this.img.src = "scorpion.png";
 		this.x = x;
 		this.x0 = x;
 		this.y = y;
@@ -26,14 +26,14 @@ export default class Scorpion {
 		if (this.facingLeft) {		
 			if ((this.x < this.x0 - 3) || !(tilePassable(this.x,this.y))) {
 				this.facingLeft != this.facingLeft;
-				this.img.src = "scorpionRight.png";
+				//this.img.src = "scorpionRight.png";
 			} else {
 				this.x -= 1;
 			}
 		} else {
 			if ((this.x > this.x0 + 3) || !(tilePassable(this.x,this.y))) {
 				this.facingLeft != this.facingLeft;
-				this.img.src = "scorpionLeft.png";
+				//this.img.src = "scorpionLeft.png";
 			} else {
 				this.x += 1;
 			}
