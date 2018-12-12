@@ -6,6 +6,9 @@
 import Type from "./encounterObjectType";
 import EncounterObject from "./encounterObject";
 import MyMath from "../../utils/myMath";
+import Explosion from "../realization/explosion";
+import Vector from "../../utils/vector";
+
 
 class EncounterCollisionHandler {
 
@@ -32,6 +35,8 @@ class EncounterCollisionHandler {
 
     handleExplosiveCollision(explosive, object) {
         // TODO: Implement actual handling
+        explosive.encounter.addObject(new Explosion(explosive.encounter, new Vector(explosive.position.x, explosive.position.y)));
+        explosive.encounter.removeObject(explosive);
     }
 
     handleExplosionCollision(explosion, object) {
@@ -49,13 +54,16 @@ class EncounterCollisionHandler {
     }
 
     handleBlackHoleCollision(blackHole, object) {
-        // TODO: Implement actual handling
+        blackHole.applyGravityTo(object);
     }
 
     handleBlackHoleRadiusCollision(blackHoleRadius, object) {
         // TODO: Implement actual handling
     }
 
+    handleLoopHoleCollision(loopHole, object){
+        loopHole.transfer(object);
+    }
 
     handleSlow(slow,other) {
         other.velocity = Vector.multiply(other.velocity,slow.SLOW_FORCE);
@@ -129,6 +137,13 @@ class EncounterCollisionHandler {
             case Type.SLOW | Type.ALLY_SHIP:
                 (object.type === Type.SLOW)
                     ? this.handleSlow(object, other) : this.handleSlow(other, object);
+                break;
+
+            case Type.LOOP_HOLE | Type.PLAYER_SHIP:
+            case Type.LOOP_HOLE | Type.ALLY_SHIP:
+            case Type.LOOP_HOLE | Type.ENEMY_SHIP:
+                (object.type === Type.LOOP_HOLE)
+                    ? this.handleLoopHoleCollision(object, other) : this.handleLoopHoleCollision(other, object);
                 break;
 
             default:

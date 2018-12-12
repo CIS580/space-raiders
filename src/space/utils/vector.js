@@ -180,6 +180,8 @@ export default class Vector {
 
         this.x = this.x / magnitude;
         this.y = this.y / magnitude;
+
+        return this;
     }
 
     /**
@@ -230,6 +232,10 @@ export default class Vector {
      */
     magnitude() {
         return Math.sqrt(this.x * this.x + this.y * this.y);
+    }
+
+    angle() {
+        return Math.atan2(this.y, this.x)
     }
 
     /**

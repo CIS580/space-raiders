@@ -50,6 +50,8 @@ class AssetLoader {
             this.getAsset("spaceMeteors/" + ass)
         });
 
+        this.getAsset("DUX");
+
         // TODO: Preload all required images
     }
 
