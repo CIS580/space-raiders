@@ -6,8 +6,9 @@
 import Type from "./encounterObjectType";
 import EncounterObject from "./encounterObject";
 import MyMath from "../../utils/myMath";
-import Explosion from "../realization/explosion";
+import Explosion, {EXPLOSION_DAMAGE} from "../realization/explosion";
 import Vector from "../../utils/vector";
+import {BULLET_DAMAGE} from "../realization/Bullet";
 
 
 class EncounterCollisionHandler {
@@ -23,24 +24,21 @@ class EncounterCollisionHandler {
         return EncounterCollisionHandler.instance;
     }
 
-    handleShipsCollision(ship1, ship2) {
-        MyMath.bounce(ship1, ship2);
-        switch (ship1.type | ship2.type) {
-            case Type.ENEMY_SHIP | Type.PLAYER_SHIP:
-            case Type.ENEMY_SHIP | Type.ALLY_SHIP:
-                // TODO: Implement ramming dmg
-                break;
+    handleEnemyShipCollision(enemyShip, object) {
+        MyMath.bounce(enemyShip, object);
+        if (object.type !== Type.ENEMY_SHIP) {
+            enemyShip.hit(15);
+            object.hit(15);
         }
     }
 
     handleExplosiveCollision(explosive, object) {
-        // TODO: Implement actual handling
-        explosive.encounter.addObject(new Explosion(explosive.encounter, new Vector(explosive.position.x, explosive.position.y)));
-        explosive.encounter.removeObject(explosive);
+        // TODO: Implement handling of remove life to explosive
+        explosive.hit(5)
     }
 
     handleExplosionCollision(explosion, object) {
-        // TODO: Implement actual handling
+        object.hit(EXPLOSION_DAMAGE)
     }
 
     handleAsteroidCollision(asteroid, object) {
@@ -65,6 +63,13 @@ class EncounterCollisionHandler {
         loopHole.transfer(object);
     }
 
+    handleBulletCollision(bullet, object) {
+        if (bullet.health > 0) {
+            object.hit(BULLET_DAMAGE);
+        }
+        bullet.hit(bullet.health);
+    }
+
     handleSlow(slow,other) {
         other.velocity = Vector.multiply(other.velocity,slow.SLOW_FORCE);
         other.velocityMagnitude *= slow.SLOW_FORCE;
@@ -82,12 +87,12 @@ class EncounterCollisionHandler {
         }
         let collisionType = object.type | other.type;
         switch (collisionType) {
-            case Type.ALLY_SHIP | Type.ALLY_SHIP:
-            case Type.ALLY_SHIP | Type.PLAYER_SHIP:
             case Type.ENEMY_SHIP | Type.ALLY_SHIP:
             case Type.ENEMY_SHIP | Type.PLAYER_SHIP:
-                 this.handleShipsCollision(object, other);
-                 break;
+            case Type.ENEMY_SHIP | Type.ENEMY_SHIP:
+                (object.type === Type.ENEMY_SHIP)
+                    ? this.handleEnemyShipCollision(object, other) : this.handleEnemyShipCollision(other, object);
+                break;
 
             case Type.ASTEROID | Type.ASTEROID:
             case Type.ASTEROID | Type.PLAYER_SHIP:
@@ -102,6 +107,7 @@ class EncounterCollisionHandler {
             case Type.EXPLOSIVE | Type.ALLY_SHIP:
             case Type.EXPLOSIVE | Type.ENEMY_SHIP:
             case Type.EXPLOSIVE | Type.ASTEROID:
+            case Type.EXPLOSIVE | Type.BULLET:
                 (object.type === Type.EXPLOSIVE)
                     ? this.handleExplosiveCollision(object, other) : this.handleExplosiveCollision(other, object);
                 break;
@@ -111,6 +117,7 @@ class EncounterCollisionHandler {
             case Type.EXPLOSION | Type.ENEMY_SHIP:
             case Type.EXPLOSION | Type.ASTEROID:
             case Type.EXPLOSION | Type.EXPLOSIVE:
+            case Type.EXPLOSION | Type.BULLET:
                 (object.type === Type.EXPLOSION)
                     ? this.handleExplosionCollision(object, other) : this.handleExplosionCollision(other, object);
                 break;
@@ -120,6 +127,7 @@ class EncounterCollisionHandler {
             case Type.BLACK_HOLE_RADIUS | Type.ENEMY_SHIP:
             case Type.BLACK_HOLE_RADIUS | Type.ASTEROID:
             case Type.BLACK_HOLE_RADIUS | Type.EXPLOSIVE:
+            case Type.BLACK_HOLE_RADIUS | Type.BULLET:
                 (object.type === Type.BLACK_HOLE_RADIUS)
                     ? this.handleBlackHoleRadiusCollision(object, other) : this.handleBlackHoleRadiusCollision(other, object);
                 break;
@@ -129,6 +137,7 @@ class EncounterCollisionHandler {
             case Type.BLACK_HOLE | Type.ENEMY_SHIP:
             case Type.BLACK_HOLE | Type.ASTEROID:
             case Type.BLACK_HOLE | Type.EXPLOSIVE:
+            case Type.BLACK_HOLE | Type.BULLET:
                 (object.type === Type.BLACK_HOLE)
                     ? this.handleBlackHoleCollision(object, other) : this.handleBlackHoleCollision(other, object);
                 break;
@@ -142,8 +151,18 @@ class EncounterCollisionHandler {
             case Type.LOOP_HOLE | Type.PLAYER_SHIP:
             case Type.LOOP_HOLE | Type.ALLY_SHIP:
             case Type.LOOP_HOLE | Type.ENEMY_SHIP:
+            case Type.LOOP_HOLE | Type.BULLET:
                 (object.type === Type.LOOP_HOLE)
                     ? this.handleLoopHoleCollision(object, other) : this.handleLoopHoleCollision(other, object);
+                break;
+
+            case Type.BULLET | Type.PLAYER_SHIP:
+            case Type.BULLET | Type.ENEMY_SHIP:
+            case Type.BULLET | Type.ALLY_SHIP:
+            case Type.BULLET | Type.ASTEROID:
+                (object.type === Type.BULLET)
+                    ? this.handleBulletCollision(object, other)
+                    : this.handleBulletCollision(other, object);
                 break;
 
             default:

@@ -2,6 +2,7 @@ import AssetLoader from "../../utils/assetLoader";
 import EncounterObject from "../pattern/encounterObject";
 import Type from "../pattern/encounterObjectType";
 import Vector from "../../utils/vector";
+import Bullet, {BulletType} from "./Bullet";
 
 /** Factor to convert milisecond to seconds */
 const MILISECOND_TO_SECOND_FACTOR = 1.0 / 1000.0;
@@ -177,11 +178,15 @@ export default class PlayerShip extends EncounterObject {
      * Handles the user commands associated with weapons
      *
      * @param {Input} input - object holding information about user input
+     * @param {Number} elapsedTime - time elapsed since last frame
      */
-    handleWeaponCommands(input) {
+    handleWeaponCommands(input, elapsedTime) {
+        this.gunCooldown -= elapsedTime;
         if (this.shouldShoot(input) && this.gunCooldown <= 0.0) {
-            // TODO: Spawn bullet
-
+            let direction = new Vector(1, 0).rotate(this.angle - Math.PI / 2);
+            let position = Vector.add(this.position, Vector.normalize(direction).multiply(PLAYER_RADIUS * 2));
+            let bullet = new Bullet(this.encounter, position, direction);
+            this.encounter.addObject(bullet);
             this.gunCooldown = GUN_COOLDOWN;
         }
     }
@@ -215,7 +220,7 @@ export default class PlayerShip extends EncounterObject {
     update(elapsedTime, input) {
         this.handleSpeedCommands(input);
         this.handleDirectionCommands(input);
-        this.handleWeaponCommands(input);
+        this.handleWeaponCommands(input, elapsedTime);
 
         this.updateVelocities(elapsedTime);
         this.updateShields(elapsedTime);

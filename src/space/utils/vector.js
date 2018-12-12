@@ -1,9 +1,10 @@
-
 /**
  * @class Vector
  *
  * Represents base class for handling 2D vectors
  */
+import Generator from "../generator";
+
 export default class Vector {
 
     /**
@@ -128,8 +129,8 @@ export default class Vector {
      * @returns New random normalized vector
      */
     static random() {
-        let x = -1.0 + Math.random() * 2;
-        let y = -1.0 + Math.random() * 2;
+        let x = -1.0 + Generator.nextRandom() * 2;
+        let y = -1.0 + Generator.nextRandom() * 2;
 
         return Vector.normalize(new Vector(x, y));
     }

@@ -3,14 +3,17 @@ import EncounterObject from "../pattern/encounterObject";
 import Type from "../pattern/encounterObjectType";
 import MyMath from "../../utils/myMath";
 import AssetLoader from "../../utils/assetLoader";
+import Generator from "../../generator";
 
 const BH_SPRITE_SIZE = 100;
 const BH_SPRITE_SHEET_WIDTH = 6;
 const BH_SPRITE_SHEET_HEIGHT = 2;
 const BH_RENDER_RADIUS = 50;
-const BH_FORCE_SCALE = 6.0/10.0;
+const BH_FORCE_SCALE = 1.5;
 const BH_GRAVITY_RANGE = 8000;
 const BH_WRAP_INTERVAL = 100;
+
+const BH_KILL_AMOUNT = 1;
 
 export default class BlackHole extends EncounterObject{
 
@@ -38,8 +41,8 @@ export default class BlackHole extends EncounterObject{
       * @return {BlackHole} a new black hole with random position
       */
     static generateAtRandomPosition(encounter){
-        let x = Math.floor(Math.random()*encounter.width);
-        let y = Math.floor(Math.random()*encounter.height);
+        let x = Math.floor(Generator.nextRandom()*encounter.width);
+        let y = Math.floor(Generator.nextRandom()*encounter.height);
         return new BlackHole(encounter, new Vector(x,y));
     }
 
@@ -47,8 +50,14 @@ export default class BlackHole extends EncounterObject{
       * @param {Object} the object waiting for check
       * @return {Boolean} whether other object collided with black hole
       */
-    collidesWith(others){
-        let distance = MyMath.distance(this.position, others.position);
+    collidesWith(other){
+        let distance = MyMath.distance(this.position, other.position);
+
+        // This is a hack:
+        if (MyMath.distance(this.position, other.position) <= BH_RENDER_RADIUS + other.radius) {
+            other.hit(BH_KILL_AMOUNT);
+        }
+
         return !(distance > BH_GRAVITY_RANGE);
     }
 
@@ -90,7 +99,7 @@ export default class BlackHole extends EncounterObject{
       *
       * @param {Object} - the object which need to check gravitation
       */
-    applyGravityTo(object){
+    applyGravityTo(object) {
         let force = Vector.subtract(this.position,object.position);
         let forceDir = Vector.normalize(force);
         object.position = Vector.add(object.position,Vector.multiply(forceDir,BH_FORCE_SCALE));
