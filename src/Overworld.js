@@ -122,7 +122,7 @@ export default class Overworld {
 				this.state = "stop";
 				this.time = 0;
 				this.currentNode = this.nextNode;
-				game.pushGameState(new Zoom(game.WIDTH/2, game.HEIGHT/2,this.callback,game, this.currentNode.color));
+				game.pushGameState(new Zoom(game.WIDTH/2, game.HEIGHT/2,this.callback,game, this.currentNode.color, this.currentNode.name));
 			}
 		}
 	}
