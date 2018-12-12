@@ -10,7 +10,7 @@ import LavaPlanetLevel from "./planet_levels/LavaPlanetLevel/LavaPlanetLevel";
 import LizardJungleLevel from "./planet_levels/LizardJungleLevel/LizardJungleLevel";
 import JungleArenaLevel from "./planet_levels/JungleArenaLevel/JungleArenaLevel";
 // This one is throwing some warnings, but it does still work.
-import IceWires from "./planet_levels/IceWireLevel/IceWires";
+import IceWireLevel from "./planet_levels/IceWireLevel/IceWires";
 import IceWalkerLevel from "./planet_levels/IceWalkerLevel/IceWalkerLevel";
 import IceRockLevel from "./planet_levels/IceRockLevel/IceRockLevel";
 
