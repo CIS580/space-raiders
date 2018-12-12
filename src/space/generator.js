@@ -9,6 +9,7 @@ import Barrel from "./objects/realization/barrel";
 import Duck from "./objects/realization/duck";
 import MyMath from "./utils/myMath";
 import BlackHole from "./objects/realization/blackHole";
+import EnemyShip, {EnemyType} from "./objects/realization/enemyShip";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
@@ -171,6 +172,19 @@ export default class Generator {
         duckSquadD.decisionIsTrue = () => { return Generator.nextRandom() < 0.6 };
         root.sequence.push(duckSquadD);
 
+        let enemyD = new Decision();
+        enemyD.yesDecision = enemyD;
+        enemyD.yesApply = () => {
+            let eType = EnemyType.SHIP;
+            if (Generator.nextRandom() < 0.3) eType = EnemyType.UFO;
+            encounter.addObject(
+                new EnemyShip(encounter, new Vector(Generator.nextRandom() * encounter.width, Generator.nextRandom() * encounter.height), eType)
+            );
+
+            console.log("[INFO] Adding enemy ship")
+        };
+        enemyD.decisionIsTrue = () => { return Generator.nextRandom() < 0.7 };
+        root.sequence.push(enemyD);
 
         // Sequence for each [object]
         //    Want more [object]
