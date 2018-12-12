@@ -13,7 +13,10 @@ const EXPLOSION_ACTIVATE_RADIUS = 100.0;
 const IMAGE_TIME = 50;
 
 /** Index of the image indicating end of explosion */
-const LAST_IMAGE_SUFFIX = 31;
+export const LAST_IMAGE_SUFFIX = 31;
+
+/**Damage per image */
+export const EXPLOSION_DAMAGE = 1;
 
 export default class Explosion extends EncounterObject {
 
