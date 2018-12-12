@@ -1,19 +1,9 @@
 /** Name of the image used for the background */
-import AssetLoader from "./utils/assetLoader";
 import Camera from "./utils/camera";
 import CollisionHandler from "./objects/pattern/collisionHandler";
 import Vector from "./utils/vector";
-import PlayerShip from "./objects/realization/playerShip";
-import AsteroidCreator from "./objects/realization/asteroid";
-import Barrel from "./objects/realization/barrel";
-import Duck from "./objects/realization/duck";
 import Generator from "./generator";
 
-/** Name of the image used for the background */
-const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
-const STAR_SMALL_IMAGE = 'spaceBackground/starSmall';
-const STAR_BIG_IMAGE = 'spaceBackground/starBig';
-const PLANET_IMAGE_PREFIX = 'spaceBackground/planet-';
 
 /** Safety margin object can be in when not in screen bounds, before they are removed */
 const SAFE_EXIT_MARGIN = 30.0;
@@ -143,6 +133,15 @@ export default class Encounter {
         this.markedForInsertion.forEach(object => this.gameObjects.push(object));
         this.markedForInsertion.forEach(object => object.initialize());
         this.markedForInsertion = [];
+    }
+
+    win() {
+        // TODO render stuff
+        console.log("You have just won")
+    }
+    loose() {
+        // TODO render stuff, restart level?
+        console.log("You have just lost")
     }
 
     /**

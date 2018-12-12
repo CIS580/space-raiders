@@ -8,6 +8,13 @@ import AsteroidCreator from "./objects/realization/asteroid";
 import Barrel from "./objects/realization/barrel";
 import Duck from "./objects/realization/duck";
 
+/** Name of the image used for the background */
+const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
+const STAR_SMALL_IMAGE = 'spaceBackground/starSmall';
+const STAR_BIG_IMAGE = 'spaceBackground/starBig';
+const PLANET_IMAGE_PREFIX = 'spaceBackground/planet-';
+
+
 export default class Generator {
 
     /**
@@ -19,6 +26,7 @@ export default class Generator {
      */
     constructor(encounter) {
         this.encounter = encounter;
+        this.gameTime = 0;
         // TODO reset deterministic random
     }
 
@@ -114,11 +122,16 @@ export default class Generator {
     }
 
     onObjectDestroyed(object) {
-
+        if (object !== this.encounter.playerShip) {
+            this.encounter.loose();
+        }
     }
 
-    update(delta) {
 
+    update(delta) {
+        this.gameTime += delta;
+        this.encounter.win();
+        this.encounter.loose();
     }
 
     // Shouldnt be, no time
