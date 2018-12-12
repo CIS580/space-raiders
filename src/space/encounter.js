@@ -139,7 +139,7 @@ export default class Encounter {
         // TODO render stuff
         console.log("You have just won")
     }
-    loose() {
+    lose() {
         // TODO render stuff, restart level?
         console.log("You have just lost")
     }

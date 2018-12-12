@@ -264,7 +264,7 @@ export default class Generator {
 
     onObjectDestroyed(object) {
         if (object === this.encounter.playerShip) {
-            this.encounter.loose();
+            this.encounter.lose();
         }
     }
 
