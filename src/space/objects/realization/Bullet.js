@@ -5,6 +5,7 @@ import Vector from "../../utils/vector";
 
 const RADIUS = 4;
 const SPEED = 512;
+const DESTROY_DURATION = 17;
 const ASSET_NAME_GREEN = "laserGreen";
 const ASSET_NAME_GREEN_SHOT = "laserGreenShot";
 const ASSET_NAME_RED = "laserRed";
@@ -63,6 +64,21 @@ export default class Bullet extends EncounterObject {
 
     initialize() {
         this.assetShot = AssetLoader.getAsset(this.assetNameShot);
+    }
+
+    startDestroyAnimation() {
+        if (this.destroyCounter === undefined) {
+            this.destroyCounter = DESTROY_DURATION;
+        }
+    }
+
+    hit(amount) {
+        if (!this.killable) return;
+
+        this.health -= amount;
+        if (this.health <= 0) {
+            this.startDestroyAnimation();
+        }
     }
 }
 

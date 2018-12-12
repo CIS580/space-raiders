@@ -60,8 +60,10 @@ class EncounterCollisionHandler {
     }
 
     handleBulletCollision(bullet, object) {
+        if (bullet.health > 0) {
+            object.hit(BULLET_DAMAGE);
+        }
         bullet.hit(bullet.health);
-        object.hit(BULLET_DAMAGE);
     }
 
     /**
