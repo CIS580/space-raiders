@@ -10,12 +10,12 @@ export default class TempMenu {
 	
 	update(elapsedTime,input,game)
 	{
-		if(input.keyDown('w'))
+		if(input.keyDown('ArrowDown'))
 		{
 			this.selected--;
 			if(this.selected<0) this.selected = 0;
 		}
-		if(input.keyDown('s'))
+		if(input.keyDown('ArrowUp'))
 		{
 			this.selected++;
 			if(this.selected>=this.strings.length) this.selected = this.selected-1;
