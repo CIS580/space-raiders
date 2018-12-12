@@ -25,7 +25,11 @@ class EncounterCollisionHandler {
     }
 
     handleEnemyShipCollision(enemyShip, object) {
-        // TODO: Implement actual handling
+        MyMath.bounce(enemyShip, object);
+        if (object.type !== Type.ENEMY_SHIP) {
+            enemyShip.hit(15);
+            object.hit(15);
+        }
     }
 
     handleExplosiveCollision(explosive, object) {
@@ -82,6 +86,7 @@ class EncounterCollisionHandler {
         switch (collisionType) {
             case Type.ENEMY_SHIP | Type.ALLY_SHIP:
             case Type.ENEMY_SHIP | Type.PLAYER_SHIP:
+            case Type.ENEMY_SHIP | Type.ENEMY_SHIP:
                 (object.type === Type.ENEMY_SHIP)
                     ? this.handleEnemyShipCollision(object, other) : this.handleEnemyShipCollision(other, object);
                 break;
