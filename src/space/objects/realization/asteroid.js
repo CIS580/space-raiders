@@ -7,6 +7,7 @@ import Type from "../pattern/encounterObjectType";
 import Vector from "../../utils/vector";
 import MyMath from "../../utils/myMath";
 import AssetLoader from "../../utils/assetLoader";
+import Generator from "../../generator";
 
 
 const AST_MAX_SPEED = 200;
@@ -20,8 +21,8 @@ class Asteroid extends EncounterObject {
     constructor(encounter, position,radius) {
         super(encounter, Type.ASTEROID,radius, position, AssetLoader.getAsset("spaceMeteors/" + ASTEROID_ASSETS[Math.floor(MyMath.randomBetween(0, ASTEROID_ASSETS.length))]));
         this.mass = this.radius / 2;
-        this.velocity = new Vector(Math.random() * AST_MAX_SPEED * 2 - AST_MAX_SPEED,Math.random() * AST_MAX_SPEED * 2 - AST_MAX_SPEED);
-        this.angularVelocity = Math.random() * 3 - 1.5;
+        this.velocity = new Vector(Generator.nextRandom() * AST_MAX_SPEED * 2 - AST_MAX_SPEED, Generator.nextRandom() * AST_MAX_SPEED * 2 - AST_MAX_SPEED);
+        this.angularVelocity = Generator.nextRandom() * 3 - 1.5;
     }
 
 

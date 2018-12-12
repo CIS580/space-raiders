@@ -3,6 +3,7 @@ import EncounterObject from "../pattern/encounterObject";
 import Type from "../pattern/encounterObjectType";
 import MyMath from "../../utils/myMath";
 import AssetLoader from "../../utils/assetLoader";
+import Generator from "../../generator";
 
 const LH_SPRITE_SIZE = 40;
 const LH_SPRITE_SHEET_WIDTH = 4;
@@ -32,8 +33,8 @@ export default class LoopHole extends EncounterObject{
         this.mapHeight = encounter.height;
         // generate loop hole exit
       	do{
-            this.outX = Math.floor(Math.random()*this.mapWidth);
-            this.outY = Math.floor(Math.random()*this.mapHeight);
+            this.outX = Math.floor(Generator.nextRandom()*this.mapWidth);
+            this.outY = Math.floor(Generator.nextRandom()*this.mapHeight);
             this.outPos = new Vector(this.outX, this.outY);
         } while (MyMath.distance(position, this.outPos) <= LH_MIN_DIS);
         //load image
@@ -52,8 +53,8 @@ export default class LoopHole extends EncounterObject{
       * @return {LoopHole} a new loop hole with random entry and wayout position
       */
     static generateAtRandomPosition(encounter){
-        let x = Math.floor(Math.random()*encounter.width);
-        let y = Math.floor(Math.random()*encounter.height);
+        let x = Math.floor(Generator.nextRandom()*encounter.width);
+        let y = Math.floor(Generator.nextRandom()*encounter.height);
         return new LoopHole(encounter, new Vector(x,y));
     }
 

@@ -3,6 +3,7 @@ import EncounterObject from "../pattern/encounterObject";
 import Type from "../pattern/encounterObjectType";
 import MyMath from "../../utils/myMath";
 import AssetLoader from "../../utils/assetLoader";
+import Generator from "../../generator";
 
 const BH_SPRITE_SIZE = 100;
 const BH_SPRITE_SHEET_WIDTH = 6;
@@ -38,8 +39,8 @@ export default class BlackHole extends EncounterObject{
       * @return {BlackHole} a new black hole with random position
       */
     static generateAtRandomPosition(encounter){
-        let x = Math.floor(Math.random()*encounter.width);
-        let y = Math.floor(Math.random()*encounter.height);
+        let x = Math.floor(Generator.nextRandom()*encounter.width);
+        let y = Math.floor(Generator.nextRandom()*encounter.height);
         return new BlackHole(encounter, new Vector(x,y));
     }
 

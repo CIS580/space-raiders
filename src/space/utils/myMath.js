@@ -1,6 +1,8 @@
 /**
  * Created by jozef on 7.12.2018.
  */
+import Generator from "../generator";
+
 export default class MyMath {
 
     /**
@@ -32,7 +34,7 @@ export default class MyMath {
      * @returns number
      */
     static randomBetween(min,max) {
-        return Math.random() * (max - min) + min;
+        return Generator.nextRandom() * (max - min) + min;
     }
 
     /**
