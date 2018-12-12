@@ -2,6 +2,7 @@ import EncounterObject from "../pattern/encounterObject";
 import EncounterObjectType from "../pattern/encounterObjectType";
 import AssetLoader from "../../utils/assetLoader";
 import Vector from "../../utils/vector";
+import Bullet, { BulletType } from "./Bullet";
 
 const RADIUS = 32;
 const ASSET_SHIP = "enemyShip";
@@ -9,6 +10,8 @@ const ASSET_UFO = "enemyUFO";
 const MAX_VELOCITY = 200;
 const MAX_ACCELERATION = 50;
 const MIN_DISTANCE = 128;
+const GUN_COOLDOWN_MIN = 300;
+const GUN_COOLDOWN_MAX = 3000;
 
 export default class EnemyShip extends EncounterObject {
 
@@ -32,6 +35,7 @@ export default class EnemyShip extends EncounterObject {
     }
 
     update(elapsedTime, input) {
+        this.handleFire(elapsedTime);
         this.updateVelocity(elapsedTime, input);
 
         this.superUpdate(elapsedTime, input);
@@ -39,6 +43,10 @@ export default class EnemyShip extends EncounterObject {
 
     render(elapsedTime, context) {
         this.superRender(elapsedTime, context);
+    }
+
+    initialize() {
+        this.setCooldown();
     }
 
     updateVelocity(elapsedTime, input) {
@@ -57,6 +65,20 @@ export default class EnemyShip extends EncounterObject {
         this.velocity.y = (this.velocity.y + targetVelocityVector.y) / 2;
 
         this.angle = this.velocity.angle() - Math.PI / 2;
+    }
+
+    handleFire(elapsedTime) {
+        this.cooldown -= elapsedTime;
+        if (this.cooldown <= 0) {
+            let position = Vector.add(this.position, Vector.normalize(this.velocity).multiply(RADIUS));
+            let bullet = new Bullet(this.encounter, position, this.velocity, BulletType.GREEN);
+            this.encounter.addObject(bullet);
+            this.setCooldown();
+        }
+    }
+
+    setCooldown() {
+        this.cooldown = Math.round(Math.random() * (GUN_COOLDOWN_MAX - GUN_COOLDOWN_MIN) + GUN_COOLDOWN_MIN);
     }
 }
 
