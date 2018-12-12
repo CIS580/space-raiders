@@ -2,6 +2,17 @@ import TempMenu from "./TempMenu"
 import Zoom from "./Zoom"
 import PlanetLevelManager from "./menus/PlanetLevelManager";
 import SamplePlanetLevel from "./planet_levels/SamplePlanetLevel";
+// This one does not work currently. Keep both import and push commented.
+// import DesertCastleMap from "../planet_levels/DesertCastleLevel/DesertCastleMap";
+import DesertMazeLevel from "./planet_levels/DesertMazeLevel/mazedesert";
+import BrandonShaverPlanetLevel from "./planet_levels/DesertShackLevel/BrandonShaverPlanetLevel";
+import LavaPlanetLevel from "./planet_levels/LavaPlanetLevel/LavaPlanetLevel";
+import LizardJungleLevel from "./planet_levels/LizardJungleLevel/LizardJungleLevel";
+import JungleArenaLevel from "./planet_levels/JungleArenaLevel/JungleArenaLevel";
+// This one is throwing some warnings, but it does still work.
+import IceWires from "./planet_levels/IceWireLevel/IceWires";
+import IceWalkerLevel from "./planet_levels/IceWalkerLevel/IceWalkerLevel";
+import IceRockLevel from "./planet_levels/IceRockLevel/IceRockLevel";
 
 export default class Overworld {
 	constructor(game)
@@ -11,7 +22,7 @@ export default class Overworld {
 				name: "Erena",
 				description: "Erena's desolate surface is almost completely covered   in sand. The planet's devasting climate and frequent   high winds gave scientists the impression that Erena   was uninhabitable, but there may be more to Erena than meets the eye...",
 				x: 0, y: 0,
-				options: ["Sample", "Castle", "Maze", "Shack","Exit"],
+				options: ["Castle", "Maze", "Shack","Exit"],
 				color: "#c2b280"
 			},
 			clareo: {
@@ -32,7 +43,7 @@ export default class Overworld {
 				name: "Thermos",
 				description: "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea,  and the hoard of blood-lusting creatures that roam     the surface looking for the next source of food to     satisfy their hellish appetites.",
 				x: -500, y: -200,
-				options: ["Exit"],
+				options: ["Lava", "Exit"],
 				color: "#cf1020"
 			}
 		};
@@ -132,7 +143,25 @@ export default class Overworld {
 		if(string!="Exit")
 		{
 			var state = null;
-			if(string=="Sample") state = new SamplePlanetLevel();
+			//if(string=="Sample")
+			//state = new SamplePlanetLevel();
+			//"Castle", "Maze", "Shack"
+			//jungle Lizard
+			//Rock", "Walker", "Wire
+
+			if (string === "Castle") state = new DesertMazeLevel();
+			else if (string === "Maze") state = new DesertMazeLevel();
+			else if (string === "Shack") state = new DesertShackLevel();
+
+			else if (string === "Jungle") state = new JungleArenaLevel();
+			else if (string === "Lizard") state = new LizardJungleLevel();
+
+			else if (string === "Rock") state = new IceRockLevel();
+			else if (string === "Walker") state = new IceWalkerLevel();
+			else if (string === "Wire") state = new IceWireLevel();
+
+			else if (string === "Lava") state = new LavaPlanetLevel();
+
 			if(state!=null) this.game.pushGameState(new PlanetLevelManager(state),this.caller.callback2);
 		}
 	}
