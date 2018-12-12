@@ -16,21 +16,21 @@ export default class Overworld {
 			},
 			clareo: {
 				name: "Clareo IV",
-				description: "Clareo IV is a luscious forested planet with livable weather conditions for the human species. Despite the accommodating climate, there are foreseen diplomatic problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.",
+				description: "Clareo IV is a luscious forested planet with livable    weather conditions for the human species. Despite the  accommodating climate, there are foreseen diplomatic   problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.",
 				x: 300, y: 45,
 				options: ["Exit"],
 				color: "#228b22"
 			},
 			zuberon: {
 				name: "Zuberon",
-				description: "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known about Zuberon's previous inhabitants, the Satchuan, except that their impact on the planet indicates obvious signs of intelligence.",
+				description: "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known  about Zuberon's previous inhabitants, the Satchuan,    except that their impact on the planet indicates       obvious signs of intelligence.",
 				x: -100, y: 180,
 				options: ["Exit"],
 				color: "#add8e6"
 			},
 			thermos: {
 				name: "Thermos",
-				description: "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea, and the hoard of blood-lusting creatures that roam the surface looking for the next source of food to satisfy their hellish appetites.",
+				description: "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea,  and the hoard of blood-lusting creatures that roam     the surface looking for the next source of food to     satisfy their hellish appetites.",
 				x: -500, y: -200,
 				options: ["Exit"],
 				color: "#cf1020"
