@@ -1,3 +1,5 @@
+import TempMenu from "./TempMenu";
+
 export default class Zoom {
 	constructor(x, y, callback,game, color)
 	{
@@ -13,15 +15,23 @@ export default class Zoom {
 	update(elapsedTime,input,game)
 	{
 
-		if(input.keyDown(' '))
+		//Don't uncomment this
+		/*if(input.keyDown(' '))
 		{
 			//this.callback(this.strings[this.selected]);
 			game.popGameState();
-		}
+		}*/
 		this.counter += 5;
 
 		if (this.counter > 242) {
 			this.counter = 242;
+			
+			//Don't erase this again
+			if(!this.flag)
+			{
+				this.flag = true;
+				game.pushGameState(new TempMenu(this.caller.currentNode.options,this.caller.callback,game));
+			}
 		}
 	}
 
