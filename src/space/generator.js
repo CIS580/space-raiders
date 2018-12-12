@@ -172,9 +172,9 @@ export default class Generator {
         duckSquadD.decisionIsTrue = () => { return Generator.nextRandom() < 0.6 };
         root.sequence.push(duckSquadD);
 
-        let enemyD = new Decision();
-        enemyD.yesDecision = enemyD;
-        enemyD.yesApply = () => {
+        let moreEnemiesD = new Decision();
+        moreEnemiesD.yesDecision = moreEnemiesD;
+        moreEnemiesD.yesApply = () => {
             let eType = EnemyType.SHIP;
             if (Generator.nextRandom() < 0.3) eType = EnemyType.UFO;
             encounter.addObject(
@@ -183,8 +183,22 @@ export default class Generator {
 
             console.log("[INFO] Adding enemy ship")
         };
-        enemyD.decisionIsTrue = () => { return Generator.nextRandom() < 0.7 };
-        root.sequence.push(enemyD);
+        moreEnemiesD.decisionIsTrue = () => { return Generator.nextRandom() < 0.3 };
+
+        let firstEnemyD = new Decision();
+        firstEnemyD.yesDecision = moreEnemiesD;
+        firstEnemyD.yesApply = () => {
+            let eType = EnemyType.SHIP;
+            if (Generator.nextRandom() < 0.3) eType = EnemyType.UFO;
+            encounter.addObject(
+                new EnemyShip(encounter, new Vector(Generator.nextRandom() * encounter.width, Generator.nextRandom() * encounter.height), eType)
+            );
+
+            console.log("[INFO] Adding enemy ship")
+        };
+        firstEnemyD.decisionIsTrue = () => { return Generator.nextRandom() < 0.7 };
+        root.sequence.push(firstEnemyD);
+
 
         // Sequence for each [object]
         //    Want more [object]

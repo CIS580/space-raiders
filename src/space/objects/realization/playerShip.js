@@ -183,8 +183,9 @@ export default class PlayerShip extends EncounterObject {
     handleWeaponCommands(input, elapsedTime) {
         this.gunCooldown -= elapsedTime;
         if (this.shouldShoot(input) && this.gunCooldown <= 0.0) {
-            let position = Vector.add(this.position, Vector.normalize(this.velocity).multiply(PLAYER_RADIUS));
-            let bullet = new Bullet(this.encounter, position, this.velocity);
+            let direction = new Vector(1, 0).rotate(this.angle - Math.PI / 2);
+            let position = Vector.add(this.position, Vector.normalize(direction).multiply(PLAYER_RADIUS * 2));
+            let bullet = new Bullet(this.encounter, position, direction);
             this.encounter.addObject(bullet);
             this.gunCooldown = GUN_COOLDOWN;
         }
