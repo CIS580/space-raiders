@@ -31,8 +31,10 @@ export default class TempMenu {
 	render(elapsedTime,context,game)
 	{
 		this.caller.render(elapsedTime,context,game);
-		context.fillStyle = "black";
-		context.fillRect(0,0,100,100);
+		context.fillStyle = "#444444";
+		context.fillRect(0,0,110, 110);
+		context.fillStyle = "#222222";
+		context.fillRect(5,5,105,105);
 		context.fillStyle = "white";
 		context.font = "30px Arial";
 		for(let i = 0; i < this.strings.length; i++)
