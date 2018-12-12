@@ -2,10 +2,16 @@ import AssetLoader from "../../utils/assetLoader";
 import EncounterObject from "../pattern/encounterObject";
 import Type from "../pattern/encounterObjectType";
 import Vector from "../../utils/vector";
-import Explosion,{LAST_IMAGE_SUFFIX} from "./explosion";
+import Explosion, {LAST_IMAGE_SUFFIX} from "./explosion";
 
-/** Name of base bomb asset */
-const BARREL_ASSET_NAME = "barrel";
+/** Name of active barrel asset */
+const BARREL_ACTIVE_ASSET_NAME = "barrel";
+
+/** Name of the inactvie barrel asset */
+const BARREL_INACTIVE_ASSET_NAME = "barrel_inactive";
+
+/** Time in ms after the barrel become active */
+const BARREL_COOLDOWN = 3000;
 
 /** Collision radius that activates the bomb*/
 const BARREL_ACTIVATE_RADIUS = 10.0;
@@ -22,9 +28,11 @@ export default class Barrel extends EncounterObject {
      * @param {Vector} position - position of this object
      */
     constructor(encounter, position) {
-        super(encounter, Type.EXPLOSIVE, BARREL_ACTIVATE_RADIUS, position, AssetLoader.getAsset(BARREL_ASSET_NAME));
+        super(encounter, Type.EXPLOSIVE, BARREL_ACTIVATE_RADIUS, position, AssetLoader.getAsset(BARREL_INACTIVE_ASSET_NAME));
         this.health = BARREL_HEALTH;
-        this.killable = true;
+        this.killable = false;
+        this.cooldown = BARREL_COOLDOWN
+        this.inactive = true;
     }
 
     /**
@@ -34,6 +42,14 @@ export default class Barrel extends EncounterObject {
      * @param {Input} input - object holding information about user input
      */
     update(elapsedTime, input) {
+        if (this.cooldown > 0) {
+            this.cooldown = this.cooldown - elapsedTime;
+        } else if (this.inactive)  {
+            this.killable = true;
+            this.asset = AssetLoader.getAsset(BARREL_ACTIVE_ASSET_NAME);
+            this.inactive = false;
+        }
+
         this.superUpdate(elapsedTime, input);
     }
 
@@ -52,7 +68,8 @@ export default class Barrel extends EncounterObject {
      * Explosion will be created after decreasing health under zero
      * @param amount - health to be decreased
      */
-    hit(amount){
+    hit(amount) {
+        if (!this.killable) return;
         this.health -= amount;
         if (this.health <= 0) {
             this.encounter.addObject(new Explosion(this.encounter, new Vector(this.position.x, this.position.y)));

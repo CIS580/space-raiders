@@ -44,6 +44,9 @@ class AssetLoader {
             this.getAsset("spaceBackground/planet-" + i );
         }
 
+        this.getAsset("barrel");
+        this.getAsset("barrel_inactive");
+
         for (let i = 0; i <= 31; i++) {
             this.getAsset("expl_08/expl_08_00" + i );
         }
