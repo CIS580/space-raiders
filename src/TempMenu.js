@@ -6,6 +6,9 @@ export default class TempMenu {
 		this.callback = callback;
 		this.caller = game.gameState[game.gameState.length-1];
 		this.game = game;
+		this.loadSound = new Audio;
+		this.loadSound.src = "resources/overworld_assets/sfx/planet_click.wav";
+		this.loadSound.volume = .2;
 	}
 
 	update(elapsedTime,input,game)
@@ -22,6 +25,7 @@ export default class TempMenu {
 		}
 		if(input.keyDown(' '))
 		{
+			if(this.strings[this.selected] != "Exit")	this.loadSound.play();
 			game.popGameState();
 			game.popGameState();
 			this.callback(this.strings[this.selected]);

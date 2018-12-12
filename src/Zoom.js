@@ -13,11 +13,19 @@ export default class Zoom {
 		this.name = name;
 		this.planetSprites = new Image;
 		this.planetSprites.src = "resources/overworld_assets/img/colored_planets.png";
+		this.zoomSound = new Audio;
+		this.soundFlag = false;
+		this.zoomSound.src = "resources/overworld_assets/sfx/planet_hover.wav";
+		this.zoomSound.volume = .2;
 	}
 
 	update(elapsedTime,input,game)
 	{
-
+		//this is just for one little sound when the zoom first is pushed as a gameState
+		if(!this.soundFlag){
+			this.zoomSound.play();
+			this.soundFlag = true;
+		}
 		//Don't uncomment this
 		/*if(input.keyDown(' '))
 		{
