@@ -7,17 +7,17 @@ export default class TempMenu {
 		this.caller = game.gameState[game.gameState.length-1];
 		this.game = game;
 	}
-	
+
 	update(elapsedTime,input,game)
 	{
 		if(input.keyDown('ArrowDown'))
 		{
-			this.selected--;
+			this.selected++;
 			if(this.selected<0) this.selected = 0;
 		}
 		if(input.keyDown('ArrowUp'))
 		{
-			this.selected++;
+			this.selected--;
 			if(this.selected>=this.strings.length) this.selected = this.selected-1;
 		}
 		if(input.keyDown(' '))
@@ -27,7 +27,7 @@ export default class TempMenu {
 			this.callback(this.strings[this.selected]);
 		}
 	}
-	
+
 	render(elapsedTime,context,game)
 	{
 		this.caller.render(elapsedTime,context,game);
@@ -39,7 +39,7 @@ export default class TempMenu {
 		context.font = "30px Arial";
 		for(let i = 0; i < this.strings.length; i++)
 		{
-		context.fillText(this.strings[i],(i==this.selected?10:0),i*32+20);	
+		context.fillText(this.strings[i],(i==this.selected?10:0),i*32+20);
 		}
 	}
 }

@@ -11,21 +11,21 @@ export default class Overworld {
 				name: "Erena",
 				description: "Erena's desolate surface is almost completely covered   in sand. The planet's devasting climate and frequent   high winds gave scientists the impression that Erena   was uninhabitable, but there may be more to Erena than meets the eye...",
 				x: 0, y: 0,
-				options: ["Sample","Exit"],
+				options: ["Castle", "Maze", "Shack","Exit"],
 				color: "#c2b280"
 			},
 			clareo: {
 				name: "Clareo IV",
 				description: "Clareo IV is a luscious forested planet with livable    weather conditions for the human species. Despite the  accommodating climate, there are foreseen diplomatic   problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.",
 				x: 300, y: 45,
-				options: ["Exit"],
+				options: ["Jungle", "Lizard", "Exit"],
 				color: "#228b22"
 			},
 			zuberon: {
 				name: "Zuberon",
 				description: "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known  about Zuberon's previous inhabitants, the Satchuan,    except that their impact on the planet indicates       obvious signs of intelligence.",
 				x: -100, y: 180,
-				options: ["Exit"],
+				options: ["Rock", "Walker", "Wire", "Exit"],
 				color: "#add8e6"
 			},
 			thermos: {
