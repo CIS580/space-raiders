@@ -11,7 +11,7 @@ export default class Overworld {
 				name: "Erena",
 				description: "Erena's desolate surface is almost completely covered   in sand. The planet's devasting climate and frequent   high winds gave scientists the impression that Erena   was uninhabitable, but there may be more to Erena than meets the eye...",
 				x: 0, y: 0,
-				options: ["Castle", "Maze", "Shack","Exit"],
+				options: ["Sample", "Castle", "Maze", "Shack","Exit"],
 				color: "#c2b280"
 			},
 			clareo: {
