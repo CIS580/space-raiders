@@ -27,8 +27,8 @@ export default class DesertCastleMap extends BasePlanetLevel {
     // First two arguments (tileset and tilemap) are relative to the current folder (wherever this file is).
     // Third argument (image) is relative to the dist folder.
     this.tileset = new PlanetTileset(
-      "../dist/resources/planet_tilesets/DesertCastleLevel/dss.json",
-      "../dist/resources/planet_tilesets/DesertCastleLevel/desert-castle.json",
+      require("../../../dist/resources/planet_tilesets/DesertCastleLevel/dss.json"),
+      require("../../../dist/resources/planet_tilesets/DesertCastleLevel/desert-castle.json"),
       "../dist/resources/planet_tilesets/DesertCastleLevel/dss.png");
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
