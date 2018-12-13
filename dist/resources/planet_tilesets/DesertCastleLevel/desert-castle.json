@@ -1,5 +1,5 @@
 { "height":40,
- "infinite":true,
+ "infinite":false,
  "layers":[
         {
          "chunks":[
