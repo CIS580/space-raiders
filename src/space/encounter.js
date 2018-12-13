@@ -205,6 +205,8 @@ export default class Encounter {
             context.font = "20px Georgia";
             context.fillText("Health: " + Math.round(this.playerShip.health), 10, 35);
             context.fillText("Shields: " + Math.round(this.playerShip.shieldHealth), game.WIDTH - 110, 35);
+
+            context.fillText("Find and enter the green portal", game.WIDTH / 2 - 100, 35);
         }
     }
 
