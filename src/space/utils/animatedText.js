@@ -132,8 +132,14 @@ export class AnimatedTextSettings {
         // Font for displayed text
         this.textFont = "bold 48px Sans Sarif";
 
-        // Vertical offset of centered text
+        // Font for displayed lower text
+        this.subTextFont = "bold 36px Sans Sarif";
+
+        // Vertical offset of displayed text
         this.textVerticalOffset = -25;
+
+        // Vertical spacing of displayed text
+        this.textVerticalSpacing = 70;
 
         // Drift of text in the middle
         this.drift = 2.0 / 21.0;
@@ -154,10 +160,13 @@ export class AnimatedTextSettings {
         this.appearanceDelay = 20;
 
         // Delay for texts to drift in the middle of the screen
-        this.driftDelay = 180;
+        this.driftDelay = 100;
 
         // Time for the text to disappear from the middle of the screen
         this.disappearanceDelay = 20;
+
+        // Delay before the sub text gets displayed
+        this.subTextDelay = 40;
 
         // Time required for text to appear, drift and disappear
         this.textDuration = this.appearanceDelay + this.driftDelay + this.disappearanceDelay;

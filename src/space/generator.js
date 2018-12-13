@@ -1,7 +1,5 @@
 /** Name of the image used for the background */
 import AssetLoader from "./utils/assetLoader";
-import Camera from "./utils/camera";
-import CollisionHandler from "./objects/pattern/collisionHandler";
 import Vector from "./utils/vector";
 import PlayerShip from "./objects/realization/playerShip";
 import AsteroidCreator from "./objects/realization/asteroid";
