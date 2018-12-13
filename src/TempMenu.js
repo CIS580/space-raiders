@@ -25,9 +25,9 @@ export default class TempMenu {
 		}
 		if(input.keyDown(' '))
 		{
-			/*
-			if(this.strings[this.selected] != "Exit")	this.loadSound.play();
-			*/
+			
+			if(this.strings[this.selected] != "Exit") this.loadSound.play();
+			
 			game.popGameState();
 			game.popGameState();
 			this.callback(this.strings[this.selected]);
