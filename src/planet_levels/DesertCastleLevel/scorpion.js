@@ -1,4 +1,4 @@
-import DesertCastleMap from "./DesertCastleMap";
+import scorpion from './scorpion.json'
 
 /**
   * Represents the Scorpion entity,
@@ -13,7 +13,7 @@ export default class Scorpion {
 	 */
 	constructor(x, y, facingLeft, desertCastleMap) {
 		this.img = new Image();
-		this.img.src = "scorpion.png";
+		//this.img.src = "../../../planet_levels/DesertCastleLevel/scorpion.png";
 		this.x = x;
 		this.x0 = x;
 		this.y = y;

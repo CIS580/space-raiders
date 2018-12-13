@@ -29,7 +29,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
     this.tileset = new PlanetTileset(
       require("../../../dist/resources/planet_tilesets/DesertCastleLevel/dss.json"),
       require("../../../dist/resources/planet_tilesets/DesertCastleLevel/desert-castle.json"),
-      "../dist/resources/planet_tilesets/DesertCastleLevel/dss.png");
+      ("resources/planet_tilesets/DesertCastleLevel/dss.png"));
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
     this.name = "Desert Castle";
@@ -39,7 +39,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
     //MAKE SURE YOU GET THEM ALL 
     //If you need more reference, feel free to look at the implementation in LizardJungleLevel
     this.message = [];
-    this.message.push('starting text');
+    this.message.push('Collect all the flowers in the castle');
     //push each line individually
     //you'll have to check if something goes off the screen and adjust for that by breaking
     //it into multiple push statements
@@ -47,7 +47,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
 	//spawn enemies
 	this.scorpions = [];
 	this.crabs = [];
-	this.spawnEnemies(context)
+	this.spawnEnemies();
   }
 
   /** @method
@@ -128,7 +128,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
 	/** @method
 	 *  Spawn all the enemies
 	 */
-	spawnEnemies(context) {
+	spawnEnemies() {
 		// spawn the scorpions
       let xLocs;
       xLocs = [6, 24, 15, 7, 24];
