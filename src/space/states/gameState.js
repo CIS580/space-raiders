@@ -1,4 +1,4 @@
-import { AnimatedTextSettings } from "../utils/animated_text";
+import { AnimatedTextSettings } from "../utils/animatedText";
 
 /**
  * @class GameState

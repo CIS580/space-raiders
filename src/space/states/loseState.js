@@ -1,4 +1,4 @@
-import { AnimatedText, TextPathNode } from "../utils/animated_text";
+import { AnimatedText, TextPathNode } from "../utils/animatedText";
 import { GameState } from "./gameState";
 import Vector from "../utils/vector";
 
@@ -18,7 +18,7 @@ export default class LoseState extends GameState {
     constructor(encounter, game) {
         super(encounter, game);
 
-        this.timer = 2 * this.settings.textDuration + this.settings.fadeOutDuration;
+        this.timer = this.settings.subTextDelay + this.settings.textDuration + this.settings.fadeOutDuration;
         this.texts = this.prepareTexts(game.WIDTH, game.HEIGHT);
 
         this.encounter.camera.moveTo(new Vector(encounter.width / 2, encounter.height / 2), this.timer);
@@ -71,6 +71,7 @@ export default class LoseState extends GameState {
     prepareTexts(screenWidth, screenHeight) {
         let s = this.settings;
         let textY = screenHeight / 2.0 + s.textVerticalOffset;
+        let subTextY = textY + s.textVerticalSpacing;
 
         let levelText = new AnimatedText("YOU DIED!", s.textFont, s.textColor, s.textAlignment, textY, [
             new TextPathNode(screenWidth * (s.leftEdge - s.offset), 0),
@@ -79,9 +80,9 @@ export default class LoseState extends GameState {
             new TextPathNode(screenWidth * (s.rightEdge + s.offset), s.disappearanceDelay)
         ])
 
-        let readyText = new AnimatedText("Traveling back in time ...",  s.textFont, s.textColor, s.textAlignment, textY, [
+        let readyText = new AnimatedText("Traveling back in time ...", s.subTextFont, s.textColor, s.textAlignment, subTextY, [
             new TextPathNode(screenWidth * (s.leftEdge - s.offset), 0),
-            new TextPathNode(screenWidth * (s.leftEdge - s.offset), s.textDuration),
+            new TextPathNode(screenWidth * (s.leftEdge - s.offset), s.subTextDelay),
             new TextPathNode(screenWidth * s.middlePointStart, s.appearanceDelay),
             new TextPathNode(screenWidth * (s.middlePointStart + s.drift), s.driftDelay),
             new TextPathNode(screenWidth * (s.rightEdge + s.offset), s.disappearanceDelay)
