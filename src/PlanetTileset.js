@@ -52,11 +52,13 @@ export default class PlanetTileset {
       this.tileset[i] = properties;
     }
 
-    for(let i = 0; i < this.tilesetJson.tiles.length; i++) {
-      let jsonProperties = this.tilesetJson.tiles[i].properties;
-      let id = this.tilesetJson.tiles[i].id;
-      for(let j = 0; j < jsonProperties.length; j++) {
-        this.tileset[id][jsonProperties[j].name] = jsonProperties[j].value;
+    if(this.tilesetJson.tiles !== undefined) {
+      for(let i = 0; i < this.tilesetJson.tiles.length; i++) {
+        let jsonProperties = this.tilesetJson.tiles[i].properties;
+        let id = this.tilesetJson.tiles[i].id;
+        for(let j = 0; j < jsonProperties.length; j++) {
+          this.tileset[id][jsonProperties[j].name] = jsonProperties[j].value;
+        }
       }
     }
 
