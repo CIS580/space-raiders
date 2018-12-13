@@ -4,6 +4,7 @@
 import PlanetLevelManager from "./PlanetLevelManager";
 import SamplePlanetLevel from "../planet_levels/SamplePlanetLevel";
 import Overworld from "../Overworld";
+import Encounter from "../space/encounter";
 
 export default class StartScreen {
   /** @method
@@ -14,6 +15,7 @@ export default class StartScreen {
     */
   update(elaspedTime, input, game) {
     // TODO: Load inital game state object
+
     if(input.keyDown(' ')) {
       game.pushGameState(new Overworld(game));
     }

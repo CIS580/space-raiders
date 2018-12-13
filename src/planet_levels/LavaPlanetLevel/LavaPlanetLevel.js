@@ -1,8 +1,8 @@
 import BasePlanetLevel from "../BasePlanetLevel";
 import PlanetTileset from "../../PlanetTileset";
-import Bullet from "../../../dist/resources/planet_tilesets/LavaPlanetLevel/lava_planet_level/Bullets";
-import Entity from "../../../dist/resources/planet_tilesets/LavaPlanetLevel/lava_planet_level/Entity";
-import Altar from "../../../dist/resources/planet_tilesets/LavaPlanetLevel/lava_planet_level/Altar";
+import Bullet from "../../../dist/resources/planet_tilesets/lavaPlanetLevel/lava_planet_level/Bullets";
+import Entity from "../../../dist/resources/planet_tilesets/lavaPlanetLevel/lava_planet_level/Entity";
+import Altar from "../../../dist/resources/planet_tilesets/lavaPlanetLevel/lava_planet_level/Altar";
 
 
 //everything that is interactable is spwaned using this class not the tilemap. 
@@ -40,9 +40,9 @@ export default class LavaPlanetLevel extends BasePlanetLevel {
     // First two arguments (tileset and tilemap) are relative to the current folder (wherever this file is).
     // Third argument (image) is relative to the dist folder.
     this.tileset = new PlanetTileset(
-      require("../../../dist/resources/planet_tilesets/LavaPlanetLevel/lava_planet_level/tileset.json"),
-      require("../../../dist/resources/planet_tilesets/LavaPlanetLevel/lava_planet_level/tilemap.json"),
-      "resources/planet_tilesets/LavaPlanetLevel/lava_planet_level/tiles.png");
+      require("../../../dist/resources/planet_tilesets/lavaPlanetLevel/lava_planet_level/tileset.json"),
+      require("../../../dist/resources/planet_tilesets/lavaPlanetLevel/lava_planet_level/tilemap.json"),
+      "resources/planet_tilesets/lavaPlanetLevel/lava_planet_level/tiles.png");
     this.timePassed = 0;	
 	this.GolemBulletTime = 0 ;
 	this.VolcanoBulletTime = 0;
