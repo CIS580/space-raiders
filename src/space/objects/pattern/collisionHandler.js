@@ -27,8 +27,8 @@ class EncounterCollisionHandler {
     handleEnemyShipCollision(enemyShip, object) {
         MyMath.bounce(enemyShip, object);
         if (object.type !== Type.ENEMY_SHIP) {
-            enemyShip.hit(15);
-            object.hit(15);
+            enemyShip.hit(1);
+            object.hit(0.5);
         }
     }
 
