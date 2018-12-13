@@ -27,9 +27,9 @@ export default class DesertCastleMap extends BasePlanetLevel {
     // First two arguments (tileset and tilemap) are relative to the current folder (wherever this file is).
     // Third argument (image) is relative to the dist folder.
     this.tileset = new PlanetTileset(
-      "../planet_levels/DesertPlanetLevel/dss.json",
-      "../planet_levels/DesertPlanetLevel/desert-castle.json",
-      "../planet_levels/DesertPlanetLevel/dss.png");
+      "../dist/resources/planet_tilesets/DesertCastleLevel/dss.json",
+      "../dist/resources/planet_tilesets/DesertCastleLevel/desert-castle.json",
+      "../dist/resources/planet_tilesets/DesertCastleLevel/dss.png");
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
     this.name = "Desert Castle";
@@ -114,7 +114,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
         staticContext.fillRect(0, 576, 1024, 256);
         staticContext.fillStyle = 'black';
         staticContext.font = '24px Arial';
-        for (var i = 0; i < this.message.length; i++) {
+        for (let i = 0; i < this.message.length; i++) {
           staticContext.fillText(this.message[i], 60, 630+40*i);
         }
         staticContext.font = '18px Arial';
@@ -130,8 +130,10 @@ export default class DesertCastleMap extends BasePlanetLevel {
 	 */
 	spawnEnemies(context) {
 		// spawn the scorpions
-        let xLocs = [6, 24, 15, 7, 24];
-        let yLocs = [8, 9, 0, -14, -14];
+      let xLocs;
+      xLocs = [6, 24, 15, 7, 24];
+      let yLocs;
+      yLocs = [8, 9, 0, -14, -14];
         let i;
         for (i = 0; i < xLocs.length; i++) {
 			let scorpion = new Scorpion(xLocs[i], yLocs[i], false, this);
@@ -142,7 +144,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
         let xCrab = [8, 23];
 		let yCrab = [-18, -19];
         let j;
-        for (j = 0; j < xCrab.length; i++) {
+        for (j = 0; j < xCrab.length; j++) {
 			let crab = new Crab(xCrab[j], yCrab[j], 2, this);
 			this.crabs.push(crab);
 			//crab.render(elapsedTime, context);
