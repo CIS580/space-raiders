@@ -27,17 +27,37 @@ export default class Camera {
 
         this.target = null;
         this.layers = [];
+
+        this.moveTarget = null;
+        this.step = null;
     }
 
     /**
-     * Binds camera to follow specified target
+     * Binds camera to follow specified target. This will also cancel any moveTo command
      *
      * @param {Object} target - target object to follow
      */
     bindTo(target) {
+        this.moveTarget = null;
+        this.step = null;
+
         this.target = target;
         this.offset = new Vector(-target.position.x + this.canvasDimensions.x / 2,
                                  -target.position.y + this.canvasDimensions.y / 2);
+    }
+
+    /**
+     * Starts moving camera to given destination so it arrives there in number of frames given by time
+     *
+     * @param {Vector} destination - destination to move camera to
+     * @param {Number} time - number of frames the transition should take
+     */
+    moveTo(destination, time) {
+        this.target = null;
+
+        this.moveTarget = new Vector(destination.x, destination.y);
+        this.step = new Vector((-destination.x + this.canvasDimensions.x / 2 - this.offset.x) / time,
+                                (-destination.y + this.canvasDimensions.y / 2 - this.offset.y) / time);
     }
 
     /**
@@ -74,12 +94,15 @@ export default class Camera {
      * @param {float} deltaT - time elapsed in between last two frames
      */
     update(deltaT) {
-        let deltaX = this.computeDeltaX(deltaT);
-        this.offset.x = this.clamp(-this.baseLayerDimensions.x + this.canvasDimensions.x, this.offset.x - deltaX, 0.0);
+        if(this.target) {
+            let deltaX = this.computeDeltaX(deltaT);
+            this.offset.x = this.clamp(-this.baseLayerDimensions.x + this.canvasDimensions.x, this.offset.x - deltaX, 0.0);
 
-        let deltaY = this.computeDeltaY(deltaT);
-        this.offset.y = this.clamp(-this.baseLayerDimensions.y + this.canvasDimensions.y, this.offset.y - deltaY, 0.0);
-
+            let deltaY = this.computeDeltaY(deltaT);
+            this.offset.y = this.clamp(-this.baseLayerDimensions.y + this.canvasDimensions.y, this.offset.y - deltaY, 0.0);
+        } else if(this.moveTarget && (this.moveTarget.x != this.offset.x || this.moveTarget.y != this.offset.y)) {
+            this.offset.add(this.step);
+        }
     }
 
     /**
@@ -89,10 +112,6 @@ export default class Camera {
      * @returns Number of pixels the main camera should move
      */
     computeDeltaX(deltaT) {
-        if (!this.target) {
-            return 0.0;
-        }
-
         let cameraX = this.target.position.x + this.offset.x;
         let leftBoundary = this.canvasDimensions.x * FOLLOW_BOUNDARY;
         let rightBoundary = this.canvasDimensions.x * (1 - FOLLOW_BOUNDARY);
@@ -115,10 +134,6 @@ export default class Camera {
      * @returns Number of pixels the main camera should move
      */
     computeDeltaY(deltaT) {
-        if (!this.target) {
-            return 0.0;
-        }
-
         let cameraY = this.target.position.y + this.offset.y;
         let topBoundary = this.canvasDimensions.y * FOLLOW_BOUNDARY;
         let bottomBoundary = this.canvasDimensions.y * (1 - FOLLOW_BOUNDARY);
