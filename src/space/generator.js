@@ -12,6 +12,7 @@ import BlackHole from "./objects/realization/blackHole";
 import EnemyShip, {EnemyType} from "./objects/realization/enemyShip";
 import LoopHole from "./objects/realization/loopHole";
 import WinHole from "./objects/realization/winHole";
+import Forcefield from "./objects/realization/forcefield";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
@@ -19,8 +20,8 @@ const STAR_SMALL_IMAGE = 'spaceBackground/starSmall';
 const STAR_BIG_IMAGE = 'spaceBackground/starBig';
 const PLANET_IMAGE_PREFIX = 'spaceBackground/planet-';
 
-
-
+/** Size of the force field */
+const FORCE_FIELD_SIZE = 50;
 
 
 /* private */ class Decision {
@@ -237,6 +238,11 @@ export default class Generator {
         encounter.playerShip = new PlayerShip(encounter, new Vector(encounter.width / 2, encounter.height / 2));
         encounter.addObject(encounter.playerShip);
         encounter.camera.bindTo(encounter.playerShip);
+
+        encounter.addObject(new Forcefield(encounter, new Vector(encounter.width / 2.0, 0), encounter.width, FORCE_FIELD_SIZE));
+        encounter.addObject(new Forcefield(encounter, new Vector(encounter.width / 2.0, encounter.height), encounter.width, FORCE_FIELD_SIZE));
+        encounter.addObject(new Forcefield(encounter, new Vector(0, encounter.height / 2.0), FORCE_FIELD_SIZE, encounter.height));
+        encounter.addObject(new Forcefield(encounter, new Vector(encounter.width, encounter.height / 2.0), FORCE_FIELD_SIZE, encounter.height));
 
         let next = this.decisionTree;
         while (next !== null) {

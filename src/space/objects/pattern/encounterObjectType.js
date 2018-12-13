@@ -15,6 +15,7 @@ let EncounterObjectType = {
     EXPLOSION:          0b1 << 8,
     SLOW :              0b1 << 9,
     BULLET :            0b1 << 10,
+    FORCEFIELD :        0b1 << 11,
 };
 
 Object.freeze(EncounterObjectType);
