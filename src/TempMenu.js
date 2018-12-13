@@ -38,14 +38,14 @@ export default class TempMenu {
 	{
 		this.caller.render(elapsedTime,context,game);
 		context.fillStyle = "#444444";
-		context.fillRect(0,0,110, 110);
+		context.fillRect(0,0,110, this.strings.length *20+30);
 		context.fillStyle = "#222222";
-		context.fillRect(5,5,105,105);
+		context.fillRect(5,5,100,this.strings.length *20 +20);
 		context.fillStyle = "white";
-		context.font = "30px Arial";
+		context.font = "20 px Arial";
 		for(let i = 0; i < this.strings.length; i++)
 		{
-		context.fillText(this.strings[i],(i==this.selected?10:0),i*32+20);
+		context.fillText(this.strings[i],(i==this.selected?20:10),i*20+20);
 		}
 	}
 }
