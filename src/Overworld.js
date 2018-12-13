@@ -342,7 +342,7 @@ export default class Overworld {
 		context.translate(game.WIDTH/2,game.HEIGHT/2);
 		if(this.state=="move")
 		{
-			context.rotate(Math.atan2(this.nextNode.y-this.currentNode.y,this.nextNode.x-this.currentNode.x) + 1);
+			context.rotate(Math.atan2(this.nextNode.y-this.currentNode.y,this.nextNode.x-this.currentNode.x)+Math.PI/2);
 		}
 		context.translate(-game.WIDTH/2,-game.HEIGHT/2);
 		context.fillStyle = "red";

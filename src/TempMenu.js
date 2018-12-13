@@ -16,12 +16,12 @@ export default class TempMenu {
 		if(input.keyDown('ArrowDown'))
 		{
 			this.selected++;
-			if(this.selected<0) this.selected = 0;
+			if(this.selected>=this.strings.length) this.selected = this.strings.length-1;
 		}
 		if(input.keyDown('ArrowUp'))
 		{
 			this.selected--;
-			if(this.selected>=this.strings.length) this.selected = this.selected-1;
+			if(this.selected<0) this.selected = 0;
 		}
 		if(input.keyDown(' '))
 		{
