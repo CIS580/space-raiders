@@ -70,7 +70,7 @@ export default class Laser {
   }
 
   render(context) {
-    context.fillStyle = "red";
+    context.fillStyle = "blue";
     context.beginPath();
     context.arc(this.x * 32 + 16, this.y * 32 + 16, 2, 0, 2*Math.PI);
     context.fill();

@@ -1,8 +1,6 @@
 /** @class StartScreen
   * A starting screen for the game.
   */
-import PlanetLevelManager from "./PlanetLevelManager";
-import SamplePlanetLevel from "../planet_levels/SamplePlanetLevel";
 import Overworld from "../Overworld";
 import Encounter from "../space/encounter";
 

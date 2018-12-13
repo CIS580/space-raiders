@@ -1,5 +1,5 @@
 import BasePlanetLevel from "../BasePlanetLevel";
-import DesertTileset from "./planet_levels/DesertCastleLevel/dss";
+import PlanetTileset from "../../PlanetTileset";
 import Scorpion from "./Scorpion";
 import Crab from "./Crab";
 
@@ -27,9 +27,9 @@ export default class DesertCastleMap extends BasePlanetLevel {
     // First two arguments (tileset and tilemap) are relative to the current folder (wherever this file is).
     // Third argument (image) is relative to the dist folder.
     this.tileset = new PlanetTileset(
-      require("../../dist/resources/planet_tilesets/sample_planet_level/dss.json"),
-      require("../../dist/resources/planet_tilesets/sample_planet_level/DesertCastleMap.json"),
-      "resources/planet_tilesets/sample_planet_level/dss.png");
+      require("../../../dist/resources/planet_tilesets/DesertCastleLevel/dss.json"),
+      require("../../../dist/resources/planet_tilesets/DesertCastleLevel/desert-castle.json"),
+      "resources/planet_tilesets/DesertCastleLevel/dss.png");
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
     this.name = "Desert Castle";
@@ -39,7 +39,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
     //MAKE SURE YOU GET THEM ALL 
     //If you need more reference, feel free to look at the implementation in LizardJungleLevel
     this.message = [];
-    this.message.push('starting text');
+    //this.message.push('Collect all the flowers in the castle');
     //push each line individually
     //you'll have to check if something goes off the screen and adjust for that by breaking
     //it into multiple push statements
@@ -47,7 +47,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
 	//spawn enemies
 	this.scorpions = [];
 	this.crabs = [];
-	spawnEnemies(elapsedTime, context);
+	this.spawnEnemies();
   }
 
   /** @method
@@ -61,33 +61,16 @@ export default class DesertCastleMap extends BasePlanetLevel {
 
     //This code handles interacting with things and properly clearing the box
     //I would suggest copying this exactly and then changing the if to whatever you need
-    var message = '';
-    if (x == 5) {
-      message = "wow!";
+      let message;
+      message = '';
+    if (x == 15 && y == -34) {
+      message = "congratulations!";
     }
     if (this.message.length !== 0 && message !== '') this.message.length = 0;
     else if (message === '') {
       this.message.length = 0;
     }
     else this.message.push(message);
-
-    // if(this.map === undefined) {
-    //   this.map = 0;
-    // }
-    // this.map++;
-    // this.map %= 3;
-    // switch(this.map) {
-    //   case 0:
-    //     this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap.json"));
-    //     break;
-    //   case 1:
-    //     this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_large.json"));
-    //     break;
-    //   case 2:
-    //     this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_small.json"));
-    //     break;
-    // }
-    // player.movePlayerToSpawn();
   }
 
   /**
@@ -120,29 +103,6 @@ export default class DesertCastleMap extends BasePlanetLevel {
   }
 
   /** @method
-   * Update any entities within this planet level, including the player.
-   * @param {DOMHighResTimeStamp} elaspedTime - the amount of time elapsed this frame
-   * @param {Input} input - the input from this and the prior frame
-   * @param {Game} game - the game object
-   * @param {PlanetPlayer} player - representation of the player
-   */
-  update(elapsedTime, input, game, player) {
-    player.update(elapsedTime, input, game);
-  }
-
-  /** @method
-   * Render the tileset, the player, and any other custom entities to the provided context.
-   * Draw here as if your visible grid is infinite, scrolling within a viewport is done by the PlanetLevelManager.
-   * @param {DOMHighResTimeStamp} elapsedTime - the amount of time elapsed this frame
-   * @param {CanvasRenderingContext2D} context - the rendering context
-   * @param {PlanetPlayer} player - representation of the player
-   */
-  render(elapsedTime, context, player) {
-    this.tileset.render(elapsedTime, context);
-    player.render(elapsedTime, context);
-  }
-
-  /** @method
    * Draw items using the static context (after scrolling).
    * Only use this for drawing items on top of the screen.
    * @param staticContext - The context to draw on top of the screen and scrolling elements.
@@ -154,7 +114,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
         staticContext.fillRect(0, 576, 1024, 256);
         staticContext.fillStyle = 'black';
         staticContext.font = '24px Arial';
-        for (var i = 0; i < this.message.length; i++) {
+        for (let i = 0; i < this.message.length; i++) {
           staticContext.fillText(this.message[i], 60, 630+40*i);
         }
         staticContext.font = '18px Arial';
@@ -168,22 +128,26 @@ export default class DesertCastleMap extends BasePlanetLevel {
 	/** @method
 	 *  Spawn all the enemies
 	 */
-	spawnEnemies(elapsedTime, context) {
+	spawnEnemies() {
 		// spawn the scorpions
-		xLocs = [6,24,15,7,24];
-		yLocs = [8,9,0,-14,-14];
-		for (i = 0; i < xLocs.length; i++) {
-			scorpion = new Scorpion(xLocs[i], yLocs[i], false);
+      let xLocs;
+      xLocs = [6, 24, 15, 7, 24];
+      let yLocs;
+      yLocs = [8, 9, 0, -14, -14];
+        let i;
+        for (i = 0; i < xLocs.length; i++) {
+			let scorpion = new Scorpion(xLocs[i], yLocs[i], false, this);
 			this.scorpions.push(scorpion);
-			scorpion.render(elapsedTime, context);
+			//scorpion.render(elapsedTime, context);
 		}
 		// spawn the crabs
-		xCrab = [8, 23];
-		yCrab = [-18, -19];
-		for (j = 0; j < xCrab.length; i++) {
-			crab = new Crab(xCrab[j], yCrab[j], 2);
+        let xCrab = [8, 23];
+		let yCrab = [-18, -19];
+        let j;
+        for (j = 0; j < xCrab.length; j++) {
+			let crab = new Crab(xCrab[j], yCrab[j], 2, this);
 			this.crabs.push(crab);
-			crab.render(elapsedTime, context);
+			//crab.render(elapsedTime, context);
 		}
 	}
   }
