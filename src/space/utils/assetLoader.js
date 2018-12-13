@@ -37,6 +37,10 @@ class AssetLoader {
         this.getAsset("jetFlame2");
         this.getAsset("shield");
 
+        this.getAsset("loophole");
+        this.getAsset("winhole");
+        this.getAsset("black-hole");
+
         this.getAsset("spaceBackground/starBackground");
         this.getAsset("spaceBackground/starSmall");
         this.getAsset("spaceBackground/starBig");
