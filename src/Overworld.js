@@ -13,6 +13,7 @@ import JungleArenaLevel from "./planet_levels/JungleArenaLevel/JungleArenaLevel"
 import IceWireLevel from "./planet_levels/IceWireLevel/IceWires";
 import IceWalkerLevel from "./planet_levels/IceWalkerLevel/IceWalkerLevel";
 import IceRockLevel from "./planet_levels/IceRockLevel/IceRockLevel";
+import Encounter from "./space/encounter";
 
 export default class Overworld {
 	constructor(game)
@@ -120,9 +121,10 @@ export default class Overworld {
 			} else if(!this.flag){
 				this.flag = true;
 				//do encounter
-				if(Math.random()>.5)
-				{
-					console.log("Encounter");
+				if(Math.random()>.3) {
+
+                    game.pushGameState(new Encounter(game, 1024 * 3, 768 * 3));
+
 				}
 			}
 			this.time += elapsedTime/1000;
