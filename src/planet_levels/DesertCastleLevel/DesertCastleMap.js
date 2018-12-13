@@ -134,7 +134,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
       let xLocs;
       xLocs = [6, 24, 15, 7, 24];
       let yLocs;
-      yLocs = [8, 9, 0, -14, -14];
+      yLocs = [48, 49, 0, 26, 26];
         let i;
         for (i = 0; i < xLocs.length; i++) {
 			let scorpion = new Scorpion(xLocs[i], yLocs[i], false, this);
@@ -143,7 +143,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
 		}
 		// spawn the crabs
         let xCrab = [8, 23];
-		let yCrab = [-18, -19];
+		let yCrab = [22, 21];
         let j;
         for (j = 0; j < xCrab.length; j++) {
 			let crab = new Crab(xCrab[j], yCrab[j], 2, this);
