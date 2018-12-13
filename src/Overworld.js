@@ -112,6 +112,9 @@ export default class Overworld {
 			} else if(input.keyPressed('ArrowRight')&&this.currentNode.right) {
 				this.state = "move";
 				this.nextNode = this.currentNode.right;
+			} else if(input.keyDown(' '))
+			{
+				game.pushGameState(new Zoom(game.WIDTH/2, game.HEIGHT/2,this.callback,game, this.currentNode.color, this.currentNode.name));
 			}
 		} else if(this.state=="move")
 		{
@@ -121,7 +124,7 @@ export default class Overworld {
 			} else if(!this.flag){
 				this.flag = true;
 				//do encounter
-				if(Math.random()>.3) {
+				if(Math.random()>.7) {
 
                     game.pushGameState(new Encounter(game, 1024 * 3, 768 * 3));
 
