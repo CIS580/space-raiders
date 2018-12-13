@@ -21,11 +21,14 @@ export default class Zoom {
 
 	update(elapsedTime,input,game)
 	{
+		/*
 		//this is just for one little sound when the zoom first is pushed as a gameState
 		if(!this.soundFlag){
 			this.zoomSound.play();
 			this.soundFlag = true;
 		}
+		*/
+		
 		//Don't uncomment this
 		/*if(input.keyDown(' '))
 		{
