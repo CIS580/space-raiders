@@ -10,6 +10,7 @@ import Duck from "./objects/realization/duck";
 import MyMath from "./utils/myMath";
 import BlackHole from "./objects/realization/blackHole";
 import EnemyShip, {EnemyType} from "./objects/realization/enemyShip";
+import LoopHole from "./objects/realization/loopHole";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
@@ -143,6 +144,17 @@ export default class Generator {
         };
         blackHoleD.decisionIsTrue = () => { return Generator.nextRandom() < 0.6 };
         root.sequence.push(blackHoleD);
+
+        let loopHoleD = new Decision();
+        loopHoleD.yesDecision = loopHoleD;
+        loopHoleD.yesApply = () => {
+            encounter.addObject(
+                new LoopHole(encounter, new Vector(Generator.nextRandom() * encounter.width, Generator.nextRandom() * encounter.height))
+            );
+            console.log("[INFO] Adding LH")
+        };
+        loopHoleD.decisionIsTrue = () => { return Generator.nextRandom() < 0.4 };
+        root.sequence.push(loopHoleD);
 
         let duckD = new Decision();
         duckD.yesDecision = duckD;

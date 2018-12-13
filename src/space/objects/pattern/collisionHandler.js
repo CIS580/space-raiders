@@ -143,6 +143,7 @@ class EncounterCollisionHandler {
             case Type.LOOP_HOLE | Type.PLAYER_SHIP:
             case Type.LOOP_HOLE | Type.ALLY_SHIP:
             case Type.LOOP_HOLE | Type.ENEMY_SHIP:
+            case Type.LOOP_HOLE | Type.ASTEROID:
             case Type.LOOP_HOLE | Type.BULLET:
                 (object.type === Type.LOOP_HOLE)
                     ? this.handleLoopHoleCollision(object, other) : this.handleLoopHoleCollision(other, object);
