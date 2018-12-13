@@ -11,6 +11,7 @@ import MyMath from "./utils/myMath";
 import BlackHole from "./objects/realization/blackHole";
 import EnemyShip, {EnemyType} from "./objects/realization/enemyShip";
 import LoopHole from "./objects/realization/loopHole";
+import WinHole from "./objects/realization/winHole";
 
 /** Name of the image used for the background */
 const BACKGROUND_IMAGE = 'spaceBackground/starBackground';
@@ -97,6 +98,8 @@ export default class Generator {
     }
 
     prepareDecisionTree() {
+        this.enemyCount = 0;
+
         // Shortcuts
         let encounter = this.encounter;
 
@@ -192,6 +195,7 @@ export default class Generator {
             encounter.addObject(
                 new EnemyShip(encounter, new Vector(Generator.nextRandom() * encounter.width, Generator.nextRandom() * encounter.height), eType)
             );
+            this.enemyCount ++;
 
             console.log("[INFO] Adding enemy ship")
         };
@@ -205,6 +209,7 @@ export default class Generator {
             encounter.addObject(
                 new EnemyShip(encounter, new Vector(Generator.nextRandom() * encounter.width, Generator.nextRandom() * encounter.height), eType)
             );
+            this.enemyCount ++;
 
             console.log("[INFO] Adding enemy ship")
         };
@@ -305,12 +310,24 @@ export default class Generator {
     onObjectDestroyed(object) {
         if (object === this.encounter.playerShip) {
             this.encounter.lose();
+        } else if (object instanceof EnemyShip) {
+            this.enemyCount --;
         }
     }
 
 
     update(delta) {
         this.gameTime += delta;
+
+        if (this.gameTime >= 15 * 1000 && this.enemyCount === 0) {
+            if (!this.winReady) {
+                this.winReady = true;
+                this.encounter.addObject(new WinHole(this.encounter, new Vector(Generator.nextRandom() * this.encounter.width, Generator.nextRandom() * this.encounter.height)))
+                console.log("[INFO] Spawning win thingy")
+            }
+        } else {
+            this.winReady = false;
+        }
 
         // TODO keep adding things like asteroids
     }

@@ -27,8 +27,8 @@ class EncounterCollisionHandler {
     handleEnemyShipCollision(enemyShip, object) {
         MyMath.bounce(enemyShip, object);
         if (object.type !== Type.ENEMY_SHIP) {
-            enemyShip.hit(15);
-            object.hit(15);
+            enemyShip.hit(1);
+            object.hit(0.5);
         }
     }
 
@@ -42,8 +42,13 @@ class EncounterCollisionHandler {
     }
 
     handleAsteroidCollision(asteroid, object) {
-        // TODO: Implement actual handling
         MyMath.bounce(asteroid,object);
+        switch (object.type) {
+            case Type.PLAYER_SHIP:
+            case Type.ALLY_SHIP:
+                // TODO: Implement ramming dmg
+                break;
+        }
     }
 
     handleBlackHoleCollision(blackHole, object) {
@@ -65,14 +70,11 @@ class EncounterCollisionHandler {
         bullet.hit(bullet.health);
     }
 
-    /**
-     *  TODO
-     *  Type.SLOW | Type.ALLY_SHIP:
-     */
-    handleSlow(slow, other) {
-        //other.velocity = Vector.multiply(other.velocity,slow.SLOW_FORCE);
-        //other.velocityMagnitude *= slow.SLOW_FORCE;
+    handleSlow(slow,other) {
+        other.velocity = Vector.multiply(other.velocity,slow.SLOW_FORCE);
+        other.velocityMagnitude *= slow.SLOW_FORCE;
     }
+
     /**
      * Handles collision of two encounter game objects
      *
@@ -138,6 +140,12 @@ class EncounterCollisionHandler {
             case Type.BLACK_HOLE | Type.BULLET:
                 (object.type === Type.BLACK_HOLE)
                     ? this.handleBlackHoleCollision(object, other) : this.handleBlackHoleCollision(other, object);
+                break;
+
+            case Type.SLOW | Type.PLAYER_SHIP:
+            case Type.SLOW | Type.ALLY_SHIP:
+                (object.type === Type.SLOW)
+                    ? this.handleSlow(object, other) : this.handleSlow(other, object);
                 break;
 
             case Type.LOOP_HOLE | Type.PLAYER_SHIP:
