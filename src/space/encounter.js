@@ -148,7 +148,6 @@ export default class Encounter {
     clear() {
         this.gameObjects.forEach(object => {
             if (object.type !== EncounterObjectType.PLAYER_SHIP) {
-                // TODO: Perserve boundaries
                 this.removeObject(object);
             }
         });
