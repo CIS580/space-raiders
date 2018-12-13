@@ -75,6 +75,10 @@ class EncounterCollisionHandler {
         other.velocityMagnitude *= slow.SLOW_FORCE;
     }
 
+    handleForceFieldCollision(forcefield, object) {
+        forcefield.bounce(object);
+    }
+
     /**
      * Handles collision of two encounter game objects
      *
@@ -162,8 +166,15 @@ class EncounterCollisionHandler {
             case Type.BULLET | Type.ALLY_SHIP:
             case Type.BULLET | Type.ASTEROID:
                 (object.type === Type.BULLET)
-                    ? this.handleBulletCollision(object, other)
-                    : this.handleBulletCollision(other, object);
+                    ? this.handleBulletCollision(object, other) : this.handleBulletCollision(other, object);
+                break;
+
+            case Type.FORCEFIELD | Type.PLAYER_SHIP:
+            case Type.FORCEFIELD | Type.ALLY_SHIP:
+            case Type.FORCEFIELD | Type.ENEMY_SHIP:
+            case Type.FORCEFIELD | Type.ASTEROID:
+                (object.type === Type.FORCEFIELD)
+                    ? this.handleForceFieldCollision(object, other) : this.handleForceFieldCollision(other, object);
                 break;
 
             default:
