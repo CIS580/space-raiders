@@ -27,9 +27,9 @@ export default class StartScreen {
     context.save();
     context.fillStyle = 'white';
     context.font = '48pt Serif';
-    context.fillText("Welcome to Space Raiders", 280, 200);
+    context.fillText("Welcome to Space Raiders", 120, 200);
     context.font = '18pt Serif';
-    context.fillText("Press [SPACE] to Begin", 500, 300);
+    context.fillText("Press [SPACE] to Begin", 340, 300);
     context.restore();
   }
 }
