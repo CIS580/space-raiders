@@ -18,7 +18,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
     super();
 
     this.playerSpawnX = 16;
-    this.playerSpawnY = 10;
+    this.playerSpawnY = 50;
     this.playerSpawnFaceDirection = 1;
 
     // This loads your own tileset created from Tiled.
@@ -31,6 +31,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
       require("../../../dist/resources/planet_tilesets/DesertCastleLevel/desert-castle.json"),
       "resources/planet_tilesets/DesertCastleLevel/dss.png");
 
+    //this.tileset.chunks().load;
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
     this.name = "Desert Castle";
 
@@ -63,7 +64,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
     //I would suggest copying this exactly and then changing the if to whatever you need
       let message;
       message = '';
-    if (x == 15 && y == -34) {
+    if (x == 15 && y == 14) {
       message = "congratulations!";
     }
     if (this.message.length !== 0 && message !== '') this.message.length = 0;
@@ -150,4 +151,27 @@ export default class DesertCastleMap extends BasePlanetLevel {
 			//crab.render(elapsedTime, context);
 		}
 	}
+
+  /** @method
+   * Update any entities within this planet level, including the player.
+   * @param {DOMHighResTimeStamp} elaspedTime - the amount of time elapsed this frame
+   * @param {Input} input - the input from this and the prior frame
+   * @param {Game} game - the game object
+   * @param {PlanetPlayer} player - representation of the player
+   */
+  update(elaspedTime, input, game, player) {
+    player.update(elaspedTime, input, game);
+  }
+
+  /** @method
+   * Render the tileset, the player, and any other custom entities to the provided context.
+   * Draw here as if your visible grid is infinite, scrolling within a viewport is done by the PlanetLevelManager.
+   * @param {DOMHighResTimeStamp} elapsedTime - the amount of time elapsed this frame
+   * @param {CanvasRenderingContext2D} context - the rendering context
+   * @param {PlanetPlayer} player - representation of the player
+   */
+  render(elapsedTime, context, player) {
+    this.tileset.render(elapsedTime, context);
+    player.render(elapsedTime, context);
+  }
   }
