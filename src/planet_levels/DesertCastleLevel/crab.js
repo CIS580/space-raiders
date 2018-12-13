@@ -1,58 +1,62 @@
-import DesertPlanetLevel from "../planet_levels/DesertCastleLevel/DesertCastleMap";
+import DesertCastleMap from "./DesertCastleMap";
+
+import crab from './crab.json'
 
 /**
   * CrabPerson entity class
   */
-export default class Crab extends DesertPlanetLevel {
-	constructor(x, y, health) {
+export default class Crab extends DesertCastleMap {
+	constructor(x, y, health, DesertCastleMap) {
+		super();
 		this.img = new Image();
 		this.img.src = "planet_levels/DesertCastleLevel/crab.png";
-		this.animationDuration = 150;
-		this.animationMsPerImage = 100;
+		//this.animationDuration = 150;
+		//this.animationMsPerImage = 100;
 		
-		this.crabJson = require("crab.json");
+		this.crabJson = crab;
 		
 		this.x = x;
 		this.y = y;
 		this.health = health;
+		this.DesertCastleMap = DesertCastleMap;
 	}
 	
 	/** 
 	 * update the crab's location
 	 */
-	update(deltaT) {
+	update(elapsedTime, input, game, player) {
 		// generate a random direction to move
-		rd = Math.floor(Math.random() * 4);
-		if (rd == 0) {
+		let rd = Math.floor(Math.random() * 4);
+		if (rd === 0) {
 			// move up
-			if (DesertPlanetLevel.tilePassable(x,y-1)) {
-				move(x, y-32);
+			if (this.DesertCastleMap.tilePassable(this.x,this.y-1)) {
+				this.move(this.x, this.y-32);
 				// change sprite
 			}
-		} else if (rd == 3) {
+		} else if (rd === 3) {
 			//move right
-			if (DesertPlanetLevel.tilePassable(x+1,y)) {
-				move(x+32,y);
+			if (this.DesertCastleMap.tilePassable(this.x+1,this.y)) {
+				this.move(this.x+32,this.y);
 				
 			}
-		} else if (rd == 2) {
+		} else if (rd === 2) {
 			//move down
-			if (DesertPlanetLevel.tilePassable(x,y+1)) {
-				move(x,y+32);
+			if (this.DesertCastleMap.tilePassable(this.x,this.y+1)) {
+				this.move(this.x,this.y+32);
 			}
-		} else if (rd == 1) {
+		} else if (rd === 1) {
 			// move left
-			if (DesertPlanetLevel.tilePassable(x-1,y)) {
-				move(x-32,y);
+			if (this.DesertCastleMap.tilePassable(this.x-1,this.y)) {
+				this.move(this.x-32,this.y);
 			}
 		}
-		this.render(img, x, y);
+		//this.render(img, x, y);
 	}
 	
 	/** 
 	 * Render the crab
 	 */
-	render(deltaT, context) {
+	render(elapsedTime, context, player) {
 		context.drawImage(this.img, this.x, this.y);
 	}
 	

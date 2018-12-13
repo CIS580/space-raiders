@@ -1,5 +1,5 @@
 import BasePlanetLevel from "../BasePlanetLevel";
-import DesertTileset from "./planet_levels/DesertCastleLevel/dss";
+import PlanetTileset from "../../PlanetTileset";
 import Scorpion from "./Scorpion";
 import Crab from "./Crab";
 
@@ -27,9 +27,9 @@ export default class DesertCastleMap extends BasePlanetLevel {
     // First two arguments (tileset and tilemap) are relative to the current folder (wherever this file is).
     // Third argument (image) is relative to the dist folder.
     this.tileset = new PlanetTileset(
-      require("../../dist/resources/planet_tilesets/sample_planet_level/dss.json"),
-      require("../../dist/resources/planet_tilesets/sample_planet_level/DesertCastleMap.json"),
-      "resources/planet_tilesets/sample_planet_level/dss.png");
+      require("../planet_levels/DesertPlanetLevel/dss.json"),
+      require("../planet_levels/DesertPlanetLevel/desert-castle.json"),
+      "../planet_levels/DesertPlanetLevel/dss.png");
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
     this.name = "Desert Castle";
@@ -47,7 +47,6 @@ export default class DesertCastleMap extends BasePlanetLevel {
 	//spawn enemies
 	this.scorpions = [];
 	this.crabs = [];
-	spawnEnemies(elapsedTime, context);
   }
 
   /** @method
@@ -139,7 +138,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
    */
   render(elapsedTime, context, player) {
     this.tileset.render(elapsedTime, context);
-    player.render(elapsedTime, context);
+    player.render(elapsedTime, context, player);
   }
 
   /** @method
@@ -168,10 +167,12 @@ export default class DesertCastleMap extends BasePlanetLevel {
 	/** @method
 	 *  Spawn all the enemies
 	 */
-	spawnEnemies(elapsedTime, context) {
+	spawnEnemies(context) {
 		// spawn the scorpions
-		xLocs = [6,24,15,7,24];
-		yLocs = [8,9,0,-14,-14];
+        var xLocs;
+        xLocs = [6, 24, 15, 7, 24];
+        var yLocs;
+        yLocs = [8, 9, 0, -14, -14];
 		for (i = 0; i < xLocs.length; i++) {
 			scorpion = new Scorpion(xLocs[i], yLocs[i], false);
 			this.scorpions.push(scorpion);
@@ -181,7 +182,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
 		xCrab = [8, 23];
 		yCrab = [-18, -19];
 		for (j = 0; j < xCrab.length; i++) {
-			crab = new Crab(xCrab[j], yCrab[j], 2);
+			crab = new Crab(xCrab[j], yCrab[j], 2, this);
 			this.crabs.push(crab);
 			crab.render(elapsedTime, context);
 		}
