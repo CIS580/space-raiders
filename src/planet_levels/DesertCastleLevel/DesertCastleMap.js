@@ -27,8 +27,8 @@ export default class DesertCastleMap extends BasePlanetLevel {
     // First two arguments (tileset and tilemap) are relative to the current folder (wherever this file is).
     // Third argument (image) is relative to the dist folder.
     this.tileset = new PlanetTileset(
-      require("../planet_levels/DesertPlanetLevel/dss.json"),
-      require("../planet_levels/DesertPlanetLevel/desert-castle.json"),
+      "../planet_levels/DesertPlanetLevel/dss.json",
+      "../planet_levels/DesertPlanetLevel/desert-castle.json",
       "../planet_levels/DesertPlanetLevel/dss.png");
 
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
@@ -47,6 +47,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
 	//spawn enemies
 	this.scorpions = [];
 	this.crabs = [];
+	this.spawnEnemies(context)
   }
 
   /** @method
@@ -60,7 +61,8 @@ export default class DesertCastleMap extends BasePlanetLevel {
 
     //This code handles interacting with things and properly clearing the box
     //I would suggest copying this exactly and then changing the if to whatever you need
-    var message = '';
+      let message;
+      message = '';
     if (x == 5) {
       message = "wow!";
     }
@@ -69,24 +71,6 @@ export default class DesertCastleMap extends BasePlanetLevel {
       this.message.length = 0;
     }
     else this.message.push(message);
-
-    // if(this.map === undefined) {
-    //   this.map = 0;
-    // }
-    // this.map++;
-    // this.map %= 3;
-    // switch(this.map) {
-    //   case 0:
-    //     this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap.json"));
-    //     break;
-    //   case 1:
-    //     this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_large.json"));
-    //     break;
-    //   case 2:
-    //     this.tileset.loadNewTilemap(require("../../dist/resources/planet_tilesets/sample_planet_level/tilemap_small.json"));
-    //     break;
-    // }
-    // player.movePlayerToSpawn();
   }
 
   /**
@@ -119,29 +103,6 @@ export default class DesertCastleMap extends BasePlanetLevel {
   }
 
   /** @method
-   * Update any entities within this planet level, including the player.
-   * @param {DOMHighResTimeStamp} elaspedTime - the amount of time elapsed this frame
-   * @param {Input} input - the input from this and the prior frame
-   * @param {Game} game - the game object
-   * @param {PlanetPlayer} player - representation of the player
-   */
-  update(elapsedTime, input, game, player) {
-    player.update(elapsedTime, input, game);
-  }
-
-  /** @method
-   * Render the tileset, the player, and any other custom entities to the provided context.
-   * Draw here as if your visible grid is infinite, scrolling within a viewport is done by the PlanetLevelManager.
-   * @param {DOMHighResTimeStamp} elapsedTime - the amount of time elapsed this frame
-   * @param {CanvasRenderingContext2D} context - the rendering context
-   * @param {PlanetPlayer} player - representation of the player
-   */
-  render(elapsedTime, context, player) {
-    this.tileset.render(elapsedTime, context);
-    player.render(elapsedTime, context, player);
-  }
-
-  /** @method
    * Draw items using the static context (after scrolling).
    * Only use this for drawing items on top of the screen.
    * @param staticContext - The context to draw on top of the screen and scrolling elements.
@@ -169,22 +130,22 @@ export default class DesertCastleMap extends BasePlanetLevel {
 	 */
 	spawnEnemies(context) {
 		// spawn the scorpions
-        var xLocs;
-        xLocs = [6, 24, 15, 7, 24];
-        var yLocs;
-        yLocs = [8, 9, 0, -14, -14];
-		for (i = 0; i < xLocs.length; i++) {
-			scorpion = new Scorpion(xLocs[i], yLocs[i], false);
+        let xLocs = [6, 24, 15, 7, 24];
+        let yLocs = [8, 9, 0, -14, -14];
+        let i;
+        for (i = 0; i < xLocs.length; i++) {
+			let scorpion = new Scorpion(xLocs[i], yLocs[i], false, this);
 			this.scorpions.push(scorpion);
-			scorpion.render(elapsedTime, context);
+			//scorpion.render(elapsedTime, context);
 		}
 		// spawn the crabs
-		xCrab = [8, 23];
-		yCrab = [-18, -19];
-		for (j = 0; j < xCrab.length; i++) {
-			crab = new Crab(xCrab[j], yCrab[j], 2, this);
+        let xCrab = [8, 23];
+		let yCrab = [-18, -19];
+        let j;
+        for (j = 0; j < xCrab.length; i++) {
+			let crab = new Crab(xCrab[j], yCrab[j], 2, this);
 			this.crabs.push(crab);
-			crab.render(elapsedTime, context);
+			//crab.render(elapsedTime, context);
 		}
 	}
   }

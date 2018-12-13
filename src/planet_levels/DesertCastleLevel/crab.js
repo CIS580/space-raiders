@@ -1,13 +1,10 @@
-import DesertCastleMap from "./DesertCastleMap";
-
 import crab from './crab.json'
 
 /**
   * CrabPerson entity class
   */
-export default class Crab extends DesertCastleMap {
+export default class Crab {
 	constructor(x, y, health, DesertCastleMap) {
-		super();
 		this.img = new Image();
 		this.img.src = "planet_levels/DesertCastleLevel/crab.png";
 		//this.animationDuration = 150;
@@ -24,7 +21,7 @@ export default class Crab extends DesertCastleMap {
 	/** 
 	 * update the crab's location
 	 */
-	update(elapsedTime, input, game, player) {
+	update() {
 		// generate a random direction to move
 		let rd = Math.floor(Math.random() * 4);
 		if (rd === 0) {
@@ -56,7 +53,7 @@ export default class Crab extends DesertCastleMap {
 	/** 
 	 * Render the crab
 	 */
-	render(elapsedTime, context, player) {
+	render(elapsedTime, context) {
 		context.drawImage(this.img, this.x, this.y);
 	}
 	
