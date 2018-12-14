@@ -2,6 +2,18 @@ import TempMenu from "./TempMenu"
 import Zoom from "./Zoom"
 import PlanetLevelManager from "./menus/PlanetLevelManager";
 import SamplePlanetLevel from "./planet_levels/SamplePlanetLevel";
+// This one does not work currently. Keep both import and push commented.
+// import DesertCastleMap from "../planet_levels/DesertCastleLevel/DesertCastleMap";
+import DesertMazeLevel from "./planet_levels/DesertMazeLevel/mazedesert";
+import BrandonShaverPlanetLevel from "./planet_levels/DesertShackLevel/BrandonShaverPlanetLevel";
+import LavaPlanetLevel from "./planet_levels/LavaPlanetLevel/LavaPlanetLevel";
+import LizardJungleLevel from "./planet_levels/LizardJungleLevel/LizardJungleLevel";
+import JungleArenaLevel from "./planet_levels/JungleArenaLevel/JungleArenaLevel";
+// This one is throwing some warnings, but it does still work.
+import IceWireLevel from "./planet_levels/IceWireLevel/IceWires";
+import IceWalkerLevel from "./planet_levels/IceWalkerLevel/IceWalkerLevel";
+import IceRockLevel from "./planet_levels/IceRockLevel/IceRockLevel";
+import Encounter from "./space/encounter";
 
 export default class Overworld {
 	constructor(game)
@@ -11,28 +23,28 @@ export default class Overworld {
 				name: "Erena",
 				description: "Erena's desolate surface is almost completely covered   in sand. The planet's devasting climate and frequent   high winds gave scientists the impression that Erena   was uninhabitable, but there may be more to Erena than meets the eye...",
 				x: 0, y: 0,
-				options: ["Sample","Exit"],
+				options: ["Castle", "Maze", "Shack","Exit"],
 				color: "#c2b280"
 			},
 			clareo: {
 				name: "Clareo IV",
-				description: "Clareo IV is a luscious forested planet with livable weather conditions for the human species. Despite the accommodating climate, there are foreseen diplomatic problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.",
+				description: "Clareo IV is a luscious forested planet with livable    weather conditions for the human species. Despite the  accommodating climate, there are foreseen diplomatic   problems with Clareo's natives and additional challenges adapting to the planet's flora and fauna.",
 				x: 300, y: 45,
-				options: ["Exit"],
+				options: ["Jungle", "Lizard", "Exit"],
 				color: "#228b22"
 			},
 			zuberon: {
 				name: "Zuberon",
-				description: "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known about Zuberon's previous inhabitants, the Satchuan, except that their impact on the planet indicates obvious signs of intelligence.",
+				description: "Zuberon is completely encased in ice. Its freezing temperatures frequently fall bellow -30°F. Little is known  about Zuberon's previous inhabitants, the Satchuan,    except that their impact on the planet indicates       obvious signs of intelligence.",
 				x: -100, y: 180,
-				options: ["Exit"],
+				options: ["Rock", "Walker", "Wire", "Exit"],
 				color: "#add8e6"
 			},
 			thermos: {
 				name: "Thermos",
-				description: "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea, and the hoard of blood-lusting creatures that roam the surface looking for the next source of food to satisfy their hellish appetites.",
+				description: "Thermos is a treacherous planet, comprised of unrelenting molten lava and razor-sharp obsidian rocks. Oh yea,  and the hoard of blood-lusting creatures that roam     the surface looking for the next source of food to     satisfy their hellish appetites.",
 				x: -500, y: -200,
-				options: ["Exit"],
+				options: ["Lava", "Exit"],
 				color: "#cf1020"
 			}
 		};
@@ -100,6 +112,9 @@ export default class Overworld {
 			} else if(input.keyPressed('ArrowRight')&&this.currentNode.right) {
 				this.state = "move";
 				this.nextNode = this.currentNode.right;
+			} else if(input.keyDown(' '))
+			{
+				game.pushGameState(new Zoom(game.WIDTH/2, game.HEIGHT/2,this.callback,game, this.currentNode.color, this.currentNode.name));
 			}
 		} else if(this.state=="move")
 		{
@@ -109,9 +124,10 @@ export default class Overworld {
 			} else if(!this.flag){
 				this.flag = true;
 				//do encounter
-				if(Math.random()>.5)
-				{
-					console.log("Encounter");
+				if(Math.random()>.7) {
+
+                    game.pushGameState(new Encounter(game, 1024 * 3, 768 * 3));
+
 				}
 			}
 			this.time += elapsedTime/1000;
@@ -122,7 +138,7 @@ export default class Overworld {
 				this.state = "stop";
 				this.time = 0;
 				this.currentNode = this.nextNode;
-				game.pushGameState(new Zoom(game.WIDTH/2, game.HEIGHT/2,this.callback,game, this.currentNode.color));
+				game.pushGameState(new Zoom(game.WIDTH/2, game.HEIGHT/2,this.callback,game, this.currentNode.color, this.currentNode.name));
 			}
 		}
 	}
@@ -132,7 +148,25 @@ export default class Overworld {
 		if(string!="Exit")
 		{
 			var state = null;
-			if(string=="Sample") state = new SamplePlanetLevel();
+			//if(string=="Sample")
+			//state = new SamplePlanetLevel();
+			//"Castle", "Maze", "Shack"
+			//jungle Lizard
+			//Rock", "Walker", "Wire
+
+			if (string === "Castle") state = new DesertMazeLevel();
+			else if (string === "Maze") state = new DesertMazeLevel();
+			else if (string === "Shack") state = new BrandonShaverPlanetLevel();
+
+			else if (string === "Jungle") state = new JungleArenaLevel();
+			else if (string === "Lizard") state = new LizardJungleLevel();
+
+			else if (string === "Rock") state = new IceRockLevel();
+			else if (string === "Walker") state = new IceWalkerLevel();
+			else if (string === "Wire") state = new IceWireLevel();
+
+			else if (string === "Lava") state = new LavaPlanetLevel();
+
 			if(state!=null) this.game.pushGameState(new PlanetLevelManager(state),this.caller.callback2);
 		}
 	}
@@ -313,11 +347,12 @@ export default class Overworld {
 		context.translate(game.WIDTH/2,game.HEIGHT/2);
 		if(this.state=="move")
 		{
-			context.rotate(Math.atan2(this.nextNode.y-this.currentNode.y,this.nextNode.x-this.currentNode.x));
+			context.rotate(Math.atan2(this.nextNode.y-this.currentNode.y,this.nextNode.x-this.currentNode.x)+Math.PI/2);
 		}
 		context.translate(-game.WIDTH/2,-game.HEIGHT/2);
 		context.fillStyle = "red";
-		context.fillRect(game.WIDTH/2-16,game.HEIGHT/2-16,32,32);
+		//context.fillRect(game.WIDTH/2-16,game.HEIGHT/2-16,32,32);
+		context.drawImage(this.ShipSprites, 3 * 31, 3 * 31, 31,31,game.WIDTH/2-16, game.HEIGHT/2-16,32,32);
 		context.restore();
 
 		context.restore();

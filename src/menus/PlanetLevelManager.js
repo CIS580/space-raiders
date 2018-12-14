@@ -24,6 +24,9 @@ export default class PlanetLevelManager {
     this.lastCalculatedTilemapWidth = 0;
     this.lastCalculatedTilemapHeight = 0;
 
+    this.escapeHeldStart = -1;
+    this.escapeDelay = 1500;
+
     this.scrollingXOffset = 0;
     this.scrollingYOffset = 0;
 
@@ -87,6 +90,21 @@ export default class PlanetLevelManager {
    * @param {Game} game - The game object.
    */
   update(elaspedTime, input, game) {
+    if(input.keyPressed("Escape")) {
+      if(this.escapeHeldStart === -1) {
+        this.escapeHeldStart = elaspedTime;
+      } else {
+        this.escapeHeldStart += elaspedTime;
+      }
+
+      if(this.escapeHeldStart >= this.escapeDelay) {
+        this.escapeHeldStart = -1;
+        this.level.finished = true; //Bad coding practice to change this, but it works for the mess of a game we have ;)
+      }
+    } else if (this.escapeHeldStart >= 0) {
+      this.escapeHeldStart = -1;
+    }
+
     if(this.level.finished) {
       if(!this.finished) {
         // Only call the callback and pop game state once.
@@ -171,6 +189,27 @@ export default class PlanetLevelManager {
         this.drawingHeight);
 
       this.level.renderStatic(elapsedTime, context, this.player);
+
+
+      if(this.escapeHeldStart > 0) {
+        let abortingText = "Aborting Level";
+        let abortingProgress = this.escapeHeldStart / this.escapeDelay;
+        if(abortingProgress > 0.75) {
+          abortingText += "...";
+        } else if (abortingProgress > 0.5) {
+          abortingText += "..";
+        } else if (abortingProgress > 0.25) {
+          abortingText += ".";
+        }
+
+        context.save();
+        context.shadowBlur = 16;
+        context.shadowColor = 'black';
+        context.fillStyle = 'white';
+        context.font = '24pt sans-serif';
+        context.fillText(abortingText, 3, 27);
+        context.restore();
+      }
     }
   }
 }

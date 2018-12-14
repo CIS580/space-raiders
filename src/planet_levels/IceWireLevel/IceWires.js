@@ -56,7 +56,7 @@ export default class IceWireLevel extends BasePlanetLevel {
     this.map %= 3;
     switch(this.map) {
       case 0:
-        this.tileset.loadNewTilemap(require("../../../dist/resources/planet_tilesets/IceWirelevel/tilemap.json"));
+        this.tileset.loadNewTilemap(require("../../../dist/resources/planet_tilesets/IceWireLevel/tilemap.json"));
         break;
     }
     player.movePlayerToSpawn();
