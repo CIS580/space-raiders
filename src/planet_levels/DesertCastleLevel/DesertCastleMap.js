@@ -43,7 +43,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
     this.message.push('Collect all the flowers in the castle');
 	
 	this.finished = false;
-	
+	this.numFlowers = 10;
     //push each line individually
     //you'll have to check if something goes off the screen and adjust for that by breaking
     //it into multiple push statements
@@ -63,11 +63,16 @@ export default class DesertCastleMap extends BasePlanetLevel {
   playerInteracted(player, x, y) {
     console.log("Player interacted with " + x + "," + y);
 
+	let tile_id = this.tileset.getTile(x, y).id;
+	if (tile_id == 10) {
+		this.tileset.setTileId(x,y,0,6);
+		this.numFlowers--;
+	}
     //This code handles interacting with things and properly clearing the box
     //I would suggest copying this exactly and then changing the if to whatever you need
       let message;
       message = '';
-    if (x == 15 && y == 14) {
+    if (numFlowers == 0) {
       message.push("congratulations!");
 	  this.finished = true;
     }
@@ -103,7 +108,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
    * @return True if the player may pass, false if the requested tile is "blocked".
    */
   tilePassable(x, y) {
-    if (this.message.length > 0) return false; //Add this line so you can't move when the text box is there
+    //if (this.message.length > 0) return false; //Add this line so you can't move when the text box is there
     return this.tileset.getTile(x, y)["passable"] === true;
   }
 

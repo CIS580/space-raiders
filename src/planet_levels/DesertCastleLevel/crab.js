@@ -5,7 +5,7 @@ import crab from './crab.json'
   */
 export default class Crab {
 	constructor(x, y, health, DesertCastleMap) {
-		this.img = new Image();
+		this.image = new Image();
 		//this.img.src = "../../../planet_levels/DesertCastleLevel/crab.png";
 		//this.animationDuration = 150;
 		//this.animationMsPerImage = 100;
