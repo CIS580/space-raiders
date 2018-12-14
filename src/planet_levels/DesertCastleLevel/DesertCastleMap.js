@@ -18,7 +18,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
     super();
 
     this.playerSpawnX = 16;
-    this.playerSpawnY = 10;
+    this.playerSpawnY = 50;
     this.playerSpawnFaceDirection = 1;
 
     // This loads your own tileset created from Tiled.
@@ -31,6 +31,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
       require("../../../dist/resources/planet_tilesets/DesertCastleLevel/desert-castle.json"),
       "resources/planet_tilesets/DesertCastleLevel/dss.png");
 
+    //this.tileset.chunks().load;
     this.icon = new Image(32, 32);  // Could be taken from your tileset, this is just a sample blank image.
     this.name = "Desert Castle";
 
@@ -39,7 +40,10 @@ export default class DesertCastleMap extends BasePlanetLevel {
     //MAKE SURE YOU GET THEM ALL 
     //If you need more reference, feel free to look at the implementation in LizardJungleLevel
     this.message = [];
-    //this.message.push('Collect all the flowers in the castle');
+    this.message.push('Collect all the flowers in the castle');
+	
+	this.finished = false;
+	
     //push each line individually
     //you'll have to check if something goes off the screen and adjust for that by breaking
     //it into multiple push statements
@@ -63,8 +67,9 @@ export default class DesertCastleMap extends BasePlanetLevel {
     //I would suggest copying this exactly and then changing the if to whatever you need
       let message;
       message = '';
-    if (x == 15 && y == -34) {
-      message = "congratulations!";
+    if (x == 15 && y == 14) {
+      message.push("congratulations!");
+	  this.finished = true;
     }
     if (this.message.length !== 0 && message !== '') this.message.length = 0;
     else if (message === '') {
@@ -133,7 +138,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
       let xLocs;
       xLocs = [6, 24, 15, 7, 24];
       let yLocs;
-      yLocs = [8, 9, 0, -14, -14];
+      yLocs = [48, 49, 0, 26, 26];
         let i;
         for (i = 0; i < xLocs.length; i++) {
 			let scorpion = new Scorpion(xLocs[i], yLocs[i], false, this);
@@ -142,7 +147,7 @@ export default class DesertCastleMap extends BasePlanetLevel {
 		}
 		// spawn the crabs
         let xCrab = [8, 23];
-		let yCrab = [-18, -19];
+		let yCrab = [22, 21];
         let j;
         for (j = 0; j < xCrab.length; j++) {
 			let crab = new Crab(xCrab[j], yCrab[j], 2, this);
@@ -150,4 +155,27 @@ export default class DesertCastleMap extends BasePlanetLevel {
 			//crab.render(elapsedTime, context);
 		}
 	}
+
+  /** @method
+   * Update any entities within this planet level, including the player.
+   * @param {DOMHighResTimeStamp} elaspedTime - the amount of time elapsed this frame
+   * @param {Input} input - the input from this and the prior frame
+   * @param {Game} game - the game object
+   * @param {PlanetPlayer} player - representation of the player
+   */
+  update(elaspedTime, input, game, player) {
+    player.update(elaspedTime, input, game);
+  }
+
+  /** @method
+   * Render the tileset, the player, and any other custom entities to the provided context.
+   * Draw here as if your visible grid is infinite, scrolling within a viewport is done by the PlanetLevelManager.
+   * @param {DOMHighResTimeStamp} elapsedTime - the amount of time elapsed this frame
+   * @param {CanvasRenderingContext2D} context - the rendering context
+   * @param {PlanetPlayer} player - representation of the player
+   */
+  render(elapsedTime, context, player) {
+    this.tileset.render(elapsedTime, context);
+    player.render(elapsedTime, context);
+  }
   }

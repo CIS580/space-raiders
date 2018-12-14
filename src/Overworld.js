@@ -3,7 +3,7 @@ import Zoom from "./Zoom"
 import PlanetLevelManager from "./menus/PlanetLevelManager";
 import SamplePlanetLevel from "./planet_levels/SamplePlanetLevel";
 // This one does not work currently. Keep both import and push commented.
-// import DesertCastleMap from "../planet_levels/DesertCastleLevel/DesertCastleMap";
+import DesertCastleMap from "./planet_levels/DesertCastleLevel/DesertCastleMap";
 import DesertMazeLevel from "./planet_levels/DesertMazeLevel/mazedesert";
 import BrandonShaverPlanetLevel from "./planet_levels/DesertShackLevel/BrandonShaverPlanetLevel";
 import LavaPlanetLevel from "./planet_levels/LavaPlanetLevel/LavaPlanetLevel";
@@ -154,7 +154,7 @@ export default class Overworld {
 			//jungle Lizard
 			//Rock", "Walker", "Wire
 
-			if (string === "Castle") state = new DesertMazeLevel();
+			if (string === "Castle") state = new DesertCastleMap();
 			else if (string === "Maze") state = new DesertMazeLevel();
 			else if (string === "Shack") state = new BrandonShaverPlanetLevel();
 
