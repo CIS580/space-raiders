@@ -40,7 +40,10 @@ export default class DesertCastleMap extends BasePlanetLevel {
     //MAKE SURE YOU GET THEM ALL 
     //If you need more reference, feel free to look at the implementation in LizardJungleLevel
     this.message = [];
-    //this.message.push('Collect all the flowers in the castle');
+    this.message.push('Collect all the flowers in the castle');
+	
+	this.finished = false;
+	
     //push each line individually
     //you'll have to check if something goes off the screen and adjust for that by breaking
     //it into multiple push statements
@@ -65,7 +68,8 @@ export default class DesertCastleMap extends BasePlanetLevel {
       let message;
       message = '';
     if (x == 15 && y == 14) {
-      message = "congratulations!";
+      message.push("congratulations!");
+	  this.finished = true;
     }
     if (this.message.length !== 0 && message !== '') this.message.length = 0;
     else if (message === '') {
